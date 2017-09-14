@@ -21,25 +21,25 @@ module.exports.addClass = function(element, classname) {
 
 module.exports.getOffset = function(element) {
 	if(element) {
-	    var rect = element.getBoundingClientRect();
-	    return { x: rect.left, y: rect.top };
+		var rect = element.getBoundingClientRect();
+		return { x: rect.left, y: rect.top };
 	}
     return { x: 0, y: 0 };
 };
 
 module.exports.getParentOffset = function(element) {
 	if(element) {
-	    var rect = element.getBoundingClientRect();
-	    var rectParent = element.parentNode != null ? element.parentNode.getBoundingClientRect() : { top: 0, left: 0} ;
-	    return { x: rect.left - rectParent.left, y: rect.top - rectParent.top };
+		var rect = element.getBoundingClientRect();
+		var rectParent = element.parentNode != null ? element.parentNode.getBoundingClientRect() : { top: 0, left: 0} ;
+		return { x: rect.left - rectParent.left, y: rect.top - rectParent.top };
 	}
     return { x: 0, y: 0 };
 };
 
 module.exports.getSize = function(element) {
 	if(element) {
-	    var rect = element.getBoundingClientRect();
-	    return { width: rect.right - rect.left, height: rect.bottom - rect.top};
+		var rect = element.getBoundingClientRect();
+		return { width: rect.right - rect.left, height: rect.bottom - rect.top};
 	}
     return { width: 0, height: 0 };
 };
@@ -82,20 +82,20 @@ module.exports.isVisible = function(element) {
 
 module.exports.updateTableColGroup = function(tableNode, widths) {
 	if(tableNode) {
-	    var colGroupNode = tableNode.firstChild;
-	    if(colGroupNode && colGroupNode.nodeName === 'COLGROUP') {
-		    tableNode.style.tableLayout = 'auto';
-		    tableNode.style.width = '';
+		var colGroupNode = tableNode.firstChild;
+		if(colGroupNode && colGroupNode.nodeName === 'COLGROUP') {
+			tableNode.style.tableLayout = 'auto';
+			tableNode.style.width = '';
 
 			while (colGroupNode.firstChild) {
-			  colGroupNode.removeChild(colGroupNode.firstChild);
+				colGroupNode.removeChild(colGroupNode.firstChild);
 			}
-		    for(var i = 0; i < widths.length; i++) {
-		      var col = document.createElement('col');
-		      col.style.width = widths[i] + 'px';
-		      colGroupNode.appendChild(col);
-		    }
-		    tableNode.style.tableLayout = 'fixed';
+			for(var i = 0; i < widths.length; i++) {
+				var col = document.createElement('col');
+				col.style.width = widths[i] + 'px';
+				colGroupNode.appendChild(col);
+			}
+			tableNode.style.tableLayout = 'fixed';
 		}
 	}
   };

@@ -1,4 +1,4 @@
-/* global module, require, react */
+/* global module, require, react */ // eslint-disable-line no-unused-vars
 /*jshint eqnull: true*/
 
 'use strict';
@@ -75,10 +75,10 @@ module.exports = React.createClass({
 		if (e.button !== 0) return;
 
 		if(e.ctrlKey) {
-		    this.props.pivotTableComp.pgridwidget.toggleFieldExpansion(this.props.axetype, this.props.field);
+			this.props.pivotTableComp.pgridwidget.toggleFieldExpansion(this.props.axetype, this.props.field);
 		} else {
 
-		    var thispos = domUtils.getOffset(ReactDOM.findDOMNode(this));
+			var thispos = domUtils.getOffset(ReactDOM.findDOMNode(this));
 			var mousePageXY = utils.getMousePageXY(e);
 			
 			// inform mousedown, save start pos
@@ -126,7 +126,7 @@ module.exports = React.createClass({
 		var mousePageXY = utils.getMousePageXY(e);
 
 		if(!this.state.dragging) {
-		    size = domUtils.getSize(ReactDOM.findDOMNode(this));
+			size = domUtils.getSize(ReactDOM.findDOMNode(this));
 		} else {
 			size = this.state.size;
 		}
@@ -150,7 +150,7 @@ module.exports = React.createClass({
 		utils.preventDefault(e);
 	},
 	updateClasses: function() {
-	    ReactDOM.findDOMNode(this).className = this.props.pivotTableComp.pgrid.config.theme.getButtonClasses().pivotButton;
+		ReactDOM.findDOMNode(this).className = this.props.pivotTableComp.pgrid.config.theme.getButtonClasses().pivotButton;
 	},
 	render: function() {
 		var self = this;
@@ -179,21 +179,21 @@ module.exports = React.createClass({
 		}
 
 		return <div key={self.props.field.name} 
-		            className={this.props.pivotTableComp.pgrid.config.theme.getButtonClasses().pivotButton}
-		            onMouseDown={this.onMouseDown}
-		            onMouseUp={this.onMouseUp}
-		            style={divstyle}>
-		            <table>
-		            	<tbody>
-		            		<tr>
-		            			<td className="caption">{self.props.field.caption}{fieldAggFunc}</td>
-		            			<td><div className={'sort-indicator ' + sortDirectionClass}></div></td>
-		            			<td className="filter">
-		            				<div ref="filterButton" className={filterClass} onMouseDown={self.state.dragging ? null : this.onFilterMouseDown}></div>
-		            			</td>
-		            		</tr>
-		            	</tbody>
-		            </table>
-		        </div>;
+					className={this.props.pivotTableComp.pgrid.config.theme.getButtonClasses().pivotButton}
+					onMouseDown={this.onMouseDown}
+					onMouseUp={this.onMouseUp}
+					style={divstyle}>
+					<table>
+						<tbody>
+							<tr>
+								<td className="caption">{self.props.field.caption}{fieldAggFunc}</td>
+								<td><div className={'sort-indicator ' + sortDirectionClass}></div></td>
+								<td className="filter">
+									<div ref="filterButton" className={filterClass} onMouseDown={self.state.dragging ? null : this.onFilterMouseDown}></div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>;
 	}
 });

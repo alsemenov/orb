@@ -1,4 +1,4 @@
-/* global module, require, react */
+/* global module, require, react */ // eslint-disable-line no-unused-vars
 /*jshint eqnull: true*/
 
 'use strict';
@@ -65,7 +65,7 @@ module.exports = (function() {
 		}
 	}
 
-	function getDropTarget() {
+	function getDropTarget() { // eslint-disable-line no-unused-vars
 		return utils.forEach(_dropTargets, function(target) {
 			if(target.component.state.isover) {
 				return target;
@@ -73,15 +73,15 @@ module.exports = (function() {
 		});
 	}
 
-	function getDropIndicator() {
+	function getDropIndicator() { // eslint-disable-line no-unused-vars
 		return utils.forEach(_dropIndicators, function(indicator) {
 			if(indicator.component.state.isover) {
 				return indicator;
 			}
 		});
 	}
-
-	var _initialized = false;
+	
+	var _initialized = false; // eslint-disable-line no-unused-vars
 
 	return {
 		init: function(pivotComp) {
@@ -105,7 +105,7 @@ module.exports = (function() {
 					setCurrDropIndicator(null);
 
 				} else {
-				    _dragNode = ReactDOM.findDOMNode(_currDragElement);
+					_dragNode = ReactDOM.findDOMNode(_currDragElement);
 				}
 			}
 		},
@@ -157,7 +157,7 @@ module.exports = (function() {
 
 				utils.forEach(_dropTargets, function(target) {
 					if(!foundTarget) {
-					    var tnodeRect = ReactDOM.findDOMNode(target.component).getBoundingClientRect();
+						var tnodeRect = ReactDOM.findDOMNode(target.component).getBoundingClientRect();
 						var isOverlap = doElementsOverlap(dragNodeRect, tnodeRect);
 						if(isOverlap) {
 							foundTarget = target;
@@ -170,14 +170,14 @@ module.exports = (function() {
 					setCurrDropTarget(foundTarget, function() {
 						var foundIndicator = null;
 
-						utils.forEach(_dropIndicators, function(indicator, index) {
+						utils.forEach(_dropIndicators, function(indicator, index) { // eslint-disable-line no-unused-vars
 							if(!foundIndicator) {
 								var elementOwnIndicator = indicator.component.props.axetype === _currDragElement.props.axetype &&
-														  indicator.component.props.position === _currDragElement.props.position;
+															indicator.component.props.position === _currDragElement.props.position;
 
 								var targetIndicator = indicator.component.props.axetype === foundTarget.component.props.axetype;
 								if(targetIndicator && !elementOwnIndicator) {	
-								    var tnodeRect = ReactDOM.findDOMNode(indicator.component).getBoundingClientRect();
+									var tnodeRect = ReactDOM.findDOMNode(indicator.component).getBoundingClientRect();
 									var isOverlap = doElementsOverlap(dragNodeRect, tnodeRect);
 									if(isOverlap) {
 										foundIndicator = indicator;

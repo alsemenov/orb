@@ -276,7 +276,7 @@ var pgrid = module.exports = function(config) {
             }
 
             var emptyIntersection = intersection && intersection.length === 0;
-            var datasource = self.filteredDataSource;
+            var datasource = self.filteredDataSource; // eslint-disable-line no-unused-vars
             var datafield;
             var datafields = [];
 

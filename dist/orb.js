@@ -1,7 +1,7 @@
 /**
  * orb v1.1.0, Pivot table javascript library.
  *
- * Copyright (c) 2014-2015 Najmeddine Nouri <devnajm@gmail.com>.
+ * Copyright (c) 2014-2017 Najmeddine Nouri <devnajm@gmail.com>.
  *
  * @version v1.1.0
  * @link http://orbjs.net/
@@ -57,9 +57,1474 @@
     return s
   })({
     1: [function(_dereq_, module, exports) {
+      module.exports = {
+        "default": _dereq_("core-js/library/fn/json/stringify"),
+        __esModule: true
+      };
+    }, {
+      "core-js/library/fn/json/stringify": 5
+    }],
+    2: [function(_dereq_, module, exports) {
+      module.exports = {
+        "default": _dereq_("core-js/library/fn/symbol"),
+        __esModule: true
+      };
+    }, {
+      "core-js/library/fn/symbol": 6
+    }],
+    3: [function(_dereq_, module, exports) {
+      module.exports = {
+        "default": _dereq_("core-js/library/fn/symbol/iterator"),
+        __esModule: true
+      };
+    }, {
+      "core-js/library/fn/symbol/iterator": 7
+    }],
+    4: [function(_dereq_, module, exports) {
+
+      exports.__esModule = true;
+
+      var _iterator = _dereq_("../core-js/symbol/iterator");
+
+      var _iterator2 = _interopRequireDefault(_iterator);
+
+      var _symbol = _dereq_("../core-js/symbol");
+
+      var _symbol2 = _interopRequireDefault(_symbol);
+
+      var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function(obj) {
+        return typeof obj;
+      } : function(obj) {
+        return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj;
+      };
+
+      function _interopRequireDefault(obj) {
+        return obj && obj.__esModule ? obj : {
+          default: obj
+        };
+      }
+
+      exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.default) === "symbol" ? function(obj) {
+        return typeof obj === "undefined" ? "undefined" : _typeof(obj);
+      } : function(obj) {
+        return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
+      };
+    }, {
+      "../core-js/symbol": 2,
+      "../core-js/symbol/iterator": 3
+    }],
+    5: [function(_dereq_, module, exports) {
+      var core = _dereq_('../../modules/_core');
+      var $JSON = core.JSON || (core.JSON = {
+        stringify: JSON.stringify
+      });
+      module.exports = function stringify(it) { // eslint-disable-line no-unused-vars
+        return $JSON.stringify.apply($JSON, arguments);
+      };
+
+    }, {
+      "../../modules/_core": 13
+    }],
+    6: [function(_dereq_, module, exports) {
+      _dereq_('../../modules/es6.symbol');
+      _dereq_('../../modules/es6.object.to-string');
+      _dereq_('../../modules/es7.symbol.async-iterator');
+      _dereq_('../../modules/es7.symbol.observable');
+      module.exports = _dereq_('../../modules/_core').Symbol;
+
+    }, {
+      "../../modules/_core": 13,
+      "../../modules/es6.object.to-string": 64,
+      "../../modules/es6.symbol": 66,
+      "../../modules/es7.symbol.async-iterator": 67,
+      "../../modules/es7.symbol.observable": 68
+    }],
+    7: [function(_dereq_, module, exports) {
+      _dereq_('../../modules/es6.string.iterator');
+      _dereq_('../../modules/web.dom.iterable');
+      module.exports = _dereq_('../../modules/_wks-ext').f('iterator');
+
+    }, {
+      "../../modules/_wks-ext": 61,
+      "../../modules/es6.string.iterator": 65,
+      "../../modules/web.dom.iterable": 69
+    }],
+    8: [function(_dereq_, module, exports) {
+      module.exports = function(it) {
+        if (typeof it != 'function') throw TypeError(it + ' is not a function!');
+        return it;
+      };
+
+    }, {}],
+    9: [function(_dereq_, module, exports) {
+      module.exports = function() {};
+
+    }, {}],
+    10: [function(_dereq_, module, exports) {
+      var isObject = _dereq_('./_is-object');
+      module.exports = function(it) {
+        if (!isObject(it)) throw TypeError(it + ' is not an object!');
+        return it;
+      };
+
+    }, {
+      "./_is-object": 29
+    }],
+    11: [function(_dereq_, module, exports) {
+      // false -> Array#indexOf
+      // true  -> Array#includes
+      var toIObject = _dereq_('./_to-iobject');
+      var toLength = _dereq_('./_to-length');
+      var toAbsoluteIndex = _dereq_('./_to-absolute-index');
+      module.exports = function(IS_INCLUDES) {
+        return function($this, el, fromIndex) {
+          var O = toIObject($this);
+          var length = toLength(O.length);
+          var index = toAbsoluteIndex(fromIndex, length);
+          var value;
+          // Array#includes uses SameValueZero equality algorithm
+          // eslint-disable-next-line no-self-compare
+          if (IS_INCLUDES && el != el)
+            while (length > index) {
+              value = O[index++];
+              // eslint-disable-next-line no-self-compare
+              if (value != value) return true;
+              // Array#indexOf ignores holes, Array#includes - not
+            } else
+              for (; length > index; index++)
+                if (IS_INCLUDES || index in O) {
+                  if (O[index] === el) return IS_INCLUDES || index || 0;
+                }
+          return !IS_INCLUDES && -1;
+        };
+      };
+
+    }, {
+      "./_to-absolute-index": 53,
+      "./_to-iobject": 55,
+      "./_to-length": 56
+    }],
+    12: [function(_dereq_, module, exports) {
+      var toString = {}.toString;
+
+      module.exports = function(it) {
+        return toString.call(it).slice(8, -1);
+      };
+
+    }, {}],
+    13: [function(_dereq_, module, exports) {
+      var core = module.exports = {
+        version: '2.5.1'
+      };
+      if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
+
+    }, {}],
+    14: [function(_dereq_, module, exports) {
+      // optional / simple context binding
+      var aFunction = _dereq_('./_a-function');
+      module.exports = function(fn, that, length) {
+        aFunction(fn);
+        if (that === undefined) return fn;
+        switch (length) {
+          case 1:
+            return function(a) {
+              return fn.call(that, a);
+            };
+          case 2:
+            return function(a, b) {
+              return fn.call(that, a, b);
+            };
+          case 3:
+            return function(a, b, c) {
+              return fn.call(that, a, b, c);
+            };
+        }
+        return function() {
+          return fn.apply(that, arguments);
+        };
+      };
+
+    }, {
+      "./_a-function": 8
+    }],
+    15: [function(_dereq_, module, exports) {
+      // 7.2.1 RequireObjectCoercible(argument)
+      module.exports = function(it) {
+        if (it == undefined) throw TypeError("Can't call method on  " + it);
+        return it;
+      };
+
+    }, {}],
+    16: [function(_dereq_, module, exports) {
+      // Thank's IE8 for his funny defineProperty
+      module.exports = !_dereq_('./_fails')(function() {
+        return Object.defineProperty({}, 'a', {
+          get: function() {
+            return 7;
+          }
+        }).a != 7;
+      });
+
+    }, {
+      "./_fails": 21
+    }],
+    17: [function(_dereq_, module, exports) {
+      var isObject = _dereq_('./_is-object');
+      var document = _dereq_('./_global').document;
+      // typeof document.createElement is 'object' in old IE
+      var is = isObject(document) && isObject(document.createElement);
+      module.exports = function(it) {
+        return is ? document.createElement(it) : {};
+      };
+
+    }, {
+      "./_global": 22,
+      "./_is-object": 29
+    }],
+    18: [function(_dereq_, module, exports) {
+      // IE 8- don't enum bug keys
+      module.exports = (
+        'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
+      ).split(',');
+
+    }, {}],
+    19: [function(_dereq_, module, exports) {
+      // all enumerable object keys, includes symbols
+      var getKeys = _dereq_('./_object-keys');
+      var gOPS = _dereq_('./_object-gops');
+      var pIE = _dereq_('./_object-pie');
+      module.exports = function(it) {
+        var result = getKeys(it);
+        var getSymbols = gOPS.f;
+        if (getSymbols) {
+          var symbols = getSymbols(it);
+          var isEnum = pIE.f;
+          var i = 0;
+          var key;
+          while (symbols.length > i)
+            if (isEnum.call(it, key = symbols[i++])) result.push(key);
+        }
+        return result;
+      };
+
+    }, {
+      "./_object-gops": 42,
+      "./_object-keys": 45,
+      "./_object-pie": 46
+    }],
+    20: [function(_dereq_, module, exports) {
+      var global = _dereq_('./_global');
+      var core = _dereq_('./_core');
+      var ctx = _dereq_('./_ctx');
+      var hide = _dereq_('./_hide');
+      var PROTOTYPE = 'prototype';
+
+      var $export = function(type, name, source) {
+        var IS_FORCED = type & $export.F;
+        var IS_GLOBAL = type & $export.G;
+        var IS_STATIC = type & $export.S;
+        var IS_PROTO = type & $export.P;
+        var IS_BIND = type & $export.B;
+        var IS_WRAP = type & $export.W;
+        var exports = IS_GLOBAL ? core : core[name] || (core[name] = {});
+        var expProto = exports[PROTOTYPE];
+        var target = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE];
+        var key, own, out;
+        if (IS_GLOBAL) source = name;
+        for (key in source) {
+          // contains in native
+          own = !IS_FORCED && target && target[key] !== undefined;
+          if (own && key in exports) continue;
+          // export native or passed
+          out = own ? target[key] : source[key];
+          // prevent global pollution for namespaces
+          exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key]
+            // bind timers to global for call from export context
+            :
+            IS_BIND && own ? ctx(out, global)
+            // wrap global constructors for prevent change them in library
+            :
+            IS_WRAP && target[key] == out ? (function(C) {
+              var F = function(a, b, c) {
+                if (this instanceof C) {
+                  switch (arguments.length) {
+                    case 0:
+                      return new C();
+                    case 1:
+                      return new C(a);
+                    case 2:
+                      return new C(a, b);
+                  }
+                  return new C(a, b, c);
+                }
+                return C.apply(this, arguments);
+              };
+              F[PROTOTYPE] = C[PROTOTYPE];
+              return F;
+              // make static versions for prototype methods
+            })(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
+          // export proto methods to core.%CONSTRUCTOR%.methods.%NAME%
+          if (IS_PROTO) {
+            (exports.virtual || (exports.virtual = {}))[key] = out;
+            // export proto methods to core.%CONSTRUCTOR%.prototype.%NAME%
+            if (type & $export.R && expProto && !expProto[key]) hide(expProto, key, out);
+          }
+        }
+      };
+      // type bitmap
+      $export.F = 1; // forced
+      $export.G = 2; // global
+      $export.S = 4; // static
+      $export.P = 8; // proto
+      $export.B = 16; // bind
+      $export.W = 32; // wrap
+      $export.U = 64; // safe
+      $export.R = 128; // real proto method for `library`
+      module.exports = $export;
+
+    }, {
+      "./_core": 13,
+      "./_ctx": 14,
+      "./_global": 22,
+      "./_hide": 24
+    }],
+    21: [function(_dereq_, module, exports) {
+      module.exports = function(exec) {
+        try {
+          return !!exec();
+        } catch (e) {
+          return true;
+        }
+      };
+
+    }, {}],
+    22: [function(_dereq_, module, exports) {
+      // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+      var global = module.exports = typeof window != 'undefined' && window.Math == Math ?
+        window : typeof self != 'undefined' && self.Math == Math ? self
+        // eslint-disable-next-line no-new-func
+        :
+        Function('return this')();
+      if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
+
+    }, {}],
+    23: [function(_dereq_, module, exports) {
+      var hasOwnProperty = {}.hasOwnProperty;
+      module.exports = function(it, key) {
+        return hasOwnProperty.call(it, key);
+      };
+
+    }, {}],
+    24: [function(_dereq_, module, exports) {
+      var dP = _dereq_('./_object-dp');
+      var createDesc = _dereq_('./_property-desc');
+      module.exports = _dereq_('./_descriptors') ? function(object, key, value) {
+        return dP.f(object, key, createDesc(1, value));
+      } : function(object, key, value) {
+        object[key] = value;
+        return object;
+      };
+
+    }, {
+      "./_descriptors": 16,
+      "./_object-dp": 37,
+      "./_property-desc": 47
+    }],
+    25: [function(_dereq_, module, exports) {
+      var document = _dereq_('./_global').document;
+      module.exports = document && document.documentElement;
+
+    }, {
+      "./_global": 22
+    }],
+    26: [function(_dereq_, module, exports) {
+      module.exports = !_dereq_('./_descriptors') && !_dereq_('./_fails')(function() {
+        return Object.defineProperty(_dereq_('./_dom-create')('div'), 'a', {
+          get: function() {
+            return 7;
+          }
+        }).a != 7;
+      });
+
+    }, {
+      "./_descriptors": 16,
+      "./_dom-create": 17,
+      "./_fails": 21
+    }],
+    27: [function(_dereq_, module, exports) {
+      // fallback for non-array-like ES3 and non-enumerable old V8 strings
+      var cof = _dereq_('./_cof');
+      // eslint-disable-next-line no-prototype-builtins
+      module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it) {
+        return cof(it) == 'String' ? it.split('') : Object(it);
+      };
+
+    }, {
+      "./_cof": 12
+    }],
+    28: [function(_dereq_, module, exports) {
+      // 7.2.2 IsArray(argument)
+      var cof = _dereq_('./_cof');
+      module.exports = Array.isArray || function isArray(arg) {
+        return cof(arg) == 'Array';
+      };
+
+    }, {
+      "./_cof": 12
+    }],
+    29: [function(_dereq_, module, exports) {
+      module.exports = function(it) {
+        return typeof it === 'object' ? it !== null : typeof it === 'function';
+      };
+
+    }, {}],
+    30: [function(_dereq_, module, exports) {
+
+      var create = _dereq_('./_object-create');
+      var descriptor = _dereq_('./_property-desc');
+      var setToStringTag = _dereq_('./_set-to-string-tag');
+      var IteratorPrototype = {};
+
+      // 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
+      _dereq_('./_hide')(IteratorPrototype, _dereq_('./_wks')('iterator'), function() {
+        return this;
+      });
+
+      module.exports = function(Constructor, NAME, next) {
+        Constructor.prototype = create(IteratorPrototype, {
+          next: descriptor(1, next)
+        });
+        setToStringTag(Constructor, NAME + ' Iterator');
+      };
+
+    }, {
+      "./_hide": 24,
+      "./_object-create": 36,
+      "./_property-desc": 47,
+      "./_set-to-string-tag": 49,
+      "./_wks": 62
+    }],
+    31: [function(_dereq_, module, exports) {
+
+      var LIBRARY = _dereq_('./_library');
+      var $export = _dereq_('./_export');
+      var redefine = _dereq_('./_redefine');
+      var hide = _dereq_('./_hide');
+      var has = _dereq_('./_has');
+      var Iterators = _dereq_('./_iterators');
+      var $iterCreate = _dereq_('./_iter-create');
+      var setToStringTag = _dereq_('./_set-to-string-tag');
+      var getPrototypeOf = _dereq_('./_object-gpo');
+      var ITERATOR = _dereq_('./_wks')('iterator');
+      var BUGGY = !([].keys && 'next' in [].keys()); // Safari has buggy iterators w/o `next`
+      var FF_ITERATOR = '@@iterator';
+      var KEYS = 'keys';
+      var VALUES = 'values';
+
+      var returnThis = function() {
+        return this;
+      };
+
+      module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED) {
+        $iterCreate(Constructor, NAME, next);
+        var getMethod = function(kind) {
+          if (!BUGGY && kind in proto) return proto[kind];
+          switch (kind) {
+            case KEYS:
+              return function keys() {
+                return new Constructor(this, kind);
+              };
+            case VALUES:
+              return function values() {
+                return new Constructor(this, kind);
+              };
+          }
+          return function entries() {
+            return new Constructor(this, kind);
+          };
+        };
+        var TAG = NAME + ' Iterator';
+        var DEF_VALUES = DEFAULT == VALUES;
+        var VALUES_BUG = false;
+        var proto = Base.prototype;
+        var $native = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT];
+        var $default = $native || getMethod(DEFAULT);
+        var $entries = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined;
+        var $anyNative = NAME == 'Array' ? proto.entries || $native : $native;
+        var methods, key, IteratorPrototype;
+        // Fix native
+        if ($anyNative) {
+          IteratorPrototype = getPrototypeOf($anyNative.call(new Base()));
+          if (IteratorPrototype !== Object.prototype && IteratorPrototype.next) {
+            // Set @@toStringTag to native iterators
+            setToStringTag(IteratorPrototype, TAG, true);
+            // fix for some old engines
+            if (!LIBRARY && !has(IteratorPrototype, ITERATOR)) hide(IteratorPrototype, ITERATOR, returnThis);
+          }
+        }
+        // fix Array#{values, @@iterator}.name in V8 / FF
+        if (DEF_VALUES && $native && $native.name !== VALUES) {
+          VALUES_BUG = true;
+          $default = function values() {
+            return $native.call(this);
+          };
+        }
+        // Define iterator
+        if ((!LIBRARY || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])) {
+          hide(proto, ITERATOR, $default);
+        }
+        // Plug for library
+        Iterators[NAME] = $default;
+        Iterators[TAG] = returnThis;
+        if (DEFAULT) {
+          methods = {
+            values: DEF_VALUES ? $default : getMethod(VALUES),
+            keys: IS_SET ? $default : getMethod(KEYS),
+            entries: $entries
+          };
+          if (FORCED)
+            for (key in methods) {
+              if (!(key in proto)) redefine(proto, key, methods[key]);
+            } else $export($export.P + $export.F * (BUGGY || VALUES_BUG), NAME, methods);
+        }
+        return methods;
+      };
+
+    }, {
+      "./_export": 20,
+      "./_has": 23,
+      "./_hide": 24,
+      "./_iter-create": 30,
+      "./_iterators": 33,
+      "./_library": 34,
+      "./_object-gpo": 43,
+      "./_redefine": 48,
+      "./_set-to-string-tag": 49,
+      "./_wks": 62
+    }],
+    32: [function(_dereq_, module, exports) {
+      module.exports = function(done, value) {
+        return {
+          value: value,
+          done: !!done
+        };
+      };
+
+    }, {}],
+    33: [function(_dereq_, module, exports) {
+      module.exports = {};
+
+    }, {}],
+    34: [function(_dereq_, module, exports) {
+      module.exports = true;
+
+    }, {}],
+    35: [function(_dereq_, module, exports) {
+      var META = _dereq_('./_uid')('meta');
+      var isObject = _dereq_('./_is-object');
+      var has = _dereq_('./_has');
+      var setDesc = _dereq_('./_object-dp').f;
+      var id = 0;
+      var isExtensible = Object.isExtensible || function() {
+        return true;
+      };
+      var FREEZE = !_dereq_('./_fails')(function() {
+        return isExtensible(Object.preventExtensions({}));
+      });
+      var setMeta = function(it) {
+        setDesc(it, META, {
+          value: {
+            i: 'O' + ++id, // object ID
+            w: {} // weak collections IDs
+          }
+        });
+      };
+      var fastKey = function(it, create) {
+        // return primitive with prefix
+        if (!isObject(it)) return typeof it == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
+        if (!has(it, META)) {
+          // can't set metadata to uncaught frozen object
+          if (!isExtensible(it)) return 'F';
+          // not necessary to add metadata
+          if (!create) return 'E';
+          // add missing metadata
+          setMeta(it);
+          // return object ID
+        }
+        return it[META].i;
+      };
+      var getWeak = function(it, create) {
+        if (!has(it, META)) {
+          // can't set metadata to uncaught frozen object
+          if (!isExtensible(it)) return true;
+          // not necessary to add metadata
+          if (!create) return false;
+          // add missing metadata
+          setMeta(it);
+          // return hash weak collections IDs
+        }
+        return it[META].w;
+      };
+      // add metadata on freeze-family methods calling
+      var onFreeze = function(it) {
+        if (FREEZE && meta.NEED && isExtensible(it) && !has(it, META)) setMeta(it);
+        return it;
+      };
+      var meta = module.exports = {
+        KEY: META,
+        NEED: false,
+        fastKey: fastKey,
+        getWeak: getWeak,
+        onFreeze: onFreeze
+      };
+
+    }, {
+      "./_fails": 21,
+      "./_has": 23,
+      "./_is-object": 29,
+      "./_object-dp": 37,
+      "./_uid": 59
+    }],
+    36: [function(_dereq_, module, exports) {
+      // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+      var anObject = _dereq_('./_an-object');
+      var dPs = _dereq_('./_object-dps');
+      var enumBugKeys = _dereq_('./_enum-bug-keys');
+      var IE_PROTO = _dereq_('./_shared-key')('IE_PROTO');
+      var Empty = function() {};
+      var PROTOTYPE = 'prototype';
+
+      // Create object with fake `null` prototype: use iframe Object with cleared prototype
+      var createDict = function() {
+        // Thrash, waste and sodomy: IE GC bug
+        var iframe = _dereq_('./_dom-create')('iframe');
+        var i = enumBugKeys.length;
+        var lt = '<';
+        var gt = '>';
+        var iframeDocument;
+        iframe.style.display = 'none';
+        _dereq_('./_html').appendChild(iframe);
+        iframe.src = 'javascript:'; // eslint-disable-line no-script-url
+        // createDict = iframe.contentWindow.Object;
+        // html.removeChild(iframe);
+        iframeDocument = iframe.contentWindow.document;
+        iframeDocument.open();
+        iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
+        iframeDocument.close();
+        createDict = iframeDocument.F;
+        while (i--) delete createDict[PROTOTYPE][enumBugKeys[i]];
+        return createDict();
+      };
+
+      module.exports = Object.create || function create(O, Properties) {
+        var result;
+        if (O !== null) {
+          Empty[PROTOTYPE] = anObject(O);
+          result = new Empty();
+          Empty[PROTOTYPE] = null;
+          // add "__proto__" for Object.getPrototypeOf polyfill
+          result[IE_PROTO] = O;
+        } else result = createDict();
+        return Properties === undefined ? result : dPs(result, Properties);
+      };
+
+    }, {
+      "./_an-object": 10,
+      "./_dom-create": 17,
+      "./_enum-bug-keys": 18,
+      "./_html": 25,
+      "./_object-dps": 38,
+      "./_shared-key": 50
+    }],
+    37: [function(_dereq_, module, exports) {
+      var anObject = _dereq_('./_an-object');
+      var IE8_DOM_DEFINE = _dereq_('./_ie8-dom-define');
+      var toPrimitive = _dereq_('./_to-primitive');
+      var dP = Object.defineProperty;
+
+      exports.f = _dereq_('./_descriptors') ? Object.defineProperty : function defineProperty(O, P, Attributes) {
+        anObject(O);
+        P = toPrimitive(P, true);
+        anObject(Attributes);
+        if (IE8_DOM_DEFINE) try {
+          return dP(O, P, Attributes);
+        } catch (e) {}
+        if ('get' in Attributes || 'set' in Attributes) throw TypeError('Accessors not supported!');
+        if ('value' in Attributes) O[P] = Attributes.value;
+        return O;
+      };
+
+    }, {
+      "./_an-object": 10,
+      "./_descriptors": 16,
+      "./_ie8-dom-define": 26,
+      "./_to-primitive": 58
+    }],
+    38: [function(_dereq_, module, exports) {
+      var dP = _dereq_('./_object-dp');
+      var anObject = _dereq_('./_an-object');
+      var getKeys = _dereq_('./_object-keys');
+
+      module.exports = _dereq_('./_descriptors') ? Object.defineProperties : function defineProperties(O, Properties) {
+        anObject(O);
+        var keys = getKeys(Properties);
+        var length = keys.length;
+        var i = 0;
+        var P;
+        while (length > i) dP.f(O, P = keys[i++], Properties[P]);
+        return O;
+      };
+
+    }, {
+      "./_an-object": 10,
+      "./_descriptors": 16,
+      "./_object-dp": 37,
+      "./_object-keys": 45
+    }],
+    39: [function(_dereq_, module, exports) {
+      var pIE = _dereq_('./_object-pie');
+      var createDesc = _dereq_('./_property-desc');
+      var toIObject = _dereq_('./_to-iobject');
+      var toPrimitive = _dereq_('./_to-primitive');
+      var has = _dereq_('./_has');
+      var IE8_DOM_DEFINE = _dereq_('./_ie8-dom-define');
+      var gOPD = Object.getOwnPropertyDescriptor;
+
+      exports.f = _dereq_('./_descriptors') ? gOPD : function getOwnPropertyDescriptor(O, P) {
+        O = toIObject(O);
+        P = toPrimitive(P, true);
+        if (IE8_DOM_DEFINE) try {
+          return gOPD(O, P);
+        } catch (e) {}
+        if (has(O, P)) return createDesc(!pIE.f.call(O, P), O[P]);
+      };
+
+    }, {
+      "./_descriptors": 16,
+      "./_has": 23,
+      "./_ie8-dom-define": 26,
+      "./_object-pie": 46,
+      "./_property-desc": 47,
+      "./_to-iobject": 55,
+      "./_to-primitive": 58
+    }],
+    40: [function(_dereq_, module, exports) {
+      // fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
+      var toIObject = _dereq_('./_to-iobject');
+      var gOPN = _dereq_('./_object-gopn').f;
+      var toString = {}.toString;
+
+      var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames ?
+        Object.getOwnPropertyNames(window) : [];
+
+      var getWindowNames = function(it) {
+        try {
+          return gOPN(it);
+        } catch (e) {
+          return windowNames.slice();
+        }
+      };
+
+      module.exports.f = function getOwnPropertyNames(it) {
+        return windowNames && toString.call(it) == '[object Window]' ? getWindowNames(it) : gOPN(toIObject(it));
+      };
+
+    }, {
+      "./_object-gopn": 41,
+      "./_to-iobject": 55
+    }],
+    41: [function(_dereq_, module, exports) {
+      // 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
+      var $keys = _dereq_('./_object-keys-internal');
+      var hiddenKeys = _dereq_('./_enum-bug-keys').concat('length', 'prototype');
+
+      exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
+        return $keys(O, hiddenKeys);
+      };
+
+    }, {
+      "./_enum-bug-keys": 18,
+      "./_object-keys-internal": 44
+    }],
+    42: [function(_dereq_, module, exports) {
+      exports.f = Object.getOwnPropertySymbols;
+
+    }, {}],
+    43: [function(_dereq_, module, exports) {
+      // 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
+      var has = _dereq_('./_has');
+      var toObject = _dereq_('./_to-object');
+      var IE_PROTO = _dereq_('./_shared-key')('IE_PROTO');
+      var ObjectProto = Object.prototype;
+
+      module.exports = Object.getPrototypeOf || function(O) {
+        O = toObject(O);
+        if (has(O, IE_PROTO)) return O[IE_PROTO];
+        if (typeof O.constructor == 'function' && O instanceof O.constructor) {
+          return O.constructor.prototype;
+        }
+        return O instanceof Object ? ObjectProto : null;
+      };
+
+    }, {
+      "./_has": 23,
+      "./_shared-key": 50,
+      "./_to-object": 57
+    }],
+    44: [function(_dereq_, module, exports) {
+      var has = _dereq_('./_has');
+      var toIObject = _dereq_('./_to-iobject');
+      var arrayIndexOf = _dereq_('./_array-includes')(false);
+      var IE_PROTO = _dereq_('./_shared-key')('IE_PROTO');
+
+      module.exports = function(object, names) {
+        var O = toIObject(object);
+        var i = 0;
+        var result = [];
+        var key;
+        for (key in O)
+          if (key != IE_PROTO) has(O, key) && result.push(key);
+        // Don't enum bug & hidden keys
+        while (names.length > i)
+          if (has(O, key = names[i++])) {
+            ~arrayIndexOf(result, key) || result.push(key);
+          }
+        return result;
+      };
+
+    }, {
+      "./_array-includes": 11,
+      "./_has": 23,
+      "./_shared-key": 50,
+      "./_to-iobject": 55
+    }],
+    45: [function(_dereq_, module, exports) {
+      // 19.1.2.14 / 15.2.3.14 Object.keys(O)
+      var $keys = _dereq_('./_object-keys-internal');
+      var enumBugKeys = _dereq_('./_enum-bug-keys');
+
+      module.exports = Object.keys || function keys(O) {
+        return $keys(O, enumBugKeys);
+      };
+
+    }, {
+      "./_enum-bug-keys": 18,
+      "./_object-keys-internal": 44
+    }],
+    46: [function(_dereq_, module, exports) {
+      exports.f = {}.propertyIsEnumerable;
+
+    }, {}],
+    47: [function(_dereq_, module, exports) {
+      module.exports = function(bitmap, value) {
+        return {
+          enumerable: !(bitmap & 1),
+          configurable: !(bitmap & 2),
+          writable: !(bitmap & 4),
+          value: value
+        };
+      };
+
+    }, {}],
+    48: [function(_dereq_, module, exports) {
+      module.exports = _dereq_('./_hide');
+
+    }, {
+      "./_hide": 24
+    }],
+    49: [function(_dereq_, module, exports) {
+      var def = _dereq_('./_object-dp').f;
+      var has = _dereq_('./_has');
+      var TAG = _dereq_('./_wks')('toStringTag');
+
+      module.exports = function(it, tag, stat) {
+        if (it && !has(it = stat ? it : it.prototype, TAG)) def(it, TAG, {
+          configurable: true,
+          value: tag
+        });
+      };
+
+    }, {
+      "./_has": 23,
+      "./_object-dp": 37,
+      "./_wks": 62
+    }],
+    50: [function(_dereq_, module, exports) {
+      var shared = _dereq_('./_shared')('keys');
+      var uid = _dereq_('./_uid');
+      module.exports = function(key) {
+        return shared[key] || (shared[key] = uid(key));
+      };
+
+    }, {
+      "./_shared": 51,
+      "./_uid": 59
+    }],
+    51: [function(_dereq_, module, exports) {
+      var global = _dereq_('./_global');
+      var SHARED = '__core-js_shared__';
+      var store = global[SHARED] || (global[SHARED] = {});
+      module.exports = function(key) {
+        return store[key] || (store[key] = {});
+      };
+
+    }, {
+      "./_global": 22
+    }],
+    52: [function(_dereq_, module, exports) {
+      var toInteger = _dereq_('./_to-integer');
+      var defined = _dereq_('./_defined');
+      // true  -> String#at
+      // false -> String#codePointAt
+      module.exports = function(TO_STRING) {
+        return function(that, pos) {
+          var s = String(defined(that));
+          var i = toInteger(pos);
+          var l = s.length;
+          var a, b;
+          if (i < 0 || i >= l) return TO_STRING ? '' : undefined;
+          a = s.charCodeAt(i);
+          return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff ?
+            TO_STRING ? s.charAt(i) : a :
+            TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
+        };
+      };
+
+    }, {
+      "./_defined": 15,
+      "./_to-integer": 54
+    }],
+    53: [function(_dereq_, module, exports) {
+      var toInteger = _dereq_('./_to-integer');
+      var max = Math.max;
+      var min = Math.min;
+      module.exports = function(index, length) {
+        index = toInteger(index);
+        return index < 0 ? max(index + length, 0) : min(index, length);
+      };
+
+    }, {
+      "./_to-integer": 54
+    }],
+    54: [function(_dereq_, module, exports) {
+      // 7.1.4 ToInteger
+      var ceil = Math.ceil;
+      var floor = Math.floor;
+      module.exports = function(it) {
+        return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
+      };
+
+    }, {}],
+    55: [function(_dereq_, module, exports) {
+      // to indexed object, toObject with fallback for non-array-like ES3 strings
+      var IObject = _dereq_('./_iobject');
+      var defined = _dereq_('./_defined');
+      module.exports = function(it) {
+        return IObject(defined(it));
+      };
+
+    }, {
+      "./_defined": 15,
+      "./_iobject": 27
+    }],
+    56: [function(_dereq_, module, exports) {
+      // 7.1.15 ToLength
+      var toInteger = _dereq_('./_to-integer');
+      var min = Math.min;
+      module.exports = function(it) {
+        return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
+      };
+
+    }, {
+      "./_to-integer": 54
+    }],
+    57: [function(_dereq_, module, exports) {
+      // 7.1.13 ToObject(argument)
+      var defined = _dereq_('./_defined');
+      module.exports = function(it) {
+        return Object(defined(it));
+      };
+
+    }, {
+      "./_defined": 15
+    }],
+    58: [function(_dereq_, module, exports) {
+      // 7.1.1 ToPrimitive(input [, PreferredType])
+      var isObject = _dereq_('./_is-object');
+      // instead of the ES6 spec version, we didn't implement @@toPrimitive case
+      // and the second argument - flag - preferred type is a string
+      module.exports = function(it, S) {
+        if (!isObject(it)) return it;
+        var fn, val;
+        if (S && typeof(fn = it.toString) == 'function' && !isObject(val = fn.call(it))) return val;
+        if (typeof(fn = it.valueOf) == 'function' && !isObject(val = fn.call(it))) return val;
+        if (!S && typeof(fn = it.toString) == 'function' && !isObject(val = fn.call(it))) return val;
+        throw TypeError("Can't convert object to primitive value");
+      };
+
+    }, {
+      "./_is-object": 29
+    }],
+    59: [function(_dereq_, module, exports) {
+      var id = 0;
+      var px = Math.random();
+      module.exports = function(key) {
+        return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
+      };
+
+    }, {}],
+    60: [function(_dereq_, module, exports) {
+      var global = _dereq_('./_global');
+      var core = _dereq_('./_core');
+      var LIBRARY = _dereq_('./_library');
+      var wksExt = _dereq_('./_wks-ext');
+      var defineProperty = _dereq_('./_object-dp').f;
+      module.exports = function(name) {
+        var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
+        if (name.charAt(0) != '_' && !(name in $Symbol)) defineProperty($Symbol, name, {
+          value: wksExt.f(name)
+        });
+      };
+
+    }, {
+      "./_core": 13,
+      "./_global": 22,
+      "./_library": 34,
+      "./_object-dp": 37,
+      "./_wks-ext": 61
+    }],
+    61: [function(_dereq_, module, exports) {
+      exports.f = _dereq_('./_wks');
+
+    }, {
+      "./_wks": 62
+    }],
+    62: [function(_dereq_, module, exports) {
+      var store = _dereq_('./_shared')('wks');
+      var uid = _dereq_('./_uid');
+      var Symbol = _dereq_('./_global').Symbol;
+      var USE_SYMBOL = typeof Symbol == 'function';
+
+      var $exports = module.exports = function(name) {
+        return store[name] || (store[name] =
+          USE_SYMBOL && Symbol[name] || (USE_SYMBOL ? Symbol : uid)('Symbol.' + name));
+      };
+
+      $exports.store = store;
+
+    }, {
+      "./_global": 22,
+      "./_shared": 51,
+      "./_uid": 59
+    }],
+    63: [function(_dereq_, module, exports) {
+
+      var addToUnscopables = _dereq_('./_add-to-unscopables');
+      var step = _dereq_('./_iter-step');
+      var Iterators = _dereq_('./_iterators');
+      var toIObject = _dereq_('./_to-iobject');
+
+      // 22.1.3.4 Array.prototype.entries()
+      // 22.1.3.13 Array.prototype.keys()
+      // 22.1.3.29 Array.prototype.values()
+      // 22.1.3.30 Array.prototype[@@iterator]()
+      module.exports = _dereq_('./_iter-define')(Array, 'Array', function(iterated, kind) {
+        this._t = toIObject(iterated); // target
+        this._i = 0; // next index
+        this._k = kind; // kind
+        // 22.1.5.2.1 %ArrayIteratorPrototype%.next()
+      }, function() {
+        var O = this._t;
+        var kind = this._k;
+        var index = this._i++;
+        if (!O || index >= O.length) {
+          this._t = undefined;
+          return step(1);
+        }
+        if (kind == 'keys') return step(0, index);
+        if (kind == 'values') return step(0, O[index]);
+        return step(0, [index, O[index]]);
+      }, 'values');
+
+      // argumentsList[@@iterator] is %ArrayProto_values% (9.4.4.6, 9.4.4.7)
+      Iterators.Arguments = Iterators.Array;
+
+      addToUnscopables('keys');
+      addToUnscopables('values');
+      addToUnscopables('entries');
+
+    }, {
+      "./_add-to-unscopables": 9,
+      "./_iter-define": 31,
+      "./_iter-step": 32,
+      "./_iterators": 33,
+      "./_to-iobject": 55
+    }],
+    64: [function(_dereq_, module, exports) {
+
+    }, {}],
+    65: [function(_dereq_, module, exports) {
+
+      var $at = _dereq_('./_string-at')(true);
+
+      // 21.1.3.27 String.prototype[@@iterator]()
+      _dereq_('./_iter-define')(String, 'String', function(iterated) {
+        this._t = String(iterated); // target
+        this._i = 0; // next index
+        // 21.1.5.2.1 %StringIteratorPrototype%.next()
+      }, function() {
+        var O = this._t;
+        var index = this._i;
+        var point;
+        if (index >= O.length) return {
+          value: undefined,
+          done: true
+        };
+        point = $at(O, index);
+        this._i += point.length;
+        return {
+          value: point,
+          done: false
+        };
+      });
+
+    }, {
+      "./_iter-define": 31,
+      "./_string-at": 52
+    }],
+    66: [function(_dereq_, module, exports) {
+
+      // ECMAScript 6 symbols shim
+      var global = _dereq_('./_global');
+      var has = _dereq_('./_has');
+      var DESCRIPTORS = _dereq_('./_descriptors');
+      var $export = _dereq_('./_export');
+      var redefine = _dereq_('./_redefine');
+      var META = _dereq_('./_meta').KEY;
+      var $fails = _dereq_('./_fails');
+      var shared = _dereq_('./_shared');
+      var setToStringTag = _dereq_('./_set-to-string-tag');
+      var uid = _dereq_('./_uid');
+      var wks = _dereq_('./_wks');
+      var wksExt = _dereq_('./_wks-ext');
+      var wksDefine = _dereq_('./_wks-define');
+      var enumKeys = _dereq_('./_enum-keys');
+      var isArray = _dereq_('./_is-array');
+      var anObject = _dereq_('./_an-object');
+      var toIObject = _dereq_('./_to-iobject');
+      var toPrimitive = _dereq_('./_to-primitive');
+      var createDesc = _dereq_('./_property-desc');
+      var _create = _dereq_('./_object-create');
+      var gOPNExt = _dereq_('./_object-gopn-ext');
+      var $GOPD = _dereq_('./_object-gopd');
+      var $DP = _dereq_('./_object-dp');
+      var $keys = _dereq_('./_object-keys');
+      var gOPD = $GOPD.f;
+      var dP = $DP.f;
+      var gOPN = gOPNExt.f;
+      var $Symbol = global.Symbol;
+      var $JSON = global.JSON;
+      var _stringify = $JSON && $JSON.stringify;
+      var PROTOTYPE = 'prototype';
+      var HIDDEN = wks('_hidden');
+      var TO_PRIMITIVE = wks('toPrimitive');
+      var isEnum = {}.propertyIsEnumerable;
+      var SymbolRegistry = shared('symbol-registry');
+      var AllSymbols = shared('symbols');
+      var OPSymbols = shared('op-symbols');
+      var ObjectProto = Object[PROTOTYPE];
+      var USE_NATIVE = typeof $Symbol == 'function';
+      var QObject = global.QObject;
+      // Don't use setters in Qt Script, https://github.com/zloirock/core-js/issues/173
+      var setter = !QObject || !QObject[PROTOTYPE] || !QObject[PROTOTYPE].findChild;
+
+      // fallback for old Android, https://code.google.com/p/v8/issues/detail?id=687
+      var setSymbolDesc = DESCRIPTORS && $fails(function() {
+        return _create(dP({}, 'a', {
+          get: function() {
+            return dP(this, 'a', {
+              value: 7
+            }).a;
+          }
+        })).a != 7;
+      }) ? function(it, key, D) {
+        var protoDesc = gOPD(ObjectProto, key);
+        if (protoDesc) delete ObjectProto[key];
+        dP(it, key, D);
+        if (protoDesc && it !== ObjectProto) dP(ObjectProto, key, protoDesc);
+      } : dP;
+
+      var wrap = function(tag) {
+        var sym = AllSymbols[tag] = _create($Symbol[PROTOTYPE]);
+        sym._k = tag;
+        return sym;
+      };
+
+      var isSymbol = USE_NATIVE && typeof $Symbol.iterator == 'symbol' ? function(it) {
+        return typeof it == 'symbol';
+      } : function(it) {
+        return it instanceof $Symbol;
+      };
+
+      var $defineProperty = function defineProperty(it, key, D) {
+        if (it === ObjectProto) $defineProperty(OPSymbols, key, D);
+        anObject(it);
+        key = toPrimitive(key, true);
+        anObject(D);
+        if (has(AllSymbols, key)) {
+          if (!D.enumerable) {
+            if (!has(it, HIDDEN)) dP(it, HIDDEN, createDesc(1, {}));
+            it[HIDDEN][key] = true;
+          } else {
+            if (has(it, HIDDEN) && it[HIDDEN][key]) it[HIDDEN][key] = false;
+            D = _create(D, {
+              enumerable: createDesc(0, false)
+            });
+          }
+          return setSymbolDesc(it, key, D);
+        }
+        return dP(it, key, D);
+      };
+      var $defineProperties = function defineProperties(it, P) {
+        anObject(it);
+        var keys = enumKeys(P = toIObject(P));
+        var i = 0;
+        var l = keys.length;
+        var key;
+        while (l > i) $defineProperty(it, key = keys[i++], P[key]);
+        return it;
+      };
+      var $create = function create(it, P) {
+        return P === undefined ? _create(it) : $defineProperties(_create(it), P);
+      };
+      var $propertyIsEnumerable = function propertyIsEnumerable(key) {
+        var E = isEnum.call(this, key = toPrimitive(key, true));
+        if (this === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key)) return false;
+        return E || !has(this, key) || !has(AllSymbols, key) || has(this, HIDDEN) && this[HIDDEN][key] ? E : true;
+      };
+      var $getOwnPropertyDescriptor = function getOwnPropertyDescriptor(it, key) {
+        it = toIObject(it);
+        key = toPrimitive(key, true);
+        if (it === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key)) return;
+        var D = gOPD(it, key);
+        if (D && has(AllSymbols, key) && !(has(it, HIDDEN) && it[HIDDEN][key])) D.enumerable = true;
+        return D;
+      };
+      var $getOwnPropertyNames = function getOwnPropertyNames(it) {
+        var names = gOPN(toIObject(it));
+        var result = [];
+        var i = 0;
+        var key;
+        while (names.length > i) {
+          if (!has(AllSymbols, key = names[i++]) && key != HIDDEN && key != META) result.push(key);
+        }
+        return result;
+      };
+      var $getOwnPropertySymbols = function getOwnPropertySymbols(it) {
+        var IS_OP = it === ObjectProto;
+        var names = gOPN(IS_OP ? OPSymbols : toIObject(it));
+        var result = [];
+        var i = 0;
+        var key;
+        while (names.length > i) {
+          if (has(AllSymbols, key = names[i++]) && (IS_OP ? has(ObjectProto, key) : true)) result.push(AllSymbols[key]);
+        }
+        return result;
+      };
+
+      // 19.4.1.1 Symbol([description])
+      if (!USE_NATIVE) {
+        $Symbol = function Symbol() {
+          if (this instanceof $Symbol) throw TypeError('Symbol is not a constructor!');
+          var tag = uid(arguments.length > 0 ? arguments[0] : undefined);
+          var $set = function(value) {
+            if (this === ObjectProto) $set.call(OPSymbols, value);
+            if (has(this, HIDDEN) && has(this[HIDDEN], tag)) this[HIDDEN][tag] = false;
+            setSymbolDesc(this, tag, createDesc(1, value));
+          };
+          if (DESCRIPTORS && setter) setSymbolDesc(ObjectProto, tag, {
+            configurable: true,
+            set: $set
+          });
+          return wrap(tag);
+        };
+        redefine($Symbol[PROTOTYPE], 'toString', function toString() {
+          return this._k;
+        });
+
+        $GOPD.f = $getOwnPropertyDescriptor;
+        $DP.f = $defineProperty;
+        _dereq_('./_object-gopn').f = gOPNExt.f = $getOwnPropertyNames;
+        _dereq_('./_object-pie').f = $propertyIsEnumerable;
+        _dereq_('./_object-gops').f = $getOwnPropertySymbols;
+
+        if (DESCRIPTORS && !_dereq_('./_library')) {
+          redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
+        }
+
+        wksExt.f = function(name) {
+          return wrap(wks(name));
+        };
+      }
+
+      $export($export.G + $export.W + $export.F * !USE_NATIVE, {
+        Symbol: $Symbol
+      });
+
+      for (var es6Symbols = (
+          // 19.4.2.2, 19.4.2.3, 19.4.2.4, 19.4.2.6, 19.4.2.8, 19.4.2.9, 19.4.2.10, 19.4.2.11, 19.4.2.12, 19.4.2.13, 19.4.2.14
+          'hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables'
+        ).split(','), j = 0; es6Symbols.length > j;) wks(es6Symbols[j++]);
+
+      for (var wellKnownSymbols = $keys(wks.store), k = 0; wellKnownSymbols.length > k;) wksDefine(wellKnownSymbols[k++]);
+
+      $export($export.S + $export.F * !USE_NATIVE, 'Symbol', {
+        // 19.4.2.1 Symbol.for(key)
+        'for': function(key) {
+          return has(SymbolRegistry, key += '') ?
+            SymbolRegistry[key] :
+            SymbolRegistry[key] = $Symbol(key);
+        },
+        // 19.4.2.5 Symbol.keyFor(sym)
+        keyFor: function keyFor(sym) {
+          if (!isSymbol(sym)) throw TypeError(sym + ' is not a symbol!');
+          for (var key in SymbolRegistry)
+            if (SymbolRegistry[key] === sym) return key;
+        },
+        useSetter: function() {
+          setter = true;
+        },
+        useSimple: function() {
+          setter = false;
+        }
+      });
+
+      $export($export.S + $export.F * !USE_NATIVE, 'Object', {
+        // 19.1.2.2 Object.create(O [, Properties])
+        create: $create,
+        // 19.1.2.4 Object.defineProperty(O, P, Attributes)
+        defineProperty: $defineProperty,
+        // 19.1.2.3 Object.defineProperties(O, Properties)
+        defineProperties: $defineProperties,
+        // 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
+        getOwnPropertyDescriptor: $getOwnPropertyDescriptor,
+        // 19.1.2.7 Object.getOwnPropertyNames(O)
+        getOwnPropertyNames: $getOwnPropertyNames,
+        // 19.1.2.8 Object.getOwnPropertySymbols(O)
+        getOwnPropertySymbols: $getOwnPropertySymbols
+      });
+
+      // 24.3.2 JSON.stringify(value [, replacer [, space]])
+      $JSON && $export($export.S + $export.F * (!USE_NATIVE || $fails(function() {
+        var S = $Symbol();
+        // MS Edge converts symbol values to JSON as {}
+        // WebKit converts symbol values to JSON as null
+        // V8 throws on boxed symbols
+        return _stringify([S]) != '[null]' || _stringify({
+          a: S
+        }) != '{}' || _stringify(Object(S)) != '{}';
+      })), 'JSON', {
+        stringify: function stringify(it) {
+          if (it === undefined || isSymbol(it)) return; // IE8 returns string on undefined
+          var args = [it];
+          var i = 1;
+          var replacer, $replacer;
+          while (arguments.length > i) args.push(arguments[i++]);
+          replacer = args[1];
+          if (typeof replacer == 'function') $replacer = replacer;
+          if ($replacer || !isArray(replacer)) replacer = function(key, value) {
+            if ($replacer) value = $replacer.call(this, key, value);
+            if (!isSymbol(value)) return value;
+          };
+          args[1] = replacer;
+          return _stringify.apply($JSON, args);
+        }
+      });
+
+      // 19.4.3.4 Symbol.prototype[@@toPrimitive](hint)
+      $Symbol[PROTOTYPE][TO_PRIMITIVE] || _dereq_('./_hide')($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
+      // 19.4.3.5 Symbol.prototype[@@toStringTag]
+      setToStringTag($Symbol, 'Symbol');
+      // 20.2.1.9 Math[@@toStringTag]
+      setToStringTag(Math, 'Math', true);
+      // 24.3.3 JSON[@@toStringTag]
+      setToStringTag(global.JSON, 'JSON', true);
+
+    }, {
+      "./_an-object": 10,
+      "./_descriptors": 16,
+      "./_enum-keys": 19,
+      "./_export": 20,
+      "./_fails": 21,
+      "./_global": 22,
+      "./_has": 23,
+      "./_hide": 24,
+      "./_is-array": 28,
+      "./_library": 34,
+      "./_meta": 35,
+      "./_object-create": 36,
+      "./_object-dp": 37,
+      "./_object-gopd": 39,
+      "./_object-gopn": 41,
+      "./_object-gopn-ext": 40,
+      "./_object-gops": 42,
+      "./_object-keys": 45,
+      "./_object-pie": 46,
+      "./_property-desc": 47,
+      "./_redefine": 48,
+      "./_set-to-string-tag": 49,
+      "./_shared": 51,
+      "./_to-iobject": 55,
+      "./_to-primitive": 58,
+      "./_uid": 59,
+      "./_wks": 62,
+      "./_wks-define": 60,
+      "./_wks-ext": 61
+    }],
+    67: [function(_dereq_, module, exports) {
+      _dereq_('./_wks-define')('asyncIterator');
+
+    }, {
+      "./_wks-define": 60
+    }],
+    68: [function(_dereq_, module, exports) {
+      _dereq_('./_wks-define')('observable');
+
+    }, {
+      "./_wks-define": 60
+    }],
+    69: [function(_dereq_, module, exports) {
+      _dereq_('./es6.array.iterator');
+      var global = _dereq_('./_global');
+      var hide = _dereq_('./_hide');
+      var Iterators = _dereq_('./_iterators');
+      var TO_STRING_TAG = _dereq_('./_wks')('toStringTag');
+
+      var DOMIterables = ('CSSRuleList,CSSStyleDeclaration,CSSValueList,ClientRectList,DOMRectList,DOMStringList,' +
+        'DOMTokenList,DataTransferItemList,FileList,HTMLAllCollection,HTMLCollection,HTMLFormElement,HTMLSelectElement,' +
+        'MediaList,MimeTypeArray,NamedNodeMap,NodeList,PaintRequestList,Plugin,PluginArray,SVGLengthList,SVGNumberList,' +
+        'SVGPathSegList,SVGPointList,SVGStringList,SVGTransformList,SourceBufferList,StyleSheetList,TextTrackCueList,' +
+        'TextTrackList,TouchList').split(',');
+
+      for (var i = 0; i < DOMIterables.length; i++) {
+        var NAME = DOMIterables[i];
+        var Collection = global[NAME];
+        var proto = Collection && Collection.prototype;
+        if (proto && !proto[TO_STRING_TAG]) hide(proto, TO_STRING_TAG, NAME);
+        Iterators[NAME] = Iterators.Array;
+      }
+
+    }, {
+      "./_global": 22,
+      "./_hide": 24,
+      "./_iterators": 33,
+      "./_wks": 62,
+      "./es6.array.iterator": 63
+    }],
+    70: [function(_dereq_, module, exports) {
 
       var Aggregations = module.exports = {
-        toAggregateFunc: function(func) {
+        toAggregateFunc: function toAggregateFunc(func) {
           if (func) {
             if (typeof func === 'string' && Aggregations[func]) {
               return Aggregations[func];
@@ -72,17 +1537,17 @@
             return Aggregations.sum;
           }
         },
-        count: function(datafield, intersection, datasource) {
+        count: function count(datafield, intersection, datasource) {
           return intersection === 'all' ? datasource.length : intersection.length;
         },
-        sum: function(datafield, intersection, datasource) {
+        sum: function sum(datafield, intersection, datasource) {
           var sum = 0;
           forEachIntersection(datafield, intersection, datasource, function(val) {
             sum += val;
           });
           return sum;
         },
-        min: function(datafield, intersection, datasource) {
+        min: function min(datafield, intersection, datasource) {
           var min = null;
           forEachIntersection(datafield, intersection, datasource, function(val) {
             if (min == null || val < min) {
@@ -91,7 +1556,7 @@
           });
           return min;
         },
-        max: function(datafield, intersection, datasource) {
+        max: function max(datafield, intersection, datasource) {
           var max = null;
           forEachIntersection(datafield, intersection, datasource, function(val) {
             if (max == null || val > max) {
@@ -100,7 +1565,7 @@
           });
           return max;
         },
-        avg: function(datafield, intersection, datasource) {
+        avg: function avg(datafield, intersection, datasource) {
           var avg = 0;
           var len = (intersection === 'all' ? datasource : intersection).length;
           if (len > 0) {
@@ -111,7 +1576,7 @@
           }
           return avg;
         },
-        prod: function(datafield, intersection, datasource) {
+        prod: function prod(datafield, intersection, datasource) {
           var prod;
           var len = (intersection === 'all' ? datasource : intersection).length;
           if (len > 0) {
@@ -122,16 +1587,16 @@
           }
           return prod;
         },
-        stdev: function(datafield, intersection, datasource) {
+        stdev: function stdev(datafield, intersection, datasource) {
           return Math.sqrt(calcVariance(datafield, intersection, datasource, false));
         },
-        stdevp: function(datafield, intersection, datasource) {
+        stdevp: function stdevp(datafield, intersection, datasource) {
           return Math.sqrt(calcVariance(datafield, intersection, datasource, true));
         },
-        'var': function(datafield, intersection, datasource) {
+        'var': function _var(datafield, intersection, datasource) {
           return calcVariance(datafield, intersection, datasource, false);
         },
-        varp: function(datafield, intersection, datasource) {
+        varp: function varp(datafield, intersection, datasource) {
           return calcVariance(datafield, intersection, datasource, true);
         }
       };
@@ -168,7 +1633,7 @@
       }
 
     }, {}],
-    2: [function(_dereq_, module, exports) {
+    71: [function(_dereq_, module, exports) {
 
       var utils = _dereq_('./orb.utils');
       var Dimension = _dereq_('./orb.dimension');
@@ -193,7 +1658,7 @@
           this.type = type;
 
 
-          this.fields = (function() {
+          this.fields = function() {
             switch (type) {
               case AxeType.COLUMNS:
                 return self.pgrid.config.columnFields;
@@ -204,7 +1669,7 @@
               default:
                 return [];
             }
-          })();
+          }();
 
 
           this.dimensionsCount = null;
@@ -327,10 +1792,10 @@
       module.exports.Type = AxeType;
 
     }, {
-      "./orb.dimension": 4,
-      "./orb.utils": 19
+      "./orb.dimension": 73,
+      "./orb.utils": 88
     }],
-    3: [function(_dereq_, module, exports) {
+    72: [function(_dereq_, module, exports) {
 
       var utils = _dereq_('./orb.utils');
       var axe = _dereq_('./orb.axe');
@@ -626,7 +2091,7 @@
 
         this.availablefields = function() {
           return self.allFields.filter(function(field) {
-            var notequalfield = function(otherfield) {
+            var notequalfield = function notequalfield(otherfield) {
               return field.name !== otherfield.name;
             };
 
@@ -802,13 +2267,13 @@
       };
 
     }, {
-      "./orb.aggregation": 1,
-      "./orb.axe": 2,
-      "./orb.filtering": 6,
-      "./orb.themes": 12,
-      "./orb.utils": 19
+      "./orb.aggregation": 70,
+      "./orb.axe": 71,
+      "./orb.filtering": 75,
+      "./orb.themes": 81,
+      "./orb.utils": 88
     }],
-    4: [function(_dereq_, module, exports) {
+    73: [function(_dereq_, module, exports) {
 
       module.exports = function(id, parent, value, field, depth, isRoot, isLeaf) {
 
@@ -853,7 +2318,7 @@
       };
 
     }, {}],
-    5: [function(_dereq_, module, exports) {
+    74: [function(_dereq_, module, exports) {
 
       var utils = _dereq_('./orb.utils');
       var uiheaders = _dereq_('./orb.ui.header');
@@ -907,7 +2372,7 @@
 
         var columnFields = createButtons(config.columnFields, pgridwidget.layout.rowHeaders.width, cellsHorizontalCount - (pgridwidget.layout.rowHeaders.width + config.columnFields.length));
 
-        var columnHeaders = (function() {
+        var columnHeaders = function() {
           var str = '';
           var j;
           for (var i = 0; i < pgridwidget.columns.headers.length; i++) {
@@ -930,11 +2395,11 @@
             str += rowStr + '</tr>';
           }
           return str;
-        })();
+        }();
 
-        var rowHeadersAndDataCells = (function() {
+        var rowHeadersAndDataCells = function() {
           var str = '';
-          var j;
+          var j; // eslint-disable-line no-unused-vars
           for (var i = 0; i < pgridwidget.rows.headers.length; i++) {
             var currRow = pgridwidget.rows.headers[i];
             var rowStr = '<tr>';
@@ -950,7 +2415,7 @@
             str += rowStr + '</tr>';
           }
           return str;
-        })();
+        }();
 
         function toBase64(str) {
           return utils.btoa(unescape(encodeURIComponent(str)));
@@ -960,11 +2425,11 @@
       };
 
     }, {
-      "./orb.themes": 12,
-      "./orb.ui.header": 15,
-      "./orb.utils": 19
+      "./orb.themes": 81,
+      "./orb.ui.header": 84,
+      "./orb.utils": 88
     }],
-    6: [function(_dereq_, module, exports) {
+    75: [function(_dereq_, module, exports) {
 
       var utils = _dereq_('./orb.utils');
 
@@ -1013,7 +2478,7 @@
       };
 
       var ops = filtering.Operators = {
-        get: function(opname) {
+        get: function get(opname) {
           switch (opname) {
             case ops.MATCH.name:
               return ops.MATCH;
@@ -1038,7 +2503,7 @@
         NONE: null,
         MATCH: {
           name: 'Matches',
-          func: function(value, term) {
+          func: function func(value, term) {
             if (value) {
               return value.toString().search(utils.isRegExp(term) ? term : new RegExp(term, 'i')) >= 0;
             } else {
@@ -1049,7 +2514,7 @@
         },
         NOTMATCH: {
           name: 'Does Not Match',
-          func: function(value, term) {
+          func: function func(value, term) {
             if (value) {
               return value.toString().search(utils.isRegExp(term) ? term : new RegExp(term, 'i')) < 0;
             } else {
@@ -1060,42 +2525,42 @@
         },
         EQ: {
           name: '=',
-          func: function(value, term) {
+          func: function func(value, term) {
             return value == term;
           },
           regexpSupported: false
         },
         NEQ: {
           name: '<>',
-          func: function(value, term) {
+          func: function func(value, term) {
             return value != term;
           },
           regexpSupported: false
         },
         GT: {
           name: '>',
-          func: function(value, term) {
+          func: function func(value, term) {
             return value > term;
           },
           regexpSupported: false
         },
         GTE: {
           name: '>=',
-          func: function(value, term) {
+          func: function func(value, term) {
             return value >= term;
           },
           regexpSupported: false
         },
         LT: {
           name: '<',
-          func: function(value, term) {
+          func: function func(value, term) {
             return value < term;
           },
           regexpSupported: false
         },
         LTE: {
           name: '<=',
-          func: function(value, term) {
+          func: function func(value, term) {
             return value <= term;
           },
           regexpSupported: false
@@ -1103,9 +2568,9 @@
       };
 
     }, {
-      "./orb.utils": 19
+      "./orb.utils": 88
     }],
-    7: [function(_dereq_, module, exports) {
+    76: [function(_dereq_, module, exports) {
 
       module.exports.utils = _dereq_('./orb.utils');
       module.exports.pgrid = _dereq_('./orb.pgrid');
@@ -1114,13 +2579,13 @@
       module.exports['export'] = _dereq_('./orb.export.excel');
 
     }, {
-      "./orb.export.excel": 5,
-      "./orb.pgrid": 8,
-      "./orb.query": 10,
-      "./orb.ui.pgridwidget": 16,
-      "./orb.utils": 19
+      "./orb.export.excel": 74,
+      "./orb.pgrid": 77,
+      "./orb.query": 79,
+      "./orb.ui.pgridwidget": 85,
+      "./orb.utils": 88
     }],
-    8: [function(_dereq_, module, exports) {
+    77: [function(_dereq_, module, exports) {
 
       var PubSub = _dereq_('./orb.pubsub'),
         axe = _dereq_('./orb.axe'),
@@ -1384,7 +2849,7 @@
             }
 
             var emptyIntersection = intersection && intersection.length === 0;
-            var datasource = self.filteredDataSource;
+            var datasource = self.filteredDataSource; // eslint-disable-line no-unused-vars
             var datafield;
             var datafields = [];
 
@@ -1527,14 +2992,14 @@
       pgrid.EVENT_CONFIG_CHANGED = 'pgrid:config-changed';
 
     }, {
-      "./orb.axe": 2,
-      "./orb.config": 3,
-      "./orb.filtering": 6,
-      "./orb.pubsub": 9,
-      "./orb.query": 10,
-      "./orb.utils": 19
+      "./orb.axe": 71,
+      "./orb.config": 72,
+      "./orb.filtering": 75,
+      "./orb.pubsub": 78,
+      "./orb.query": 79,
+      "./orb.utils": 88
     }],
-    9: [function(_dereq_, module, exports) {
+    78: [function(_dereq_, module, exports) {
 
       var utils = _dereq_('./orb.utils');
 
@@ -1558,15 +3023,25 @@
       };
 
     }, {
-      "./orb.utils": 19
+      "./orb.utils": 88
     }],
-    10: [function(_dereq_, module, exports) {
+    79: [function(_dereq_, module, exports) {
+
+      var _typeof2 = _dereq_('babel-runtime/helpers/typeof');
+
+      var _typeof3 = _interopRequireDefault(_typeof2);
+
+      function _interopRequireDefault(obj) {
+        return obj && obj.__esModule ? obj : {
+          default: obj
+        };
+      }
 
       var utils = _dereq_('./orb.utils');
       var axe = _dereq_('./orb.axe');
       var aggregation = _dereq_('./orb.aggregation');
 
-      var queryBase = function(source, query, filters) {
+      var queryBase = function queryBase(source, query, filters) {
 
         var self = this;
 
@@ -1618,7 +3093,7 @@
         };
       };
 
-      var pgridQuery = function(pgrid) {
+      var pgridQuery = function pgridQuery(pgrid) {
 
         queryBase.call(this, pgrid, {}, {});
 
@@ -1634,7 +3109,7 @@
           };
 
           if (outerArgs.multi === true) {
-            if (options && typeof options === 'object') {
+            if (options && (typeof options === 'undefined' ? 'undefined' : (0, _typeof3.default)(options)) === 'object') {
               opts.aggregateFunc = options.aggregateFunc;
               opts.multiFieldNames = options.fields;
             } else {
@@ -1769,7 +3244,7 @@
         };
       };
 
-      var arrayQuery = function(array) {
+      var arrayQuery = function arrayQuery(array) {
 
         queryBase.call(this, array, {}, []);
 
@@ -1790,7 +3265,7 @@
           };
 
           if (outerArgs.multi === true) {
-            if (options && typeof options === 'object') {
+            if (options && (typeof options === 'undefined' ? 'undefined' : (0, _typeof3.default)(options)) === 'object') {
               opts.aggregateFunc = options.aggregateFunc;
               opts.multiFieldNames = options.fields;
             } else {
@@ -1900,11 +3375,12 @@
       };
 
     }, {
-      "./orb.aggregation": 1,
-      "./orb.axe": 2,
-      "./orb.utils": 19
+      "./orb.aggregation": 70,
+      "./orb.axe": 71,
+      "./orb.utils": 88,
+      "babel-runtime/helpers/typeof": 4
     }],
-    11: [function(_dereq_, module, exports) {
+    80: [function(_dereq_, module, exports) {
 
       module.exports = function() {
         var states = {};
@@ -1919,9 +3395,9 @@
       };
 
     }, {}],
-    12: [function(_dereq_, module, exports) {
+    81: [function(_dereq_, module, exports) {
 
-      module.exports = (function() {
+      module.exports = function() {
 
         var currentTheme = 'blue';
         var themeManager = {};
@@ -2007,7 +3483,7 @@
         };
 
         var utils = themeManager.utils = {
-          hexToRgb: function(hex) {
+          hexToRgb: function hexToRgb(hex) {
             var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
             return result ? {
               r: parseInt(result[1], 16),
@@ -2015,7 +3491,7 @@
               b: parseInt(result[3], 16)
             } : null;
           },
-          rgbaToHex: function(rgba) {
+          rgbaToHex: function rgbaToHex(rgba) {
             var matches = rgba.match(/rgba\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+(?:\.\d+)?)\s*\)/);
             if (matches) {
               var alpha = parseFloat(matches[4]);
@@ -2023,7 +3499,7 @@
             }
             return null;
           },
-          rgbaToHexA: function(rgba) {
+          rgbaToHexA: function rgbaToHexA(rgba) {
             var matches = rgba.match(/rgba\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+(?:\.\d+)?)\s*\)/);
             if (matches) {
               var alpha = parseFloat(matches[4]);
@@ -2031,20 +3507,20 @@
             }
             return null;
           },
-          applyAlphaAndToHex: function(value, alpha) {
+          applyAlphaAndToHex: function applyAlphaAndToHex(value, alpha) {
             return (Math.floor(alpha * parseInt(value) + (1 - alpha) * 255) + 256).toString(16).substr(1, 2);
           },
-          fadeoutColor: function(color, alpha) {
+          fadeoutColor: function fadeoutColor(color, alpha) {
             color = utils.hexToRgb(color);
             return '#' + utils.applyAlphaAndToHex(color.r, alpha) + utils.applyAlphaAndToHex(color.g, alpha) + utils.applyAlphaAndToHex(color.b, alpha);
           }
         };
 
         return themeManager;
-      })();
+      }();
 
     }, {}],
-    13: [function(_dereq_, module, exports) {
+    82: [function(_dereq_, module, exports) {
 
       var axe = _dereq_('./orb.axe');
       var uiheaders = _dereq_('./orb.ui.header');
@@ -2102,10 +3578,10 @@
       };
 
     }, {
-      "./orb.axe": 2,
-      "./orb.ui.header": 15
+      "./orb.axe": 71,
+      "./orb.ui.header": 84
     }],
-    14: [function(_dereq_, module, exports) {
+    83: [function(_dereq_, module, exports) {
 
       var axe = _dereq_('./orb.axe');
       var axeUi = _dereq_('./orb.ui.axe');
@@ -2172,7 +3648,7 @@
                 if (currparent != prevpar) {
                   pushsubtotal(prevpar);
                   if (currparent != null) {
-                    // walk up parent hierarchy and add grand parents if different
+                    // walk up parent hierarchy and add grand parents if different 
                     // than current header grand parents
                     var grandpar = currparent.parent;
                     var prevgrandpar = prevpar ? prevpar.parent : null;
@@ -2257,11 +3733,11 @@
       };
 
     }, {
-      "./orb.axe": 2,
-      "./orb.ui.axe": 13,
-      "./orb.ui.header": 15
+      "./orb.axe": 71,
+      "./orb.ui.axe": 82,
+      "./orb.ui.header": 84
     }],
-    15: [function(_dereq_, module, exports) {
+    84: [function(_dereq_, module, exports) {
 
       var axe = _dereq_('./orb.axe'),
         state = new(_dereq_('./orb.state'))();
@@ -2275,7 +3751,7 @@
         WRAPPER: 6,
         SUB_TOTAL: 7,
         GRAND_TOTAL: 8,
-        getHeaderClass: function(headerType, axetype) {
+        getHeaderClass: function getHeaderClass(headerType, axetype) {
           var cssclass = axetype === axe.Type.ROWS ? 'header-row' : axetype === axe.Type.COLUMNS ? 'header-col' : '';
           switch (headerType) {
             case HeaderType.EMPTY:
@@ -2298,7 +3774,7 @@
 
           return cssclass;
         },
-        getCellClass: function(rowHeaderType, colHeaderType) {
+        getCellClass: function getCellClass(rowHeaderType, colHeaderType) {
           var cssclass = '';
           switch (rowHeaderType) {
             case HeaderType.GRAND_TOTAL:
@@ -2529,7 +4005,7 @@
         });
       };
 
-      module.exports.emptyCell = function(hspan, vspan) {
+      module.exports.emptyCell = function(_hspan, _vspan) {
 
         CellBase.call(this, {
           axetype: null,
@@ -2537,20 +4013,20 @@
           template: 'cell-template-empty',
           value: null,
           cssclass: HeaderType.getHeaderClass(HeaderType.EMPTY),
-          hspan: function() {
-            return hspan;
+          hspan: function hspan() {
+            return _hspan;
           },
-          vspan: function() {
-            return vspan;
+          vspan: function vspan() {
+            return _vspan;
           }
         });
       };
 
     }, {
-      "./orb.axe": 2,
-      "./orb.state": 11
+      "./orb.axe": 71,
+      "./orb.state": 80
     }],
-    16: [function(_dereq_, module, exports) {
+    85: [function(_dereq_, module, exports) {
 
       var ReactDOM = typeof window === 'undefined' ? _dereq_('react-dom') : window.ReactDOM,
         axe = _dereq_('./orb.axe'),
@@ -2669,6 +4145,7 @@
         };
 
         this.drilldown = function(dataCell, pivotId) {
+          // eslint-disable-line no-unused-vars
           if (dataCell) {
             var colIndexes = dataCell.columnDimension.getRowIndexes();
             var data = dataCell.rowDimension.getRowIndexes().filter(function(index) {
@@ -2774,18 +4251,18 @@
       };
 
     }, {
-      "./orb.axe": 2,
-      "./orb.pgrid": 8,
-      "./orb.ui.cols": 14,
-      "./orb.ui.header": 15,
-      "./orb.ui.rows": 17,
-      "./react/orb.react.Dialog.jsx": 21,
-      "./react/orb.react.Grid.jsx": 28,
-      "./react/orb.react.PivotChart.jsx": 31,
-      "./react/orb.react.PivotTable.jsx": 40,
+      "./orb.axe": 71,
+      "./orb.pgrid": 77,
+      "./orb.ui.cols": 83,
+      "./orb.ui.header": 84,
+      "./orb.ui.rows": 86,
+      "./react/orb.react.Dialog.jsx": 90,
+      "./react/orb.react.Grid.jsx": 97,
+      "./react/orb.react.PivotChart.jsx": 100,
+      "./react/orb.react.PivotTable.jsx": 109,
       "react-dom": "react-dom"
     }],
-    17: [function(_dereq_, module, exports) {
+    86: [function(_dereq_, module, exports) {
 
       var axe = _dereq_('./orb.axe');
       var axeUi = _dereq_('./orb.ui.axe');
@@ -2890,11 +4367,11 @@
       };
 
     }, {
-      "./orb.axe": 2,
-      "./orb.ui.axe": 13,
-      "./orb.ui.header": 15
+      "./orb.axe": 71,
+      "./orb.ui.axe": 82,
+      "./orb.ui.header": 84
     }],
-    18: [function(_dereq_, module, exports) {
+    87: [function(_dereq_, module, exports) {
 
       module.exports.removeClass = function(element, classname) {
         if (element && classname) {
@@ -2972,13 +4449,13 @@
           var currStyle, f, fixProp;
           if (element.currentStyle) {
             currStyle = element.currentStyle;
-            f = function(prop) {
+            f = function f(prop) {
               return currStyle[prop];
             };
             fixProp = true;
           } else if (window && window.getComputedStyle) {
             currStyle = window.getComputedStyle(element, null);
-            f = function(prop) {
+            f = function f(prop) {
               return currStyle.getPropertyValue(prop);
             };
           }
@@ -3019,12 +4496,22 @@
       };
 
     }, {}],
-    19: [function(_dereq_, module, exports) {
+    88: [function(_dereq_, module, exports) {
       (function(global) {
+
+        var _stringify = _dereq_('babel-runtime/core-js/json/stringify');
+
+        var _stringify2 = _interopRequireDefault(_stringify);
+
+        function _interopRequireDefault(obj) {
+          return obj && obj.__esModule ? obj : {
+            default: obj
+          };
+        }
 
         module.exports = {
 
-          ns: function(identifier, parent) {
+          ns: function ns(identifier, parent) {
             var parts = identifier.split('.');
             var i = 0;
             parent = parent || window;
@@ -3036,7 +4523,7 @@
             return parent;
           },
 
-          ownProperties: function(obj) {
+          ownProperties: function ownProperties(obj) {
             var arr = [];
             for (var prop in obj) {
               if (obj.hasOwnProperty(prop)) {
@@ -3046,7 +4533,7 @@
             return arr;
           },
 
-          forEach: function(list, callback, forceContinue) {
+          forEach: function forEach(list, callback, forceContinue) {
             var ret;
             if (list) {
               for (var i = 0, l = list.length; i < l; i++) {
@@ -3059,35 +4546,35 @@
             return ret;
           },
 
-          isArray: function(obj) {
+          isArray: function isArray(obj) {
             return Object.prototype.toString.apply(obj) === '[object Array]';
           },
 
-          isNumber: function(obj) {
+          isNumber: function isNumber(obj) {
             return Object.prototype.toString.apply(obj) === '[object Number]';
           },
 
-          isDate: function(obj) {
+          isDate: function isDate(obj) {
             return Object.prototype.toString.apply(obj) === '[object Date]';
           },
 
-          isString: function(obj) {
+          isString: function isString(obj) {
             return Object.prototype.toString.apply(obj) === '[object String]';
           },
 
-          isRegExp: function(obj) {
+          isRegExp: function isRegExp(obj) {
             return Object.prototype.toString.apply(obj) === '[object RegExp]';
           },
 
-          isFunction: function(obj) {
+          isFunction: function isFunction(obj) {
             return Object.prototype.toString.apply(obj) === '[object Function]';
           },
 
-          escapeRegex: function(re) {
+          escapeRegex: function escapeRegex(re) {
             return re.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
           },
 
-          findInArray: function(array, predicate) {
+          findInArray: function findInArray(array, predicate) {
             if (this.isArray(array) && predicate) {
               for (var i = 0; i < array.length; i++) {
                 var item = array[i];
@@ -3099,31 +4586,31 @@
             return undefined;
           },
 
-          jsonStringify: function(obj, censorKeywords) {
+          jsonStringify: function jsonStringify(obj, censorKeywords) {
             function censor(key, value) {
               return censorKeywords && censorKeywords.indexOf(key) > -1 ? undefined : value;
             }
-            return JSON.stringify(obj, censor, 2);
+            return (0, _stringify2.default)(obj, censor, 2);
           },
-          addEventListener: function(element, eventName, handler) {
+          addEventListener: function addEventListener(element, eventName, handler) {
             if (element.addEventListener) {
               element.addEventListener(eventName, handler, false);
             } else if (element.attachEvent) {
               element.attachEvent('on' + eventName, handler);
             } else {
-              element["on" + eventName] = handler;
+              element['on' + eventName] = handler;
             }
           },
-          removeEventListener: function(element, eventName, handler) {
+          removeEventListener: function removeEventListener(element, eventName, handler) {
             if (element.removeEventListener) {
               element.removeEventListener(eventName, handler, false);
             } else if (element.detachEvent) {
-              element.detachEvent("on" + eventName, handler);
+              element.detachEvent('on' + eventName, handler);
             } else {
-              element["on" + eventName] = null;
+              element['on' + eventName] = null;
             }
           },
-          preventDefault: function(e) {
+          preventDefault: function preventDefault(e) {
             e = e || window.event;
 
             if (e.preventDefault) {
@@ -3132,7 +4619,7 @@
               e.returnValue = false;
             }
           },
-          stopPropagation: function(e) {
+          stopPropagation: function stopPropagation(e) {
             e = e || window.event;
 
             if (e.stopPropagation) {
@@ -3141,7 +4628,7 @@
               e.cancelBubble = true;
             }
           },
-          getEventButton: function(e) {
+          getEventButton: function getEventButton(e) {
             var button = e.button;
             if ('which' in e) {
               return button;
@@ -3151,7 +4638,7 @@
               button === 4 ? 1 : // middle
               2; // right
           },
-          getMousePageXY: function(e) {
+          getMousePageXY: function getMousePageXY(e) {
             e = e || window.event;
 
             var pageX = e.pageX;
@@ -3194,7 +4681,7 @@
               output += map.charAt(63 & block >> 8 - idx % 1 * 8)) {
               charCode = str.charCodeAt(idx += 3 / 4);
               if (charCode > 0xFF) {
-                throw new InvalidCharacterError("'btoa' failed: The string to be encoded contains characters outside of the Latin1 range.");
+                throw new InvalidCharacterError('\'btoa\' failed: The string to be encoded contains characters outside of the Latin1 range.');
               }
               block = block << 8 | charCode;
             }
@@ -3208,7 +4695,7 @@
           } : function(input) {
             var str = String(input).replace(/=+$/, '');
             if (str.length % 4 == 1) {
-              throw new InvalidCharacterError("'atob' failed: The string to be decoded is not correctly encoded.");
+              throw new InvalidCharacterError('\'atob\' failed: The string to be decoded is not correctly encoded.');
             }
             for (
               // initialize result and counters
@@ -3228,8 +4715,11 @@
         })(module.exports);
 
       }).call(this, typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-    }, {}],
-    20: [function(_dereq_, module, exports) {
+    }, {
+      "babel-runtime/core-js/json/stringify": 1
+    }],
+    89: [function(_dereq_, module, exports) {
+      // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
         ReactDOM = typeof window === 'undefined' ? _dereq_('react-dom') : window.ReactDOM;
@@ -3237,15 +4727,15 @@
       module.exports = React.createClass({
         displayName: 'exports',
 
-        getInitialState: function() {
+        getInitialState: function getInitialState() {
           return {
             canRender: false
           };
         },
-        canRender: function() {
+        canRender: function canRender() {
           return this.state.canRender && typeof this.props.chartMode.type === 'string' && typeof google.visualization[this.props.chartMode.type] === 'function';
         },
-        drawChart: function() {
+        drawChart: function drawChart() {
           if (this.canRender()) {
             var chartData = this.props.pivotTableComp.pgridwidget.pgrid.getChartData();
             var data = new google.visualization.DataTable();
@@ -3276,13 +4766,13 @@
             }
           }
         },
-        componentDidMount: function() {
+        componentDidMount: function componentDidMount() {
           this.drawChart();
         },
-        componentDidUpdate: function() {
+        componentDidUpdate: function componentDidUpdate() {
           this.drawChart();
         },
-        render: function() {
+        render: function render() {
           if (this.canRender()) {
             return React.createElement('div', {
               className: 'chart',
@@ -3297,7 +4787,8 @@
       "react": "react",
       "react-dom": "react-dom"
     }],
-    21: [function(_dereq_, module, exports) {
+    90: [function(_dereq_, module, exports) {
+      // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
         ReactDOM = typeof window === 'undefined' ? _dereq_('react-dom') : window.ReactDOM,
@@ -3314,22 +4805,22 @@
         displayName: 'exports',
 
         statics: {
-          create: function() {
+          create: function create() {
             var dialogFactory = React.createFactory(Dialog);
             var overlay = createOverlay();
 
             return {
-              show: function(props) {
+              show: function show(props) {
                 ReactDOM.render(dialogFactory(props), overlay);
               }
             };
           }
         },
         overlayElement: null,
-        setOverlayClass: function(visible) {
+        setOverlayClass: function setOverlayClass(visible) {
           this.overlayElement.className = this.props.theme.getDialogClasses(visible).overlay;
         },
-        componentDidMount: function() {
+        componentDidMount: function componentDidMount() {
           this.overlayElement = ReactDOM.findDOMNode(this).parentNode;
           this.setOverlayClass(true);
           utils.addEventListener(this.overlayElement, 'click', this.close);
@@ -3350,7 +4841,7 @@
           dialogBodyElement.style.width = dWidth + 'px';
           dialogBodyElement.style.height = dHeight - 45 + 'px';
         },
-        close: function(e) {
+        close: function close(e) {
           var target = e.target || e.srcElement;
           if (target == this.overlayElement || target.className === 'button-close') {
             utils.removeEventListener(this.overlayElement, 'click', this.close);
@@ -3358,7 +4849,7 @@
             this.setOverlayClass(false);
           }
         },
-        render: function() {
+        render: function render() {
           if (this.props.comp) {
             var comp = React.createElement(this.props.comp.type, this.props.comp.props);
             var classes = this.props.theme.getDialogClasses();
@@ -3400,16 +4891,17 @@
       });
 
     }, {
-      "../orb.utils": 19,
+      "../orb.utils": 88,
       "react": "react",
       "react-dom": "react-dom"
     }],
-    22: [function(_dereq_, module, exports) {
+    91: [function(_dereq_, module, exports) {
+      // eslint-disable-line no-unused-vars
 
       var ReactDOM = typeof window === 'undefined' ? _dereq_('react-dom') : window.ReactDOM,
         utils = _dereq_('../orb.utils');
 
-      var dragManager = module.exports = (function() {
+      module.exports = function() {
 
         var _pivotComp = null;
 
@@ -3466,6 +4958,7 @@
         }
 
         function getDropTarget() {
+          // eslint-disable-line no-unused-vars
           return utils.forEach(_dropTargets, function(target) {
             if (target.component.state.isover) {
               return target;
@@ -3474,6 +4967,7 @@
         }
 
         function getDropIndicator() {
+          // eslint-disable-line no-unused-vars
           return utils.forEach(_dropIndicators, function(indicator) {
             if (indicator.component.state.isover) {
               return indicator;
@@ -3481,14 +4975,14 @@
           });
         }
 
-        var _initialized = false;
+        var _initialized = false; // eslint-disable-line no-unused-vars
 
         return {
-          init: function(pivotComp) {
+          init: function init(pivotComp) {
             _initialized = true;
             _pivotComp = pivotComp;
           },
-          setDragElement: function(elem) {
+          setDragElement: function setDragElement(elem) {
 
             var prevDragElement = _currDragElement;
             _currDragElement = elem;
@@ -3508,7 +5002,7 @@
               }
             }
           },
-          registerTarget: function(target, axetype, dragOverHandler, dargEndHandler) {
+          registerTarget: function registerTarget(target, axetype, dragOverHandler, dargEndHandler) {
             _dropTargets.push({
               component: target,
               axetype: axetype,
@@ -3516,7 +5010,7 @@
               onDragEnd: dargEndHandler
             });
           },
-          unregisterTarget: function(target) {
+          unregisterTarget: function unregisterTarget(target) {
             var tindex;
             for (var i = 0; i < _dropTargets.length; i++) {
               if (_dropTargets[i].component == target) {
@@ -3528,7 +5022,7 @@
               _dropTargets.splice(tindex, 1);
             }
           },
-          registerIndicator: function(indicator, axetype, position, dragOverHandler, dargEndHandler) {
+          registerIndicator: function registerIndicator(indicator, axetype, position, dragOverHandler, dargEndHandler) {
             _dropIndicators.push({
               component: indicator,
               axetype: axetype,
@@ -3537,7 +5031,7 @@
               onDragEnd: dargEndHandler
             });
           },
-          unregisterIndicator: function(indicator) {
+          unregisterIndicator: function unregisterIndicator(indicator) {
             var iindex;
             for (var i = 0; i < _dropIndicators.length; i++) {
               if (_dropIndicators[i].component == indicator) {
@@ -3549,7 +5043,7 @@
               _dropIndicators.splice(iindex, 1);
             }
           },
-          elementMoved: function() {
+          elementMoved: function elementMoved() {
             if (_currDragElement != null) {
               var dragNodeRect = _dragNode.getBoundingClientRect();
               var foundTarget;
@@ -3570,6 +5064,7 @@
                   var foundIndicator = null;
 
                   utils.forEach(_dropIndicators, function(indicator, index) {
+                    // eslint-disable-line no-unused-vars
                     if (!foundIndicator) {
                       var elementOwnIndicator = indicator.component.props.axetype === _currDragElement.props.axetype && indicator.component.props.position === _currDragElement.props.position;
 
@@ -3599,29 +5094,30 @@
             }
           }
         };
-      })();
+      }();
 
     }, {
-      "../orb.utils": 19,
+      "../orb.utils": 88,
       "react-dom": "react-dom"
     }],
-    23: [function(_dereq_, module, exports) {
+    92: [function(_dereq_, module, exports) {
+      // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
         DragManager = _dereq_('./orb.react.DragManager.jsx');
 
       module.exports = React.createClass({
         displayName: 'DropIndicator',
-        getInitialState: function() {
+        getInitialState: function getInitialState() {
           DragManager.registerIndicator(this, this.props.axetype, this.props.position, this.onDragOver, this.onDragEnd);
           return {
             isover: false
           };
         },
-        componentWillUnmount: function() {
+        componentWillUnmount: function componentWillUnmount() {
           DragManager.unregisterIndicator(this);
         },
-        onDragOver: function(callback) {
+        onDragOver: function onDragOver(callback) {
           if (this.isMounted()) {
             this.setState({
               isover: true
@@ -3630,7 +5126,7 @@
             callback();
           }
         },
-        onDragEnd: function(callback) {
+        onDragEnd: function onDragEnd(callback) {
           if (this.isMounted()) {
             this.setState({
               isover: false
@@ -3639,7 +5135,7 @@
             callback();
           }
         },
-        render: function() {
+        render: function render() {
           var classname = 'drp-indic' + (this.props.isVertical ? '-vertical' : '');
 
           if (this.props.isFirst) {
@@ -3663,10 +5159,11 @@
       });
 
     }, {
-      "./orb.react.DragManager.jsx": 22,
+      "./orb.react.DragManager.jsx": 91,
       "react": "react"
     }],
-    24: [function(_dereq_, module, exports) {
+    93: [function(_dereq_, module, exports) {
+      // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
         DragManager = _dereq_('./orb.react.DragManager.jsx'),
@@ -3677,19 +5174,19 @@
       module.exports = React.createClass({
         displayName: 'exports',
 
-        getInitialState: function() {
+        getInitialState: function getInitialState() {
           this.dtid = ++dtid;
           return {
             isover: false
           };
         },
-        componentDidMount: function() {
+        componentDidMount: function componentDidMount() {
           DragManager.registerTarget(this, this.props.axetype, this.onDragOver, this.onDragEnd);
         },
-        componentWillUnmount: function() {
+        componentWillUnmount: function componentWillUnmount() {
           DragManager.unregisterTarget(this);
         },
-        onDragOver: function(callback) {
+        onDragOver: function onDragOver(callback) {
           if (this.isMounted()) {
             this.setState({
               isover: true
@@ -3698,7 +5195,7 @@
             callback();
           }
         },
-        onDragEnd: function(callback) {
+        onDragEnd: function onDragEnd(callback) {
           if (this.isMounted()) {
             this.setState({
               isover: false
@@ -3707,7 +5204,7 @@
             callback();
           }
         },
-        render: function() {
+        render: function render() {
           var self = this;
 
           var buttons = this.props.buttons.map(function(button, index) {
@@ -3779,12 +5276,13 @@
       });
 
     }, {
-      "../orb.axe": 2,
-      "./orb.react.DragManager.jsx": 22,
-      "./orb.react.DropIndicator.jsx": 23,
+      "../orb.axe": 71,
+      "./orb.react.DragManager.jsx": 91,
+      "./orb.react.DropIndicator.jsx": 92,
       "react": "react"
     }],
-    25: [function(_dereq_, module, exports) {
+    94: [function(_dereq_, module, exports) {
+      // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
         DragManager = _dereq_('./orb.react.DragManager.jsx'),
@@ -3794,19 +5292,19 @@
       module.exports = React.createClass({
         displayName: 'exports',
 
-        getInitialState: function() {
+        getInitialState: function getInitialState() {
           this.dtid = ++dtid;
           return {
             isover: false
           };
         },
-        componentDidMount: function() {
+        componentDidMount: function componentDidMount() {
           DragManager.registerTarget(this, this.props.axetype, this.onDragOver, this.onDragEnd);
         },
-        componentWillUnmount: function() {
+        componentWillUnmount: function componentWillUnmount() {
           DragManager.unregisterTarget(this);
         },
-        onDragOver: function(callback) {
+        onDragOver: function onDragOver(callback) {
           if (this.isMounted()) {
             this.setState({
               isover: true
@@ -3815,7 +5313,7 @@
             callback();
           }
         },
-        onDragEnd: function(callback) {
+        onDragEnd: function onDragEnd(callback) {
           if (this.isMounted()) {
             this.setState({
               isover: false
@@ -3824,7 +5322,7 @@
             callback();
           }
         },
-        render: function() {
+        render: function render() {
           var self = this;
 
           var buttons = this.props.buttons.map(function(button, index) {
@@ -3889,11 +5387,12 @@
       });
 
     }, {
-      "./orb.react.DragManager.jsx": 22,
-      "./orb.react.DropIndicator.jsx": 23,
+      "./orb.react.DragManager.jsx": 91,
+      "./orb.react.DropIndicator.jsx": 92,
       "react": "react"
     }],
-    26: [function(_dereq_, module, exports) {
+    95: [function(_dereq_, module, exports) {
+      // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
         utils = _dereq_('../orb.utils');
@@ -3901,7 +5400,7 @@
       module.exports = React.createClass({
         displayName: 'exports',
 
-        openOrClose: function(e) {
+        openOrClose: function openOrClose(e) {
           var valueNode = this.refs.valueElement;
           var valuesListNode = this.refs.valuesList;
           var target = e.target || e.srcElement;
@@ -3912,21 +5411,21 @@
             valuesListNode.style.display = 'none';
           }
         },
-        onMouseEnter: function() {
+        onMouseEnter: function onMouseEnter() {
           var valueNode = this.refs.valueElement;
-          valueNode.className = "orb-tgl-btn-down";
+          valueNode.className = 'orb-tgl-btn-down';
           valueNode.style.backgroundPosition = 'right center';
         },
-        onMouseLeave: function() {
-          this.refs.valueElement.className = "";
+        onMouseLeave: function onMouseLeave() {
+          this.refs.valueElement.className = '';
         },
-        componentDidMount: function() {
+        componentDidMount: function componentDidMount() {
           utils.addEventListener(document, 'click', this.openOrClose);
         },
-        componentWillUnmount: function() {
+        componentWillUnmount: function componentWillUnmount() {
           utils.removeEventListener(document, 'click', this.openOrClose);
         },
-        selectValue: function(e) {
+        selectValue: function selectValue(e) {
           var listNode = this.refs.valuesList;
           var target = e.target || e.srcElement;
           var isli = false;
@@ -3949,8 +5448,9 @@
             }
           }
         },
-        render: function() {
+        render: function render() {
           function createSelectValueFunc(value) {
+            // eslint-disable-line no-unused-vars
             return function() {
               this.selectValue(value);
             };
@@ -3993,10 +5493,11 @@
       });
 
     }, {
-      "../orb.utils": 19,
+      "../orb.utils": 88,
       "react": "react"
     }],
-    27: [function(_dereq_, module, exports) {
+    96: [function(_dereq_, module, exports) {
+      // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
         ReactDOM = typeof window === 'undefined' ? _dereq_('react-dom') : window.ReactDOM,
@@ -4011,20 +5512,20 @@
         pgridwidget: null,
         values: null,
         filterManager: null,
-        getInitialState: function() {
+        getInitialState: function getInitialState() {
           this.pgridwidget = this.props.pivotTableComp.pgridwidget;
           return {};
         },
-        destroy: function() {
+        destroy: function destroy() {
           var container = ReactDOM.findDOMNode(this).parentNode;
           ReactDOM.unmountComponentAtNode(container);
           container.parentNode.removeChild(container);
         },
-        onFilter: function(operator, term, staticValue, excludeStatic) {
+        onFilter: function onFilter(operator, term, staticValue, excludeStatic) {
           this.props.pivotTableComp.applyFilter(this.props.field, operator, term, staticValue, excludeStatic);
           this.destroy();
         },
-        onMouseDown: function(e) {
+        onMouseDown: function onMouseDown(e) {
           var container = ReactDOM.findDOMNode(this).parentNode;
           var target = e.target || e.srcElement;
           while (target != null) {
@@ -4036,7 +5537,7 @@
 
           this.destroy();
         },
-        onMouseWheel: function(e) {
+        onMouseWheel: function onMouseWheel(e) {
           var valuesTable = this.refs.valuesTable;
           var target = e.target || e.srcElement;
           while (target != null) {
@@ -4052,20 +5553,20 @@
 
           this.destroy();
         },
-        componentWillMount: function() {
+        componentWillMount: function componentWillMount() {
           utils.addEventListener(document, 'mousedown', this.onMouseDown);
           utils.addEventListener(document, 'wheel', this.onMouseWheel);
           utils.addEventListener(window, 'resize', this.destroy);
         },
-        componentDidMount: function() {
+        componentDidMount: function componentDidMount() {
           this.filterManager.init(ReactDOM.findDOMNode(this));
         },
-        componentWillUnmount: function() {
+        componentWillUnmount: function componentWillUnmount() {
           utils.removeEventListener(document, 'mousedown', this.onMouseDown);
           utils.removeEventListener(document, 'wheel', this.onMouseWheel);
           utils.removeEventListener(window, 'resize', this.destroy);
         },
-        render: function() {
+        render: function render() {
           var checkboxes = [];
 
           this.filterManager = new FilterManager(this, this.pgridwidget.pgrid.getFieldFilter(this.props.field));
@@ -4263,7 +5764,7 @@
           resizeGrip: null
         };
 
-        var resizeManager;
+        var resizeManager; // eslint-disable-line no-unused-vars
 
         this.init = function(filterContainerElement) {
 
@@ -4611,14 +6112,15 @@
       }
 
     }, {
-      "../orb.filtering": 6,
-      "../orb.utils": 19,
-      "../orb.utils.dom": 18,
-      "./orb.react.Dropdown.jsx": 26,
+      "../orb.filtering": 75,
+      "../orb.utils": 88,
+      "../orb.utils.dom": 87,
+      "./orb.react.Dropdown.jsx": 95,
       "react": "react",
       "react-dom": "react-dom"
     }],
-    28: [function(_dereq_, module, exports) {
+    97: [function(_dereq_, module, exports) {
+      // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
         utils = _dereq_('../orb.utils');
@@ -4626,7 +6128,7 @@
       module.exports = React.createClass({
         displayName: 'exports',
 
-        render: function() {
+        render: function render() {
           var data = this.props.data;
           var headers = this.props.headers;
           var tableClasses = this.props.theme.getGridClasses();
@@ -4698,10 +6200,11 @@
       });
 
     }, {
-      "../orb.utils": 19,
+      "../orb.utils": 88,
       "react": "react"
     }],
-    29: [function(_dereq_, module, exports) {
+    98: [function(_dereq_, module, exports) {
+      // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
         ReactDOM = typeof window === 'undefined' ? _dereq_('react-dom') : window.ReactDOM,
@@ -4714,7 +6217,7 @@
 
       module.exports = React.createClass({
         displayName: 'PivotButton',
-        getInitialState: function() {
+        getInitialState: function getInitialState() {
           this.pbid = ++pbid;
 
           // initial state, all zero.
@@ -4731,7 +6234,7 @@
             dragging: false
           };
         },
-        onFilterMouseDown: function(e) {
+        onFilterMouseDown: function onFilterMouseDown(e) {
           // left mouse button only
           if (e.button !== 0) return;
 
@@ -4756,7 +6259,7 @@
           utils.stopPropagation(e);
           utils.preventDefault(e);
         },
-        componentDidUpdate: function() {
+        componentDidUpdate: function componentDidUpdate() {
           if (this.props.pivotTableComp.pgrid.config.canMoveFields) {
             if (!this.state.mousedown) {
               // mouse not down, don't care about mouse up/move events.
@@ -4769,14 +6272,14 @@
             }
           }
         },
-        componentDidMount: function() {
+        componentDidMount: function componentDidMount() {
           this.props.pivotTableComp.registerThemeChanged(this.updateClasses);
         },
-        componentWillUnmount: function() {
+        componentWillUnmount: function componentWillUnmount() {
           this.props.pivotTableComp.unregisterThemeChanged(this.updateClasses);
           utils.removeEventListener(document, 'mousemove', this.onMouseMove);
         },
-        onMouseDown: function(e) {
+        onMouseDown: function onMouseDown(e) {
           // drag/sort with left mouse button
           if (e.button !== 0) return;
 
@@ -4805,7 +6308,7 @@
           utils.stopPropagation(e);
           utils.preventDefault(e);
         },
-        onMouseUp: function(e) {
+        onMouseUp: function onMouseUp(e) {
 
           var isdragged = this.state.dragging;
 
@@ -4824,7 +6327,7 @@
             this.props.pivotTableComp.sort(this.props.axetype, this.props.field);
           }
         },
-        onMouseMove: function(e) {
+        onMouseMove: function onMouseMove(e) {
           // if the mouse is not down while moving, return (no drag)
           if (!this.props.pivotTableComp.pgrid.config.canMoveFields || !this.state.mousedown) return;
 
@@ -4855,10 +6358,10 @@
           utils.stopPropagation(e);
           utils.preventDefault(e);
         },
-        updateClasses: function() {
+        updateClasses: function updateClasses() {
           ReactDOM.findDOMNode(this).className = this.props.pivotTableComp.pgrid.config.theme.getButtonClasses().pivotButton;
         },
-        render: function() {
+        render: function render() {
           var self = this;
           var divstyle = {
             left: self.state.pos.x + 'px',
@@ -4935,15 +6438,16 @@
       });
 
     }, {
-      "../orb.axe": 2,
-      "../orb.utils": 19,
-      "../orb.utils.dom": 18,
-      "./orb.react.DragManager.jsx": 22,
-      "./orb.react.FilterPanel.jsx": 27,
+      "../orb.axe": 71,
+      "../orb.utils": 88,
+      "../orb.utils.dom": 87,
+      "./orb.react.DragManager.jsx": 91,
+      "./orb.react.FilterPanel.jsx": 96,
       "react": "react",
       "react-dom": "react-dom"
     }],
-    30: [function(_dereq_, module, exports) {
+    99: [function(_dereq_, module, exports) {
+      // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
         ReactDOM = typeof window === 'undefined' ? _dereq_('react-dom') : window.ReactDOM,
@@ -4955,13 +6459,13 @@
       module.exports = React.createClass({
         displayName: 'exports',
 
-        expand: function() {
+        expand: function expand() {
           this.props.pivotTableComp.pgridwidget.expandRow(this.props.cell);
         },
-        collapse: function() {
+        collapse: function collapse() {
           this.props.pivotTableComp.pgridwidget.collapseRow(this.props.cell);
         },
-        updateCellInfos: function() {
+        updateCellInfos: function updateCellInfos() {
           var node = ReactDOM.findDOMNode(this);
           var cell = this.props.cell;
           node.__orb = node.__orb || {};
@@ -5012,20 +6516,21 @@
             node.__orb._borderRightWidth = 0;
           }
         },
-        componentDidMount: function() {
+        componentDidMount: function componentDidMount() {
           this.updateCellInfos();
         },
-        componentDidUpdate: function() {
+        componentDidUpdate: function componentDidUpdate() {
           this.updateCellInfos();
         },
-        shouldComponentUpdate: function(nextProps, nextState) {
+        shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
+          // eslint-disable-line no-unused-vars
           if (nextProps.cell && nextProps.cell == this.props.cell && !this._latestVisibleState && !nextProps.cell.visible()) {
             return false;
           }
           return true;
         },
         _latestVisibleState: false,
-        render: function() {
+        render: function render() {
           var self = this;
           var cell = this.props.cell;
           var divcontent = [];
@@ -5085,7 +6590,7 @@
               break;
             case 'cell-template-datavalue':
               value = cell.datafield && cell.datafield.formatFunc ? cell.datafield.formatFunc()(cell.value) : cell.value;
-              cellClick = function() {
+              cellClick = function cellClick() {
                 self.props.pivotTableComp.pgridwidget.drilldown(cell, self.props.pivotTableComp.id);
               };
               break;
@@ -5137,7 +6642,7 @@
       function getClassname(compProps) {
         var cell = compProps.cell;
         var classname = cell.cssclass;
-        var isEmpty = cell.template === 'cell-template-empty';
+        var isEmpty = cell.template === 'cell-template-empty'; // eslint-disable-line no-unused-vars
 
         if (!cell.visible()) {
           classname += ' cell-hidden';
@@ -5167,18 +6672,20 @@
       }
 
     }, {
-      "../orb.ui.header": 15,
-      "../orb.utils.dom": 18,
+      "../orb.ui.header": 84,
+      "../orb.utils.dom": 87,
       "react": "react",
       "react-dom": "react-dom"
     }],
-    31: [function(_dereq_, module, exports) {
+    100: [function(_dereq_, module, exports) {
+      // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
         ReactDOM = typeof window === 'undefined' ? _dereq_('react-dom') : window.ReactDOM,
         DragManager = _dereq_('./orb.react.DragManager.jsx'),
         SizingManager = _dereq_('./orb.react.PivotTable.SizingManager.jsx'),
         Toolbar = _dereq_('./orb.react.Toolbar.jsx'),
+        // eslint-disable-line no-unused-vars
         UpperButtons = _dereq_('./orb.react.PivotTable.UpperButtons.jsx'),
         ColumnButtons = _dereq_('./orb.react.PivotTable.ColumnButtons.jsx'),
         RowButtons = _dereq_('./orb.react.PivotTable.RowButtons.jsx'),
@@ -5194,7 +6701,7 @@
         pgrid: null,
         pgridwidget: null,
         fontStyle: null,
-        getInitialState: function() {
+        getInitialState: function getInitialState() {
           DragManager.init(this);
 
           themeChangeCallbacks[this.id] = [];
@@ -5204,27 +6711,27 @@
           this.pgrid = this.pgridwidget.pgrid;
           return {};
         },
-        sort: function(axetype, field) {
+        sort: function sort(axetype, field) {
           this.pgridwidget.sort(axetype, field);
         },
-        moveButton: function(button, newAxeType, position) {
+        moveButton: function moveButton(button, newAxeType, position) {
           this.pgridwidget.moveField(button.props.field.name, button.props.axetype, newAxeType, position);
         },
-        applyFilter: function(fieldname, operator, term, staticValue, excludeStatic) {
+        applyFilter: function applyFilter(fieldname, operator, term, staticValue, excludeStatic) {
           this.pgridwidget.applyFilter(fieldname, operator, term, staticValue, excludeStatic);
         },
-        registerThemeChanged: function(compCallback) {
+        registerThemeChanged: function registerThemeChanged(compCallback) {
           if (compCallback) {
             themeChangeCallbacks[this.id].push(compCallback);
           }
         },
-        unregisterThemeChanged: function(compCallback) {
+        unregisterThemeChanged: function unregisterThemeChanged(compCallback) {
           var i;
           if (compCallback && (i = themeChangeCallbacks[this.id].indexOf(compCallback)) >= 0) {
             themeChangeCallbacks[this.id].splice(i, 1);
           }
         },
-        changeTheme: function(newTheme) {
+        changeTheme: function changeTheme(newTheme) {
           if (this.pgridwidget.pgrid.config.setTheme(newTheme)) {
             // notify self/sub-components of the theme change
             for (var i = 0; i < themeChangeCallbacks[this.id].length; i++) {
@@ -5232,16 +6739,16 @@
             }
           }
         },
-        updateClasses: function() {
+        updateClasses: function updateClasses() {
           var thisnode = ReactDOM.findDOMNode(this);
           var classes = this.pgridwidget.pgrid.config.theme.getPivotClasses();
           thisnode.className = classes.container;
           thisnode.children[1].className = classes.table;
         },
-        componentDidUpdate: function() {
+        componentDidUpdate: function componentDidUpdate() {
           this.synchronizeWidths();
         },
-        componentDidMount: function() {
+        componentDidMount: function componentDidMount() {
           var fontInfos = domUtils.getStyle(ReactDOM.findDOMNode(this), ['font-family', 'font-size'], true);
           this.fontStyle = {
             fontFamily: fontInfos[0],
@@ -5250,7 +6757,7 @@
 
           this.synchronizeWidths();
         },
-        synchronizeWidths: function() {
+        synchronizeWidths: function synchronizeWidths() {
           var chartStyle = SizingManager.synchronizeWidths(this);
           chartStyle.fontFamily = this.fontStyle.fontFamily;
           chartStyle.fontSize = this.fontStyle.fontSize;
@@ -5260,7 +6767,7 @@
             chartStyle: chartStyle
           });
         },
-        render: function() {
+        render: function render() {
 
           var self = this;
 
@@ -5360,18 +6867,19 @@
       });
 
     }, {
-      "../orb.utils.dom": 18,
-      "./orb.react.Chart.jsx": 20,
-      "./orb.react.DragManager.jsx": 22,
-      "./orb.react.PivotTable.ColumnButtons.jsx": 33,
-      "./orb.react.PivotTable.RowButtons.jsx": 36,
-      "./orb.react.PivotTable.SizingManager.jsx": 38,
-      "./orb.react.PivotTable.UpperButtons.jsx": 39,
-      "./orb.react.Toolbar.jsx": 42,
+      "../orb.utils.dom": 87,
+      "./orb.react.Chart.jsx": 89,
+      "./orb.react.DragManager.jsx": 91,
+      "./orb.react.PivotTable.ColumnButtons.jsx": 102,
+      "./orb.react.PivotTable.RowButtons.jsx": 105,
+      "./orb.react.PivotTable.SizingManager.jsx": 107,
+      "./orb.react.PivotTable.UpperButtons.jsx": 108,
+      "./orb.react.Toolbar.jsx": 111,
       "react": "react",
       "react-dom": "react-dom"
     }],
-    32: [function(_dereq_, module, exports) {
+    101: [function(_dereq_, module, exports) {
+      // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
         PivotCell = _dereq_('./orb.react.PivotCell.jsx'),
@@ -5380,11 +6888,11 @@
       module.exports = React.createClass({
         displayName: 'exports',
 
-        render: function() {
+        render: function render() {
           var self = this;
 
-          var lastCellIndex = this.props.row.length - 1;
-          var cell0 = this.props.row[0];
+          var lastCellIndex = this.props.row.length - 1; // eslint-disable-line no-unused-vars
+          var cell0 = this.props.row[0]; // eslint-disable-line no-unused-vars
           var leftmostCellFound = false;
           var layoutInfos = self.props.layoutInfos;
           var cells;
@@ -5398,7 +6906,7 @@
             var isleftmost = false;
 
             // If current cells are column/data headers and left most cell is not found yet
-            // and last row left most cell does not span vertically over the current one and current one is visible
+            // and last row left most cell does not span vertically over the current one and current one is visible 
             // then mark IT as the left most cell
             if (cell.visible() && layoutInfos) {
               if (cell.dim) {
@@ -5441,11 +6949,12 @@
       });
 
     }, {
-      "../orb.axe": 2,
-      "./orb.react.PivotCell.jsx": 30,
+      "../orb.axe": 71,
+      "./orb.react.PivotCell.jsx": 99,
       "react": "react"
     }],
-    33: [function(_dereq_, module, exports) {
+    102: [function(_dereq_, module, exports) {
+      // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
         axe = _dereq_('../orb.axe'),
@@ -5455,7 +6964,7 @@
       module.exports = React.createClass({
         displayName: 'exports',
 
-        render: function() {
+        render: function render() {
           var self = this;
           var config = this.props.pivotTableComp.pgridwidget.pgrid.config;
 
@@ -5477,12 +6986,13 @@
       });
 
     }, {
-      "../orb.axe": 2,
-      "./orb.react.DropTarget.jsx": 24,
-      "./orb.react.PivotButton.jsx": 29,
+      "../orb.axe": 71,
+      "./orb.react.DropTarget.jsx": 93,
+      "./orb.react.PivotButton.jsx": 98,
       "react": "react"
     }],
-    34: [function(_dereq_, module, exports) {
+    103: [function(_dereq_, module, exports) {
+      // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
         axe = _dereq_('../orb.axe'),
@@ -5491,7 +7001,7 @@
       module.exports = React.createClass({
         displayName: 'exports',
 
-        render: function() {
+        render: function render() {
           var self = this;
           var pgridwidget = this.props.pivotTableComp.pgridwidget;
           var cntrClass = pgridwidget.columns.headers.length === 0 ? '' : ' columns-cntr';
@@ -5532,11 +7042,12 @@
       });
 
     }, {
-      "../orb.axe": 2,
-      "./orb.react.PivotRow.jsx": 32,
+      "../orb.axe": 71,
+      "./orb.react.PivotRow.jsx": 101,
       "react": "react"
     }],
-    35: [function(_dereq_, module, exports) {
+    104: [function(_dereq_, module, exports) {
+      // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
         axe = _dereq_('../orb.axe'),
@@ -5545,7 +7056,7 @@
       module.exports = React.createClass({
         displayName: 'exports',
 
-        render: function() {
+        render: function render() {
           var self = this;
           var pgridwidget = this.props.pivotTableComp.pgridwidget;
           var layoutInfos = {
@@ -5584,11 +7095,12 @@
       });
 
     }, {
-      "../orb.axe": 2,
-      "./orb.react.PivotRow.jsx": 32,
+      "../orb.axe": 71,
+      "./orb.react.PivotRow.jsx": 101,
       "react": "react"
     }],
-    36: [function(_dereq_, module, exports) {
+    105: [function(_dereq_, module, exports) {
+      // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
         PivotButton = _dereq_('./orb.react.PivotButton.jsx'),
@@ -5599,7 +7111,7 @@
       module.exports = React.createClass({
         displayName: 'exports',
 
-        render: function() {
+        render: function render() {
           var self = this;
           var config = this.props.pivotTableComp.pgridwidget.pgrid.config;
 
@@ -5628,13 +7140,14 @@
       });
 
     }, {
-      "../orb.axe": 2,
-      "./orb.react.DropTarget.jsx": 24,
-      "./orb.react.DropTargetVertical.jsx": 25,
-      "./orb.react.PivotButton.jsx": 29,
+      "../orb.axe": 71,
+      "./orb.react.DropTarget.jsx": 93,
+      "./orb.react.DropTargetVertical.jsx": 94,
+      "./orb.react.PivotButton.jsx": 98,
       "react": "react"
     }],
-    37: [function(_dereq_, module, exports) {
+    106: [function(_dereq_, module, exports) {
+      // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
         ReactDOM = typeof window === 'undefined' ? _dereq_('react-dom') : window.ReactDOM,
@@ -5644,7 +7157,7 @@
       module.exports = React.createClass({
         displayName: 'exports',
 
-        setColGroup: function(widths) {
+        setColGroup: function setColGroup(widths) {
           var node = ReactDOM.findDOMNode(this);
           var colGroupNode = this.refs.colgroup;
           node.style.tableLayout = 'auto';
@@ -5657,7 +7170,7 @@
           }
           node.style.tableLayout = 'fixed';
         },
-        render: function() {
+        render: function render() {
           var self = this;
           var pgridwidget = this.props.pivotTableComp.pgridwidget;
           var cntrClass = pgridwidget.rows.headers.length === 0 ? '' : ' rows-cntr';
@@ -5700,31 +7213,34 @@
       });
 
     }, {
-      "../orb.axe": 2,
-      "./orb.react.PivotRow.jsx": 32,
+      "../orb.axe": 71,
+      "./orb.react.PivotRow.jsx": 101,
       "react": "react",
       "react-dom": "react-dom"
     }],
-    38: [function(_dereq_, module, exports) {
+    107: [function(_dereq_, module, exports) {
+      // eslint-disable-line no-unused-vars
 
       var ReactDOM = typeof window === 'undefined' ? _dereq_('react-dom') : window.ReactDOM,
         domUtils = _dereq_('../orb.utils.dom');
 
       var SizingManager = module.exports = {
-        synchronizeWidths: function(pivotComp) {
+        synchronizeWidths: function synchronizeWidths(pivotComp) {
           if (pivotComp.pgridwidget.pgrid.config.chartMode.enabled) {
             return SizingManager.synchronizePivotChartWidths(pivotComp);
           } else {
             SizingManager.synchronizePivotTableWidths(pivotComp);
           }
         },
-        synchronizePivotChartWidths: function(pivotComp) {
+        synchronizePivotChartWidths: function synchronizePivotChartWidths(pivotComp) {
           var pivotWrapperTable = pivotComp.refs.pivotWrapperTable,
             pivot = new ComponentSizeInfo(pivotComp.refs.pivot),
             topBtns = new ComponentSizeInfo(pivotComp.refs.upperButtons),
             cBtns = new ComponentSizeInfo(pivotComp.refs.colButtons),
             rBtnsTbl = new ComponentSizeInfo(pivotComp.refs.rowButtons),
             chart = new ComponentSizeInfo(pivotComp.refs.chart),
+            // eslint-disable-line no-unused-vars
+
             rBtnsWidth = Math.max(rBtnsTbl.w, 67),
             chartWidth = pivot.w - rBtnsWidth,
             pivotHeight = pivotComp.pgridwidget.pgrid.config.height,
@@ -5738,7 +7254,7 @@
             height: chartHeight
           };
         },
-        synchronizePivotTableWidths: function(pivotComp) {
+        synchronizePivotTableWidths: function synchronizePivotTableWidths(pivotComp) {
 
           var pivotWrapperTable = pivotComp.refs.pivotWrapperTable,
             pivot = new ComponentSizeInfo(pivotComp.refs.pivot),
@@ -5862,7 +7378,7 @@
                 //var cellwidth = Math.ceil(domUtils.getSize(currCell.children[0]).width/currCell.colSpan);
                 var cellwidth = Math.ceil(currCell.__orb._textWidth / currCell.__orb._colSpan + currCell.__orb._paddingLeft + currCell.__orb._paddingRight + currCell.__orb._borderLeftWidth + currCell.__orb._borderRightWidth);
                 // whether current cell spans vertically to the last row
-                var rowsSpan = currCell.__orb._rowSpan > 1 && currCell.__orb._rowSpan >= tbl.rows.length - rowIndex;
+                var rowsSpan = currCell.__orb._rowSpan > 1 && currCell.__orb._rowSpan >= tbl.rows.length - rowIndex; // eslint-disable-line no-unused-vars
 
                 // if current cell spans over more than one column, add its width (its) 'colSpan' number of times
                 for (var cspan = 0; cspan < currCell.__orb._colSpan; cspan++) {
@@ -5907,6 +7423,7 @@
           // set colWidths to the tblObject
           tblObject.w = 0;
           tblObject.colWidths = colWidths.map(function(item, index) {
+            // eslint-disable-line no-unused-vars
             tblObject.w += item.width;
             return item.width;
           });
@@ -5914,6 +7431,7 @@
       }
 
       function setTableWidths(tblObject, colWidths) {
+        // eslint-disable-line no-unused-vars
         if (tblObject && tblObject.node) {
 
           // reset table width
@@ -5992,10 +7510,11 @@
       }
 
     }, {
-      "../orb.utils.dom": 18,
+      "../orb.utils.dom": 87,
       "react-dom": "react-dom"
     }],
-    39: [function(_dereq_, module, exports) {
+    108: [function(_dereq_, module, exports) {
+      // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
         PivotButton = _dereq_('./orb.react.PivotButton.jsx'),
@@ -6005,7 +7524,7 @@
       module.exports = React.createClass({
         displayName: 'exports',
 
-        render: function() {
+        render: function render() {
           var self = this;
           var config = this.props.pivotTableComp.pgridwidget.pgrid.config;
 
@@ -6096,12 +7615,13 @@
       });
 
     }, {
-      "../orb.axe": 2,
-      "./orb.react.DropTarget.jsx": 24,
-      "./orb.react.PivotButton.jsx": 29,
+      "../orb.axe": 71,
+      "./orb.react.DropTarget.jsx": 93,
+      "./orb.react.PivotButton.jsx": 98,
       "react": "react"
     }],
-    40: [function(_dereq_, module, exports) {
+    109: [function(_dereq_, module, exports) {
+      // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
         ReactDOM = typeof window === 'undefined' ? _dereq_('react-dom') : window.ReactDOM,
@@ -6129,7 +7649,7 @@
         pgrid: null,
         pgridwidget: null,
         fontStyle: null,
-        getInitialState: function() {
+        getInitialState: function getInitialState() {
           DragManager.init(this);
 
           themeChangeCallbacks[this.id] = [];
@@ -6139,33 +7659,33 @@
           this.pgrid = this.pgridwidget.pgrid;
           return {};
         },
-        sort: function(axetype, field) {
+        sort: function sort(axetype, field) {
           this.pgridwidget.sort(axetype, field);
         },
-        moveButton: function(button, newAxeType, position) {
+        moveButton: function moveButton(button, newAxeType, position) {
           this.pgridwidget.moveField(button.props.field.name, button.props.axetype, newAxeType, position);
         },
-        toggleSubtotals: function(axetype) {
+        toggleSubtotals: function toggleSubtotals(axetype) {
           this.pgridwidget.toggleSubtotals(axetype);
         },
-        toggleGrandtotal: function(axetype) {
+        toggleGrandtotal: function toggleGrandtotal(axetype) {
           this.pgridwidget.toggleGrandtotal(axetype);
         },
-        applyFilter: function(fieldname, operator, term, staticValue, excludeStatic) {
+        applyFilter: function applyFilter(fieldname, operator, term, staticValue, excludeStatic) {
           this.pgridwidget.applyFilter(fieldname, operator, term, staticValue, excludeStatic);
         },
-        registerThemeChanged: function(compCallback) {
+        registerThemeChanged: function registerThemeChanged(compCallback) {
           if (compCallback) {
             themeChangeCallbacks[this.id].push(compCallback);
           }
         },
-        unregisterThemeChanged: function(compCallback) {
+        unregisterThemeChanged: function unregisterThemeChanged(compCallback) {
           var i;
           if (compCallback && (i = themeChangeCallbacks[this.id].indexOf(compCallback)) >= 0) {
             themeChangeCallbacks[this.id].splice(i, 1);
           }
         },
-        changeTheme: function(newTheme) {
+        changeTheme: function changeTheme(newTheme) {
           if (this.pgridwidget.pgrid.config.setTheme(newTheme)) {
             // notify self/sub-components of the theme change
             for (var i = 0; i < themeChangeCallbacks[this.id].length; i++) {
@@ -6173,16 +7693,16 @@
             }
           }
         },
-        updateClasses: function() {
+        updateClasses: function updateClasses() {
           var thisnode = ReactDOM.findDOMNode(this);
           var classes = this.pgridwidget.pgrid.config.theme.getPivotClasses();
           thisnode.className = classes.container;
           thisnode.children[1].className = classes.table;
         },
-        componentDidUpdate: function() {
+        componentDidUpdate: function componentDidUpdate() {
           this.synchronizeWidths();
         },
-        componentDidMount: function() {
+        componentDidMount: function componentDidMount() {
           var fontInfos = domUtils.getStyle(ReactDOM.findDOMNode(this), ['font-family', 'font-size'], true);
           this.fontStyle = {
             fontFamily: fontInfos[0],
@@ -6208,8 +7728,8 @@
 
           this.synchronizeWidths();
         },
-        onWheel: function(e) {
-          var elem;
+        onWheel: function onWheel(e) {
+          var elem; // eslint-disable-line no-unused-vars
           var scrollbar;
           var amount;
 
@@ -6226,12 +7746,12 @@
             utils.preventDefault(e);
           }
         },
-        synchronizeWidths: function() {
+        synchronizeWidths: function synchronizeWidths() {
           SizingManager.synchronizeWidths(this);
           this.refs.horizontalScrollBar.refresh();
           this.refs.verticalScrollBar.refresh();
         },
-        render: function() {
+        render: function render() {
 
           var self = this;
 
@@ -6403,22 +7923,23 @@
       });
 
     }, {
-      "../orb.utils": 19,
-      "../orb.utils.dom": 18,
-      "./orb.react.DragManager.jsx": 22,
-      "./orb.react.PivotTable.ColumnButtons.jsx": 33,
-      "./orb.react.PivotTable.ColumnHeaders.jsx": 34,
-      "./orb.react.PivotTable.DataCells.jsx": 35,
-      "./orb.react.PivotTable.RowButtons.jsx": 36,
-      "./orb.react.PivotTable.RowHeaders.jsx": 37,
-      "./orb.react.PivotTable.SizingManager.jsx": 38,
-      "./orb.react.PivotTable.UpperButtons.jsx": 39,
-      "./orb.react.ScrollBars.jsx": 41,
-      "./orb.react.Toolbar.jsx": 42,
+      "../orb.utils": 88,
+      "../orb.utils.dom": 87,
+      "./orb.react.DragManager.jsx": 91,
+      "./orb.react.PivotTable.ColumnButtons.jsx": 102,
+      "./orb.react.PivotTable.ColumnHeaders.jsx": 103,
+      "./orb.react.PivotTable.DataCells.jsx": 104,
+      "./orb.react.PivotTable.RowButtons.jsx": 105,
+      "./orb.react.PivotTable.RowHeaders.jsx": 106,
+      "./orb.react.PivotTable.SizingManager.jsx": 107,
+      "./orb.react.PivotTable.UpperButtons.jsx": 108,
+      "./orb.react.ScrollBars.jsx": 110,
+      "./orb.react.Toolbar.jsx": 111,
       "react": "react",
       "react-dom": "react-dom"
     }],
-    41: [function(_dereq_, module, exports) {
+    110: [function(_dereq_, module, exports) {
+      // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
         ReactDOM = typeof window === 'undefined' ? _dereq_('react-dom') : window.ReactDOM,
@@ -6428,7 +7949,7 @@
       var scrollBarMixin = {
         scrollEvent: null,
         scrollClient: null,
-        getInitialState: function() {
+        getInitialState: function getInitialState() {
           // initial state, all zero.
           return {
             size: 16,
@@ -6436,10 +7957,10 @@
             thumbOffset: 0
           };
         },
-        componentDidMount: function() {
+        componentDidMount: function componentDidMount() {
           this.scrollEvent = new ScrollEvent(this);
         },
-        componentDidUpdate: function() {
+        componentDidUpdate: function componentDidUpdate() {
           if (!this.state.mousedown) {
             // mouse not down, don't care about mouse up/move events.
             utils.removeEventListener(document, 'mousemove', this.onMouseMove);
@@ -6450,11 +7971,11 @@
             utils.addEventListener(document, 'mouseup', this.onMouseUp);
           }
         },
-        componentWillUnmount: function() {
+        componentWillUnmount: function componentWillUnmount() {
           utils.removeEventListener(document, 'mousemove', this.onMouseMove);
           utils.removeEventListener(document, 'mouseup', this.onMouseUp);
         },
-        onMouseDown: function(e) {
+        onMouseDown: function onMouseDown(e) {
           // drag with left mouse button
           if (e.button !== 0) return;
 
@@ -6475,7 +7996,7 @@
           utils.stopPropagation(e);
           utils.preventDefault(e);
         },
-        onMouseUp: function() {
+        onMouseUp: function onMouseUp() {
 
           if (this.state.mousedown) {
             var thumbElem = this.refs.scrollThumb;
@@ -6486,7 +8007,7 @@
             mousedown: false
           });
         },
-        onMouseMove: function(e) {
+        onMouseMove: function onMouseMove(e) {
 
           // if the mouse is not down while moving, return (no drag)
           if (!this.state.mousedown) return;
@@ -6500,22 +8021,22 @@
 
           this.scroll(amount);
         },
-        getScrollSize: function() {
+        getScrollSize: function getScrollSize() {
           if (this.scrollClient != null) {
             return domUtils.getSize(this.scrollClient)[this.sizeProp];
           } else {
             return domUtils.getSize(ReactDOM.findDOMNode(this))[this.sizeProp];
           }
         },
-        setScrollClient: function(scrollClient, scrollCallback) {
+        setScrollClient: function setScrollClient(scrollClient, scrollCallback) {
           this.scrollClient = scrollClient;
           this.scrollEvent.callback = scrollCallback;
         },
-        getScrollPercent: function() {
+        getScrollPercent: function getScrollPercent() {
           var maxOffset = this.getScrollSize() - this.state.size;
           return maxOffset <= 0 ? 0 : this.state.thumbOffset / maxOffset;
         },
-        refresh: function() {
+        refresh: function refresh() {
           if (this.scrollClient) {
             var scrolledElement = this.scrollClient.children[0];
 
@@ -6532,7 +8053,7 @@
             }, this.scrollEvent.raise);
           }
         },
-        scroll: function(amount, mode) {
+        scroll: function scroll(amount, mode) {
           if (this.state.size > 0) {
             if (mode == 1) amount *= 8;
 
@@ -6550,13 +8071,13 @@
           }
           return false;
         },
-        onWheel: function(e) {
+        onWheel: function onWheel(e) {
           this.scroll(e.deltaY, e.deltaMode);
           utils.stopPropagation(e);
           utils.preventDefault(e);
         },
-        render: function() {
-          var self = this;
+        render: function render() {
+          var self = this; // eslint-disable-line no-unused-vars
 
           var thumbStyle = {
             padding: 0
@@ -6567,7 +8088,7 @@
           var thisStyle = {};
           thisStyle[this.sizeProp] = this.state.containerSize;
 
-          var thumbClass = "orb-scrollthumb " + this.props.pivotTableComp.pgrid.config.theme.getButtonClasses().scrollBar;
+          var thumbClass = 'orb-scrollthumb ' + this.props.pivotTableComp.pgrid.config.theme.getButtonClasses().scrollBar;
 
           var scrollThumb = this.state.size <= 0 ? null : React.createElement('div', {
             className: thumbClass,
@@ -6621,12 +8142,13 @@
       });
 
     }, {
-      "../orb.utils": 19,
-      "../orb.utils.dom": 18,
+      "../orb.utils": 88,
+      "../orb.utils.dom": 87,
       "react": "react",
       "react-dom": "react-dom"
     }],
-    42: [function(_dereq_, module, exports) {
+    111: [function(_dereq_, module, exports) {
+      // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
         axe = _dereq_('../orb.axe'),
@@ -6636,19 +8158,19 @@
         displayName: 'exports',
 
         _toInit: [],
-        componentDidMount: function() {
+        componentDidMount: function componentDidMount() {
           for (var i = 0; i < this._toInit.length; i++) {
             var btn = this._toInit[i];
             btn.init(this.props.pivotTableComp, this.refs[btn.ref]);
           }
         },
-        componentDidUpdate: function() {
+        componentDidUpdate: function componentDidUpdate() {
           for (var i = 0; i < this._toInit.length; i++) {
             var btn = this._toInit[i];
             btn.init(this.props.pivotTableComp, this.refs[btn.ref]);
           }
         },
-        createCallback: function(action) {
+        createCallback: function createCallback(action) {
           if (action != null) {
             var pgridComponent = this.props.pivotTableComp;
             return function(e) {
@@ -6657,7 +8179,7 @@
           }
           return null;
         },
-        render: function() {
+        render: function render() {
 
           var config = this.props.pivotTableComp.pgridwidget.pgrid.config;
 
@@ -6714,27 +8236,32 @@
       var excelExport = _dereq_('../orb.export.excel');
 
       var defaultToolbarConfig = {
-        exportToExcel: function(pgridComponent, button) {
+        exportToExcel: function exportToExcel(pgridComponent, button) {
+          // eslint-disable-line no-unused-vars
           var a = document.createElement('a');
-          a.download = "orbpivotgrid.xls";
+          a.download = 'orbpivotgrid.xls';
           a.href = excelExport(pgridComponent.props.pgridwidget);
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
         },
-        expandAllRows: function(pgridComponent, button) {
+        expandAllRows: function expandAllRows(pgridComponent, button) {
+          // eslint-disable-line no-unused-vars
           pgridComponent.pgridwidget.toggleFieldExpansion(axe.Type.ROWS, null, true);
         },
-        collapseAllRows: function(pgridComponent, button) {
+        collapseAllRows: function collapseAllRows(pgridComponent, button) {
+          // eslint-disable-line no-unused-vars
           pgridComponent.pgridwidget.toggleFieldExpansion(axe.Type.ROWS, null, false);
         },
-        expandAllColumns: function(pgridComponent, button) {
+        expandAllColumns: function expandAllColumns(pgridComponent, button) {
+          // eslint-disable-line no-unused-vars
           pgridComponent.pgridwidget.toggleFieldExpansion(axe.Type.COLUMNS, null, true);
         },
-        collapseAllColumns: function(pgridComponent, button) {
+        collapseAllColumns: function collapseAllColumns(pgridComponent, button) {
+          // eslint-disable-line no-unused-vars
           pgridComponent.pgridwidget.toggleFieldExpansion(axe.Type.COLUMNS, null, false);
         },
-        updateSubtotalsButton: function(axetype, pgridComponent, button) {
+        updateSubtotalsButton: function updateSubtotalsButton(axetype, pgridComponent, button) {
           var subTotalsState = pgridComponent.pgridwidget.areSubtotalsVisible(axetype);
           button.style.display = subTotalsState === null ? 'none' : '';
 
@@ -6751,20 +8278,20 @@
           domUtils.removeClass(button, classToRemove);
           domUtils.addClass(button, classToAdd);
         },
-        initSubtotals: function(axetype) {
+        initSubtotals: function initSubtotals(axetype) {
           var self = this;
           return function(pgridComponent, button) {
             self.updateSubtotalsButton(axetype, pgridComponent, button);
           };
         },
-        toggleSubtotals: function(axetype) {
+        toggleSubtotals: function toggleSubtotals(axetype) {
           var self = this;
           return function(pgridComponent, button) {
             pgridComponent.toggleSubtotals(axetype);
             self.updateSubtotalsButton(axetype, pgridComponent, button);
           };
         },
-        updateGrandtotalButton: function(axetype, pgridComponent, button) {
+        updateGrandtotalButton: function updateGrandtotalButton(axetype, pgridComponent, button) {
           var subTotalsState = pgridComponent.pgridwidget.isGrandtotalVisible(axetype);
           button.style.display = subTotalsState === null ? 'none' : '';
 
@@ -6781,13 +8308,13 @@
           domUtils.removeClass(button, classToRemove);
           domUtils.addClass(button, classToAdd);
         },
-        initGrandtotal: function(axetype) {
+        initGrandtotal: function initGrandtotal(axetype) {
           var self = this;
           return function(pgridComponent, button) {
             self.updateGrandtotalButton(axetype, pgridComponent, button);
           };
         },
-        toggleGrandtotal: function(axetype) {
+        toggleGrandtotal: function toggleGrandtotal(axetype) {
           var self = this;
           return function(pgridComponent, button) {
             pgridComponent.toggleGrandtotal(axetype);
@@ -6857,10 +8384,10 @@
       }];
 
     }, {
-      "../orb.axe": 2,
-      "../orb.export.excel": 5,
-      "../orb.utils.dom": 18,
+      "../orb.axe": 71,
+      "../orb.export.excel": 74,
+      "../orb.utils.dom": 87,
       "react": "react"
     }]
-  }, {}, [7])(7)
+  }, {}, [76])(76)
 });

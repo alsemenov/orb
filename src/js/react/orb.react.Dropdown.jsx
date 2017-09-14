@@ -1,4 +1,4 @@
-/* global module, react, React */
+/* global module, react, React */ // eslint-disable-line no-unused-vars
 /*jshint eqnull: true*/
 
 'use strict';
@@ -20,11 +20,11 @@ module.exports = React.createClass({
 	},
 	onMouseEnter: function() {
 		var valueNode = this.refs.valueElement;
-		valueNode.className = "orb-tgl-btn-down";
+		valueNode.className = 'orb-tgl-btn-down';
 		valueNode.style.backgroundPosition = 'right center';
 	},
 	onMouseLeave: function() {
-		this.refs.valueElement.className = "";
+		this.refs.valueElement.className = '';
 	},
 	componentDidMount: function() {
 		utils.addEventListener(document, 'click', this.openOrClose);
@@ -56,7 +56,7 @@ module.exports = React.createClass({
 		}
 	},
 	render: function() {
-		function createSelectValueFunc(value) {
+		function createSelectValueFunc(value) { // eslint-disable-line no-unused-vars
 			return function() {
 				this.selectValue(value);
 			};

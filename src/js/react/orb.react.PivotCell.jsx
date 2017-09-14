@@ -1,4 +1,4 @@
-/* global module, require, React */
+/* global module, require, React */ // eslint-disable-line no-unused-vars
 /*jshint eqnull: true*/
 
 'use strict';
@@ -75,7 +75,7 @@ module.exports = React.createClass({
   componentDidUpdate: function() {
     this.updateCellInfos();
   },
-  shouldComponentUpdate: function(nextProps, nextState) {
+  shouldComponentUpdate: function(nextProps, nextState) { // eslint-disable-line no-unused-vars
     if(nextProps.cell && nextProps.cell == this.props.cell && !this._latestVisibleState && !nextProps.cell.visible()) {
       return false;
     }
@@ -150,7 +150,7 @@ module.exports = React.createClass({
 function getClassname(compProps) {
     var cell = compProps.cell;
     var classname = cell.cssclass;
-    var isEmpty = cell.template === 'cell-template-empty';
+    var isEmpty = cell.template === 'cell-template-empty'; // eslint-disable-line no-unused-vars
 
     if(!cell.visible()) {
       classname += ' cell-hidden'; 

@@ -1,4 +1,4 @@
-/* global module, require, React */
+/* global module, require, React */ // eslint-disable-line no-unused-vars
 
 'use strict';
 
@@ -6,7 +6,7 @@ var React = typeof window === 'undefined' ? require('react') : window.React,
     ReactDOM = typeof window === 'undefined' ? require('react-dom') : window.ReactDOM,    
     DragManager = require('./orb.react.DragManager.jsx'),
     SizingManager = require('./orb.react.PivotTable.SizingManager.jsx'),
-    Toolbar = require('./orb.react.Toolbar.jsx'),
+    Toolbar = require('./orb.react.Toolbar.jsx'), // eslint-disable-line no-unused-vars
     UpperButtons =  require('./orb.react.PivotTable.UpperButtons.jsx'),
     ColumnButtons = require('./orb.react.PivotTable.ColumnButtons.jsx'),
     RowButtons = require('./orb.react.PivotTable.RowButtons.jsx'),

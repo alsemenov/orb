@@ -1,4 +1,4 @@
-/* global module, require, React */
+/* global module, require, React */ // eslint-disable-line no-unused-vars
 
 'use strict';
 
@@ -10,8 +10,8 @@ module.exports = React.createClass({
   render: function() {
     var self = this;
     
-    var lastCellIndex = this.props.row.length - 1;
-    var cell0 = this.props.row[0];
+    var lastCellIndex = this.props.row.length - 1; // eslint-disable-line no-unused-vars
+    var cell0 = this.props.row[0]; // eslint-disable-line no-unused-vars
     var leftmostCellFound = false;
     var layoutInfos = self.props.layoutInfos;
     var cells;

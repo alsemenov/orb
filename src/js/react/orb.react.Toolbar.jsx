@@ -1,4 +1,4 @@
-/* global module, require, react */
+/* global module, require, react */ // eslint-disable-line no-unused-vars
 /*jshint node: true, eqnull: true*/
 
 'use strict';
@@ -72,24 +72,24 @@ module.exports = React.createClass({
 var excelExport = require('../orb.export.excel');
 
 var defaultToolbarConfig = {
-  exportToExcel: function(pgridComponent, button) {
+  exportToExcel: function(pgridComponent, button) { // eslint-disable-line no-unused-vars
     var a = document.createElement('a');
-    a.download = "orbpivotgrid.xls";
+    a.download = 'orbpivotgrid.xls';
     a.href =  excelExport(pgridComponent.props.pgridwidget);
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
   },
-  expandAllRows: function(pgridComponent, button) {
+  expandAllRows: function(pgridComponent, button) { // eslint-disable-line no-unused-vars
       pgridComponent.pgridwidget.toggleFieldExpansion(axe.Type.ROWS, null, true);
   },
-  collapseAllRows: function(pgridComponent, button) {
+  collapseAllRows: function(pgridComponent, button) { // eslint-disable-line no-unused-vars
       pgridComponent.pgridwidget.toggleFieldExpansion(axe.Type.ROWS, null, false);
   },
-  expandAllColumns: function(pgridComponent, button) {
+  expandAllColumns: function(pgridComponent, button) { // eslint-disable-line no-unused-vars
       pgridComponent.pgridwidget.toggleFieldExpansion(axe.Type.COLUMNS, null, true);
   },
-  collapseAllColumns: function(pgridComponent, button) {
+  collapseAllColumns: function(pgridComponent, button) { // eslint-disable-line no-unused-vars
       pgridComponent.pgridwidget.toggleFieldExpansion(axe.Type.COLUMNS, null, false);
   },
   updateSubtotalsButton: function(axetype, pgridComponent, button) {

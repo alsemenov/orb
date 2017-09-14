@@ -1,4 +1,4 @@
-/* global module, domUtils */
+/* global module, domUtils */ // eslint-disable-line no-unused-vars
 
 'use strict';
 
@@ -19,7 +19,7 @@ var SizingManager = module.exports = {
         topBtns = new ComponentSizeInfo(pivotComp.refs.upperButtons),
         cBtns = new ComponentSizeInfo(pivotComp.refs.colButtons),
         rBtnsTbl = new ComponentSizeInfo(pivotComp.refs.rowButtons),
-        chart = new ComponentSizeInfo(pivotComp.refs.chart),
+        chart = new ComponentSizeInfo(pivotComp.refs.chart), // eslint-disable-line no-unused-vars
 
         rBtnsWidth = Math.max(rBtnsTbl.w, 67),
         chartWidth = pivot.w - rBtnsWidth,
@@ -177,7 +177,7 @@ function getAllColumnsWidth(tblObject) {
           //var cellwidth = Math.ceil(domUtils.getSize(currCell.children[0]).width/currCell.colSpan);
           var cellwidth = Math.ceil((currCell.__orb._textWidth/currCell.__orb._colSpan) + currCell.__orb._paddingLeft + currCell.__orb._paddingRight + currCell.__orb._borderLeftWidth + currCell.__orb._borderRightWidth);
           // whether current cell spans vertically to the last row
-          var rowsSpan = currCell.__orb._rowSpan > 1 && currCell.__orb._rowSpan >= tbl.rows.length - rowIndex;
+          var rowsSpan = currCell.__orb._rowSpan > 1 && currCell.__orb._rowSpan >= tbl.rows.length - rowIndex; // eslint-disable-line no-unused-vars
 
           // if current cell spans over more than one column, add its width (its) 'colSpan' number of times
           for(var cspan = 0; cspan < currCell.__orb._colSpan; cspan++) {
@@ -221,7 +221,7 @@ function getAllColumnsWidth(tblObject) {
 
     // set colWidths to the tblObject
     tblObject.w = 0;
-    tblObject.colWidths = colWidths.map(function(item, index) {
+    tblObject.colWidths = colWidths.map(function(item, index) { // eslint-disable-line no-unused-vars
       tblObject.w += item.width;
       return item.width;
     });
@@ -235,7 +235,7 @@ function getAllColumnsWidth(tblObject) {
  *                                  Its length is equal to the greatest number of cells of all rows
  *                                  (in case of cells having colSpan/rowSpan greater than 1.)
  */
-function setTableWidths(tblObject, colWidths) {
+function setTableWidths(tblObject, colWidths) { // eslint-disable-line no-unused-vars
   if(tblObject && tblObject.node) {
 
     // reset table width

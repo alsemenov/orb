@@ -1,4 +1,4 @@
-/* global module, require, React, react, domUtils, document */
+/* global module, require, React, react, domUtils, document */ // eslint-disable-line no-unused-vars
 /*jshint eqnull: true*/
 
 'use strict';
@@ -144,7 +144,7 @@ var scrollBarMixin = {
     utils.preventDefault(e);
   },
   render: function() {
-    var self = this;
+    var self = this; // eslint-disable-line no-unused-vars
     
     var thumbStyle = {padding: 0};
     thumbStyle[this.sizeProp] = this.state.size;
@@ -153,7 +153,7 @@ var scrollBarMixin = {
     var thisStyle = {};
     thisStyle[this.sizeProp] = this.state.containerSize;
 
-    var thumbClass = "orb-scrollthumb " + this.props.pivotTableComp.pgrid.config.theme.getButtonClasses().scrollBar;
+    var thumbClass = 'orb-scrollthumb ' + this.props.pivotTableComp.pgrid.config.theme.getButtonClasses().scrollBar;
 
     var scrollThumb = this.state.size <= 0 ?
       null : 

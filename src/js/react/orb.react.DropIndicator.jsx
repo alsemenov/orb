@@ -1,4 +1,4 @@
-/* global module, require, react */
+/* global module, require, react */ // eslint-disable-line no-unused-vars
 /*jshint eqnull: true*/
 
 'use strict';

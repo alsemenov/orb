@@ -169,7 +169,7 @@ module.exports = function(config) {
         }
     };
 
-    this.drilldown = function(dataCell, pivotId) {
+    this.drilldown = function(dataCell, pivotId) { // eslint-disable-line no-unused-vars
         if(dataCell) {
             var colIndexes = dataCell.columnDimension.getRowIndexes();
             var data = dataCell.rowDimension.getRowIndexes().filter(function(index) {

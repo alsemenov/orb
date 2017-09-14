@@ -1,4 +1,4 @@
-/* global module, require, React */
+/* global module, require, React */ // eslint-disable-line no-unused-vars
 
 'use strict';
 
@@ -118,7 +118,7 @@ module.exports = React.createClass({
     this.synchronizeWidths();
   },
   onWheel: function(e) {
-    var elem;
+    var elem; // eslint-disable-line no-unused-vars
     var scrollbar;
     var amount;
 

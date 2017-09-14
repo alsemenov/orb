@@ -1,4 +1,4 @@
-/* global module, react, React */
+/* global module, react, React */ // eslint-disable-line no-unused-vars
 /*jshint eqnull: true*/
 
 'use strict';
@@ -20,8 +20,8 @@ module.exports = React.createClass({
 		return {};
 	},
 	destroy: function() {
-	    var container = ReactDOM.findDOMNode(this).parentNode;
-	    ReactDOM.unmountComponentAtNode(container);
+		var container = ReactDOM.findDOMNode(this).parentNode;
+		ReactDOM.unmountComponentAtNode(container);
 		container.parentNode.removeChild(container);
 	},
 	onFilter: function(operator, term, staticValue, excludeStatic) {
@@ -29,7 +29,7 @@ module.exports = React.createClass({
 		this.destroy();
 	},
 	onMouseDown: function(e) {
-	    var container = ReactDOM.findDOMNode(this).parentNode;
+		var container = ReactDOM.findDOMNode(this).parentNode;
 		var target = e.target || e.srcElement;
 		while(target != null) {
 			if(target == container) {
@@ -62,7 +62,7 @@ module.exports = React.createClass({
 		utils.addEventListener(window, 'resize', this.destroy);
 	},
 	componentDidMount: function() {
-	    this.filterManager.init(ReactDOM.findDOMNode(this));
+		this.filterManager.init(ReactDOM.findDOMNode(this));
 	},
 	componentWillUnmount : function() {
 		utils.removeEventListener(document, 'mousedown', this.onMouseDown);
@@ -175,7 +175,7 @@ function FilterManager(reactComp, initialFilterObject) {
 		resizeGrip: null
 	};
 
-	var resizeManager;
+	var resizeManager; // eslint-disable-line no-unused-vars
 
 	this.init = function(filterContainerElement) {
 
@@ -310,10 +310,10 @@ function FilterManager(reactComp, initialFilterObject) {
 
 			var resizeGripSize = resizeGripElem.getBoundingClientRect();
 			var outerContainerSize = outerContainerElem.getBoundingClientRect();
-		    var valuesTableSize = valuesTableElem.tBodies[0].getBoundingClientRect();
+			var valuesTableSize = valuesTableElem.tBodies[0].getBoundingClientRect();
 
-		    var outerContainerWidth = outerContainerSize.right - outerContainerSize.left;
-		    var outerContainerHeight = outerContainerSize.bottom - outerContainerSize.top;
+			var outerContainerWidth = outerContainerSize.right - outerContainerSize.left;
+			var outerContainerHeight = outerContainerSize.bottom - outerContainerSize.top;
 
 			var offset = {
 				x: outerContainerWidth <= minContainerWidth && mousePageXY.pageX < resizeGripSize.left ? 0 : mousePageXY.pageX - mousedownpos.x,
@@ -321,7 +321,7 @@ function FilterManager(reactComp, initialFilterObject) {
 			};
 
 			var newContainerWidth = outerContainerWidth  + offset.x;
-		    var newContainerHeight = outerContainerHeight  + offset.y;
+			var newContainerHeight = outerContainerHeight  + offset.y;
 
 			mousedownpos.x = mousePageXY.pageX;
 			mousedownpos.y = mousePageXY.pageY;

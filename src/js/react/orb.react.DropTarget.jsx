@@ -1,4 +1,4 @@
-/* global module, require, react */
+/* global module, require, react */ // eslint-disable-line no-unused-vars
 /*jshint eqnull: true*/
 
 'use strict';
@@ -16,9 +16,9 @@ module.exports = React.createClass({
 			isover: false
 		};
 	},
-  	componentDidMount: function() {
-  		DragManager.registerTarget(this, this.props.axetype, this.onDragOver, this.onDragEnd);
-  	},
+	componentDidMount: function() {
+		DragManager.registerTarget(this, this.props.axetype, this.onDragOver, this.onDragEnd);
+	},
 	componentWillUnmount : function() {
 		DragManager.unregisterTarget(this);
 	},
