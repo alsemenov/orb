@@ -1727,7 +1727,8 @@
           };
 
           this.flattenValues = function() {
-            return self.dimensionsByDepth[1].map(function(dim) {
+            var dims = self.dimensionsCount > 0 ? self.dimensionsByDepth[1] : [self.root];
+            return dims.map(function(dim) {
               var name = '';
               var currDim = dim;
               while (!currDim.isRoot) {
