@@ -27,7 +27,8 @@ module.exports = function () {
         debug: false,
         standalone: 'orb'
     }).external('react')
-        .external('react-dom');
+        .external('react-dom')
+        .external('c3');
 
     var bundle = function () {
         return bundler

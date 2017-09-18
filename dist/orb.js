@@ -4722,7 +4722,8 @@
       // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
-        ReactDOM = typeof window === 'undefined' ? _dereq_('react-dom') : window.ReactDOM;
+        ReactDOM = typeof window === 'undefined' ? _dereq_('react-dom') : window.ReactDOM,
+        c3 = typeof window === 'undefined' ? _dereq_('c3') : window.c3;
 
       module.exports = React.createClass({
         displayName: 'exports',
@@ -4733,37 +4734,19 @@
           };
         },
         canRender: function canRender() {
-          return this.state.canRender && typeof this.props.chartMode.type === 'string' && typeof google.visualization[this.props.chartMode.type] === 'function';
+          return this.state.canRender && typeof this.props.chartMode.type === 'string';
         },
         drawChart: function drawChart() {
           if (this.canRender()) {
             var chartData = this.props.pivotTableComp.pgridwidget.pgrid.getChartData();
-            var data = new google.visualization.DataTable();
 
-            data.addColumn('string', chartData.hAxisLabel);
-            for (var ri = 0; ri < chartData.colNames.length; ri++) {
-              data.addColumn('number', chartData.colNames[ri]);
-            }
-
-            data.addRows(chartData.dataTable);
-
-            var options = {
-              title: chartData.title,
-              //isStacked: true,
-              fontName: this.state.chartStyle.fontFamily,
-              fontSize: parseFloat(this.state.chartStyle.fontSize),
-              hAxis: {
-                title: chartData.hAxisLabel
-              },
-              vAxis: {
-                title: chartData.vAxisLabel
+            var chart = c3.generate({ // eslint-disable-line no-unused-vars
+              bindto: ReactDOM.findDOMNode(this),
+              data: {
+                type: 'bar',
+                columns: chartData.dataTable
               }
-            };
-
-            if (typeof google.visualization[this.props.chartMode.type] === 'function') {
-              var chart = new google.visualization[this.props.chartMode.type](ReactDOM.findDOMNode(this));
-              chart.draw(data, options);
-            }
+            });
           }
         },
         componentDidMount: function componentDidMount() {
@@ -4784,6 +4767,7 @@
       });
 
     }, {
+      "c3": "c3",
       "react": "react",
       "react-dom": "react-dom"
     }],
