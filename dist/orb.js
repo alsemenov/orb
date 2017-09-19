@@ -2791,28 +2791,39 @@
           }
 
           var hAxisLabel = getAxisLabel(config.columnFields);
-          var vAxisLabel = config.dataFields[0].aggregateFuncName + '(' + config.dataFields[0].caption + ')';
-          var legendsLabel = getAxisLabel(config.rowFields);
+          //var vAxisLabel = config.dataFields[0].aggregateFuncName + '(' + config.dataFields[0].caption + ')';
+          //var legendsLabel = getAxisLabel(config.rowFields);
 
-          var rowLeafDimensions = self.rows.flattenValues();
+          // var rowLeafDimensions = self.rows.flattenValues();
           var colLeafDimensions = self.columns.flattenValues();
           var data = [];
-
-          for (var ci = 0; ci < colLeafDimensions.length; ci++) {
-            var cdim = colLeafDimensions[ci];
-            var currData = [cdim.name];
-            for (var rri = 0; rri < rowLeafDimensions.length; rri++) {
-              currData.push(self.getData(config.dataFields[0].name, rowLeafDimensions[rri].dim, cdim.dim));
+          // push x axis labels
+          // data.push(['_x'].concat(colLeafDimensions.map(function(d){return d.name})));
+          // push data values
+          for (var di = 0; di < config.dataFields.length; di++) {
+            var currData = [config.dataFields[di].aggregateFuncName + '(' + config.dataFields[di].caption + ')'];
+            for (var ci = 0; ci < colLeafDimensions.length; ci++) {
+              currData.push(self.getData(config.dataFields[di].name, self.rows.root, colLeafDimensions[ci].dim));
             }
             data.push(currData);
           }
 
+          // for(var ci=0; ci < colLeafDimensions.length; ci++) {
+          //     var cdim = colLeafDimensions[ci];
+          //     var currData = [cdim.name];
+          //     for(var rri=0; rri < rowLeafDimensions.length; rri++) {
+          //         currData.push(self.getData(config.dataFields[0].name, rowLeafDimensions[rri].dim, cdim.dim));
+          //     }
+          //     data.push(currData);
+          // }
+
           return {
-            title: vAxisLabel + ': ' + hAxisLabel + ' by ' + legendsLabel,
+            // title: vAxisLabel + ': ' + hAxisLabel + ' by ' + legendsLabel,
             hAxisLabel: hAxisLabel,
-            vAxisLabel: vAxisLabel,
-            legendsLabel: legendsLabel,
-            colNames: rowLeafDimensions.map(function(d) {
+            // vAxisLabel: vAxisLabel,
+            // legendsLabel: legendsLabel,
+            // colNames: rowLeafDimensions.map(function(d) { return d.name; }),
+            colNames: colLeafDimensions.map(function(d) {
               return d.name;
             }),
             dataTable: data
@@ -4746,6 +4757,13 @@
               data: {
                 type: 'bar',
                 columns: chartData.dataTable
+              },
+              axis: {
+                x: {
+                  label: chartData.hAxisLabel,
+                  type: 'category', // this needed to load string x value
+                  categories: chartData.colNames
+                }
               }
             });
           }

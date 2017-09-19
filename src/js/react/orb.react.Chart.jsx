@@ -25,6 +25,13 @@ module.exports = React.createClass({
         data:{
           type: 'bar',
           columns: chartData.dataTable
+        },
+        axis: {
+          x: {
+              label: chartData.hAxisLabel,
+              type: 'category', // this needed to load string x value
+              categories: chartData.colNames
+          }
         }
       });
     }
