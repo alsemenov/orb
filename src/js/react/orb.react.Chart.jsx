@@ -17,15 +17,16 @@ module.exports = React.createClass({
       typeof this.props.chartMode.type === 'string';
   },
   drawChart: function() {
+    var self = this;
     if(this.canRender()) {
-      var chartData = this.props.pivotTableComp.pgridwidget.pgrid.getChartData();
-
+      var chartData = self.props.pivotTableComp.pgridwidget.pgrid.getChartData();
       var chart = c3.generate({ // eslint-disable-line no-unused-vars
         bindto: ReactDOM.findDOMNode(this),
         data:{
-          type: 'bar',
-          columns: chartData.dataTable
-        },
+          type: self.props.chartMode.type,
+          columns: chartData.dataTable,
+          types: chartData.secondaryValues.reduce(function(map,value) { map[value] = self.props.chartMode.secondaryType; return map; }, {})
+        },        
         axis: {
           x: {
               label: chartData.hAxisLabel,

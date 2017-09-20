@@ -1920,8 +1920,9 @@
         options = options || {};
 
         this.enabled = options.enabled || false;
-        // type can be: 'LineChart', 'AreaChart', 'ColumnChart', 'BarChart', 'SteppedAreaChart'
-        this.type = options.type || 'LineChart';
+        // type can be: line, spline, step. area, area-spline, area-step, bar, scatter, pie, donut, gauge
+        this.type = options.type || 'bar';
+        this.secondaryType = options.secondaryType || 'line';
       }
 
       var Field = module.exports.field = function(options, createSubOptions) {
@@ -2795,9 +2796,7 @@
           // var rowLeafDimensions = self.rows.flattenValues();
           var colLeafDimensions = self.columns.flattenValues();
           var data = [];
-          // push x axis labels
-          // data.push(['_x'].concat(colLeafDimensions.map(function(d){return d.name})));
-          // push data values
+          // primary data values
           for (var di = 0; di < config.dataFields.length; di++) {
             var currData = [config.dataFields[di].aggregateFuncName + '(' + config.dataFields[di].caption + ')'];
             for (var ci = 0; ci < colLeafDimensions.length; ci++) {
@@ -2805,15 +2804,16 @@
             }
             data.push(currData);
           }
-
-          // for(var ci=0; ci < colLeafDimensions.length; ci++) {
-          //     var cdim = colLeafDimensions[ci];
-          //     var currData = [cdim.name];
-          //     for(var rri=0; rri < rowLeafDimensions.length; rri++) {
-          //         currData.push(self.getData(config.dataFields[0].name, rowLeafDimensions[rri].dim, cdim.dim));
-          //     }
-          //     data.push(currData);
-          // }
+          // secondary data values
+          var secondaryValues = [];
+          for (var ri = 0; ri < config.rowFields.length; ri++) {
+            currData = [config.rowFields[ri].aggregateFuncName + '(' + config.rowFields[ri].caption + ')'];
+            secondaryValues.push(currData[0]);
+            for (ci = 0; ci < colLeafDimensions.length; ci++) {
+              currData.push(self.getData(config.rowFields[ri].name, self.rows.root, colLeafDimensions[ci].dim));
+            }
+            data.push(currData);
+          }
 
           return {
             // title: vAxisLabel + ': ' + hAxisLabel + ' by ' + legendsLabel,
@@ -2824,7 +2824,8 @@
             colNames: colLeafDimensions.map(function(d) {
               return d.name;
             }),
-            dataTable: data
+            dataTable: data,
+            secondaryValues: secondaryValues
           };
         };
 
@@ -4747,14 +4748,18 @@
           return this.state.canRender && typeof this.props.chartMode.type === 'string';
         },
         drawChart: function drawChart() {
+          var self = this;
           if (this.canRender()) {
-            var chartData = this.props.pivotTableComp.pgridwidget.pgrid.getChartData();
-
+            var chartData = self.props.pivotTableComp.pgridwidget.pgrid.getChartData();
             var chart = c3.generate({ // eslint-disable-line no-unused-vars
               bindto: ReactDOM.findDOMNode(this),
               data: {
-                type: 'bar',
-                columns: chartData.dataTable
+                type: self.props.chartMode.type,
+                columns: chartData.dataTable,
+                types: chartData.secondaryValues.reduce(function(map, value) {
+                  map[value] = self.props.chartMode.secondaryType;
+                  return map;
+                }, {})
               },
               axis: {
                 x: {

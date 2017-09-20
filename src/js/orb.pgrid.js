@@ -225,9 +225,7 @@ var pgrid = module.exports = function(config) {
         // var rowLeafDimensions = self.rows.flattenValues();
         var colLeafDimensions = self.columns.flattenValues();
         var data = [];
-        // push x axis labels
-        // data.push(['_x'].concat(colLeafDimensions.map(function(d){return d.name})));
-        // push data values
+        // primary data values
         for (var di=0; di<config.dataFields.length; di++) {
             var currData = [config.dataFields[di].aggregateFuncName + '(' + config.dataFields[di].caption + ')'];
             for (var ci=0; ci<colLeafDimensions.length; ci++) {
@@ -235,16 +233,17 @@ var pgrid = module.exports = function(config) {
             }
             data.push(currData);
         }
+        // secondary data values
+        var secondaryValues = [];
+        for (var ri=0; ri<config.rowFields.length; ri++) {
+            currData = [config.rowFields[ri].aggregateFuncName + '(' + config.rowFields[ri].caption + ')'];
+            secondaryValues.push(currData[0]);
+            for (ci=0; ci<colLeafDimensions.length; ci++) {
+                currData.push(self.getData(config.rowFields[ri].name, self.rows.root, colLeafDimensions[ci].dim));
+            }
+            data.push(currData);
+        }
         
-        // for(var ci=0; ci < colLeafDimensions.length; ci++) {
-        //     var cdim = colLeafDimensions[ci];
-        //     var currData = [cdim.name];
-        //     for(var rri=0; rri < rowLeafDimensions.length; rri++) {
-        //         currData.push(self.getData(config.dataFields[0].name, rowLeafDimensions[rri].dim, cdim.dim));
-        //     }
-        //     data.push(currData);
-        // }
-
         return {
             // title: vAxisLabel + ': ' + hAxisLabel + ' by ' + legendsLabel,
             hAxisLabel: hAxisLabel,
@@ -252,7 +251,8 @@ var pgrid = module.exports = function(config) {
             // legendsLabel: legendsLabel,
             // colNames: rowLeafDimensions.map(function(d) { return d.name; }),
             colNames: colLeafDimensions.map(function(d) { return d.name }),
-            dataTable: data
+            dataTable: data,
+            secondaryValues: secondaryValues
            };
     };
 

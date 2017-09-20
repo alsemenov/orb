@@ -132,8 +132,9 @@ function ChartConfig(options) {
     options = options || {};
 
     this.enabled = options.enabled || false;
-    // type can be: 'LineChart', 'AreaChart', 'ColumnChart', 'BarChart', 'SteppedAreaChart'
-    this.type = options.type || 'LineChart';    
+    // type can be: line, spline, step. area, area-spline, area-step, bar, scatter, pie, donut, gauge
+    this.type = options.type || 'bar';
+    this.secondaryType = options.secondaryType || 'line';    
 }
 
 var Field = module.exports.field = function(options, createSubOptions) {
