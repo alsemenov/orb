@@ -1727,23 +1727,21 @@
           };
 
           this.flattenValues = function() {
-            var dims = self.dimensionsCount > 0 ? self.dimensionsByDepth[1] : [self.root];
-            return dims.map(function(dim) {
-              var name = '';
-              var currDim = dim;
-              while (!currDim.isRoot) {
-                name = currDim.value + (name !== '' ? '-' + name : '');
-                currDim = currDim.parent;
-              }
-              return {
-                name: name,
-                dim: dim
-              };
-            }).sort(function(a, b) {
-              if (a.name < b.name) return -1;
-              if (a.name > b.name) return 1;
-              return 0;
-            });
+            var queue = [{
+              name: '',
+              dim: self.root
+            }];
+            while (queue[0].dim.depth != 1) {
+              var x = queue.shift();
+              x.dim.values.forEach(function(value) {
+                var subdim = x.dim.subdimvals[value];
+                queue.push({
+                  name: x.name + (x.name !== '' ? '-' : '') + value,
+                  dim: subdim
+                });
+              });
+            }
+            return queue;
           };
         }
 
