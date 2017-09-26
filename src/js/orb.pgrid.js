@@ -128,6 +128,16 @@ var pgrid = module.exports = function(config) {
         return self.config.isGrandtotalVisible(axetype);
     };
 
+    this.toggleStackedBars = function() {
+        if (self.config.toggleStackedBars()){
+            self.publish(pgrid.EVENT_CONFIG_CHANGED); 
+        }
+    };
+    
+    this.areStackedBars = function() {
+        return self.config.areStackedBars();
+    };
+
     this.getFieldValues = function(field, filterFunc) {
         var values1 = [];
         var values = [];
@@ -224,10 +234,12 @@ var pgrid = module.exports = function(config) {
 
         // var rowLeafDimensions = self.rows.flattenValues();
         var colLeafDimensions = self.columns.flattenValues();
+        var primaryValues = [];
         var data = [];
         // primary data values
         for (var di=0; di<config.dataFields.length; di++) {
             var currData = [config.dataFields[di].aggregateFuncName + '(' + config.dataFields[di].caption + ')'];
+            primaryValues.push(currData[0]);
             for (var ci=0; ci<colLeafDimensions.length; ci++) {
                 currData.push(self.getData(config.dataFields[di].name, self.rows.root, colLeafDimensions[ci].dim));
             }
@@ -252,7 +264,9 @@ var pgrid = module.exports = function(config) {
             // colNames: rowLeafDimensions.map(function(d) { return d.name; }),
             colNames: colLeafDimensions.map(function(d) { return d.name }),
             dataTable: data,
-            secondaryValues: secondaryValues
+            primaryValues: primaryValues,
+            secondaryValues: secondaryValues,
+            stackedBars: config.areStackedBars()
            };
     };
 

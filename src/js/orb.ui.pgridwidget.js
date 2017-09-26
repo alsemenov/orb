@@ -150,6 +150,14 @@ module.exports = function(config) {
         return self.pgrid.isGrandtotalVisible(axetype);
     };
 
+    this.toggleStackedBars = function() {
+        self.pgrid.toggleStackedBars();
+    };
+
+    this.areStackedBars = function() {
+        return self.pgrid.areStackedBars();
+    };
+
     this.changeTheme = function(newTheme) {
         pivotComponent.changeTheme(newTheme);
     };

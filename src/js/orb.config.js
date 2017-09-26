@@ -135,6 +135,7 @@ function ChartConfig(options) {
     // type can be: line, spline, step. area, area-spline, area-step, bar, scatter, pie, donut, gauge
     this.type = options.type || 'bar';
     this.secondaryType = options.secondaryType || 'line';    
+    this.stackedBars = options.stackedBars !== undefined ? options.stackedBars : false;
 }
 
 var Field = module.exports.field = function(options, createSubOptions) {
@@ -496,5 +497,14 @@ module.exports.config = function(config) {
         } else {
             return false;
         }
+    };
+
+    this.areStackedBars = function() {
+        return self.chartMode.stackedBars;
+    };
+
+    this.toggleStackedBars = function() {
+        self.chartMode.stackedBars = !self.areStackedBars();
+        return self.chartMode.enabled;
     };
 };

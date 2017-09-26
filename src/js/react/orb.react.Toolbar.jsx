@@ -151,10 +151,42 @@ var defaultToolbarConfig = {
       pgridComponent.toggleGrandtotal(axetype);
       self.updateGrandtotalButton(axetype, pgridComponent, button);
     };
+  },
+
+  updateStackedBars: function(pgridComponent, button) {
+    var stackedBarsState = pgridComponent.pgridwidget.areStackedBars();
+    button.style = '';
+    var classToAdd = '';
+    var classToRemove = '';
+    if (stackedBarsState){
+      classToAdd = 'stacked-bars';
+      classToRemove = 'non-stacked-bars';
+    } else {
+      classToAdd = 'non-stacked-bars';
+      classToRemove = 'stacked-bars';
+    }
+    domUtils.removeClass(button, classToRemove);
+    domUtils.addClass(button, classToAdd);
+  },
+
+  toggleStackedBars: function() {
+    var self = this;
+    return function(pgridComponent, button) {
+      pgridComponent.toggleStackedBars();
+      self.updateStackedBars(pgridComponent, button);
+    };
+  },
+
+  initStackedBars: function() {
+    var self = this;
+    return function(pgridComponent, button) {
+      self.updateStackedBars(pgridComponent, button);
+    };
   }
 };
 
 defaultToolbarConfig.buttons = [
+  { type: 'button', tooltip: 'Toggle stacked bars', init: defaultToolbarConfig.initStackedBars(), action: defaultToolbarConfig.toggleStackedBars()},
   { type: 'label', text: 'Rows:'},
   { type: 'button', tooltip: 'Expand all rows', cssClass: 'expand-all', action: defaultToolbarConfig.expandAllRows},
   { type: 'button', tooltip: 'Collapse all rows', cssClass: 'collapse-all', action: defaultToolbarConfig.collapseAllRows},
@@ -172,5 +204,5 @@ defaultToolbarConfig.buttons = [
                                                            action: defaultToolbarConfig.toggleGrandtotal(axe.Type.COLUMNS)},
   { type: 'separator'},
   { type: 'label', text: 'Export:'},
-  { type: 'button', tooltip: 'Export to Excel', cssClass: 'export-xls', action: defaultToolbarConfig.exportToExcel}
+  { type: 'button', tooltip: 'Export to Excel', cssClass: 'export-xls', action: defaultToolbarConfig.exportToExcel}  
 ];

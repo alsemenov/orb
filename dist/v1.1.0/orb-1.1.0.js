@@ -1923,6 +1923,7 @@
         // type can be: line, spline, step. area, area-spline, area-step, bar, scatter, pie, donut, gauge
         this.type = options.type || 'bar';
         this.secondaryType = options.secondaryType || 'line';
+        this.stackedBars = options.stackedBars !== undefined ? options.stackedBars : false;
       }
 
       var Field = module.exports.field = function(options, createSubOptions) {
@@ -2263,6 +2264,15 @@
           } else {
             return false;
           }
+        };
+
+        this.areStackedBars = function() {
+          return self.chartMode.stackedBars;
+        };
+
+        this.toggleStackedBars = function() {
+          self.chartMode.stackedBars = !self.areStackedBars();
+          return self.chartMode.enabled;
         };
       };
 
@@ -2701,6 +2711,16 @@
           return self.config.isGrandtotalVisible(axetype);
         };
 
+        this.toggleStackedBars = function() {
+          if (self.config.toggleStackedBars()) {
+            self.publish(pgrid.EVENT_CONFIG_CHANGED);
+          }
+        };
+
+        this.areStackedBars = function() {
+          return self.config.areStackedBars();
+        };
+
         this.getFieldValues = function(field, filterFunc) {
           var values1 = [];
           var values = [];
@@ -2795,10 +2815,12 @@
 
           // var rowLeafDimensions = self.rows.flattenValues();
           var colLeafDimensions = self.columns.flattenValues();
+          var primaryValues = [];
           var data = [];
           // primary data values
           for (var di = 0; di < config.dataFields.length; di++) {
             var currData = [config.dataFields[di].aggregateFuncName + '(' + config.dataFields[di].caption + ')'];
+            primaryValues.push(currData[0]);
             for (var ci = 0; ci < colLeafDimensions.length; ci++) {
               currData.push(self.getData(config.dataFields[di].name, self.rows.root, colLeafDimensions[ci].dim));
             }
@@ -2825,7 +2847,9 @@
               return d.name;
             }),
             dataTable: data,
-            secondaryValues: secondaryValues
+            primaryValues: primaryValues,
+            secondaryValues: secondaryValues,
+            stackedBars: config.areStackedBars()
           };
         };
 
@@ -4139,6 +4163,14 @@
           return self.pgrid.isGrandtotalVisible(axetype);
         };
 
+        this.toggleStackedBars = function() {
+          self.pgrid.toggleStackedBars();
+        };
+
+        this.areStackedBars = function() {
+          return self.pgrid.areStackedBars();
+        };
+
         this.changeTheme = function(newTheme) {
           pivotComponent.changeTheme(newTheme);
         };
@@ -4759,7 +4791,8 @@
                 types: chartData.secondaryValues.reduce(function(map, value) {
                   map[value] = self.props.chartMode.secondaryType;
                   return map;
-                }, {})
+                }, {}),
+                groups: [chartData.stackedBars ? chartData.primaryValues : []]
               },
               axis: {
                 x: {
@@ -6717,6 +6750,9 @@
           this.pgrid = this.pgridwidget.pgrid;
           return {};
         },
+        toggleStackedBars: function toggleStackedBars() {
+          this.pgridwidget.toggleStackedBars();
+        },
         sort: function sort(axetype, field) {
           this.pgridwidget.sort(axetype, field);
         },
@@ -6794,6 +6830,15 @@
               style: tblStyle,
               ref: 'pivot'
             },
+            config.toolbar && config.toolbar.visible ? React.createElement(
+              'div', {
+                ref: 'toolbar',
+                className: 'orb-toolbar'
+              },
+              React.createElement(Toolbar, {
+                pivotTableComp: self
+              })
+            ) : null,
             React.createElement(
               'table', {
                 id: 'tbl-' + self.id,
@@ -7241,6 +7286,7 @@
         synchronizePivotChartWidths: function synchronizePivotChartWidths(pivotComp) {
           var pivotWrapperTable = pivotComp.refs.pivotWrapperTable,
             pivot = new ComponentSizeInfo(pivotComp.refs.pivot),
+            toolbar = new ComponentSizeInfo(pivotComp.refs.toolbar),
             topBtns = new ComponentSizeInfo(pivotComp.refs.upperButtons),
             cBtns = new ComponentSizeInfo(pivotComp.refs.colButtons),
             rBtnsTbl = new ComponentSizeInfo(pivotComp.refs.rowButtons),
@@ -7250,7 +7296,7 @@
             rBtnsWidth = Math.max(rBtnsTbl.w, 67),
             chartWidth = pivot.w - rBtnsWidth,
             pivotHeight = pivotComp.pgridwidget.pgrid.config.height,
-            chartHeight = !pivotHeight ? null : pivotHeight - (topBtns.h + cBtns.h);
+            chartHeight = !pivotHeight ? null : pivotHeight - (toolbar ? toolbar.h + 17 : 0) - (topBtns.h + cBtns.h);
 
           // set pivotWrapperTable columns width to fixed value
           domUtils.updateTableColGroup(pivotWrapperTable, [rBtnsWidth, chartWidth]);
@@ -8326,10 +8372,46 @@
             pgridComponent.toggleGrandtotal(axetype);
             self.updateGrandtotalButton(axetype, pgridComponent, button);
           };
+        },
+
+        updateStackedBars: function updateStackedBars(pgridComponent, button) {
+          var stackedBarsState = pgridComponent.pgridwidget.areStackedBars();
+          button.style = '';
+          var classToAdd = '';
+          var classToRemove = '';
+          if (stackedBarsState) {
+            classToAdd = 'stacked-bars';
+            classToRemove = 'non-stacked-bars';
+          } else {
+            classToAdd = 'non-stacked-bars';
+            classToRemove = 'stacked-bars';
+          }
+          domUtils.removeClass(button, classToRemove);
+          domUtils.addClass(button, classToAdd);
+        },
+
+        toggleStackedBars: function toggleStackedBars() {
+          var self = this;
+          return function(pgridComponent, button) {
+            pgridComponent.toggleStackedBars();
+            self.updateStackedBars(pgridComponent, button);
+          };
+        },
+
+        initStackedBars: function initStackedBars() {
+          var self = this;
+          return function(pgridComponent, button) {
+            self.updateStackedBars(pgridComponent, button);
+          };
         }
       };
 
       defaultToolbarConfig.buttons = [{
+        type: 'button',
+        tooltip: 'Toggle stacked bars',
+        init: defaultToolbarConfig.initStackedBars(),
+        action: defaultToolbarConfig.toggleStackedBars()
+      }, {
         type: 'label',
         text: 'Rows:'
       }, {

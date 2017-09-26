@@ -25,7 +25,8 @@ module.exports = React.createClass({
         data:{
           type: self.props.chartMode.type,
           columns: chartData.dataTable,
-          types: chartData.secondaryValues.reduce(function(map,value) { map[value] = self.props.chartMode.secondaryType; return map; }, {})
+          types: chartData.secondaryValues.reduce(function(map,value) { map[value] = self.props.chartMode.secondaryType; return map; }, {}),
+          groups: [ chartData.stackedBars ? chartData.primaryValues : [] ]
         },        
         axis: {
           x: {

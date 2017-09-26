@@ -31,6 +31,9 @@ module.exports = React.createClass({
     this.pgrid = this.pgridwidget.pgrid;
     return {};
   },
+  toggleStackedBars: function () {
+    this.pgridwidget.toggleStackedBars();
+  },
   sort: function(axetype, field) {
     this.pgridwidget.sort(axetype, field);
   },
@@ -99,6 +102,9 @@ module.exports = React.createClass({
     if(config.height) { tblStyle.height = config.height; }
 
     return (<div className={classes.container} style={tblStyle} ref="pivot">
+      {config.toolbar && config.toolbar.visible ? <div ref="toolbar" className="orb-toolbar">
+        <Toolbar pivotTableComp={self}></Toolbar>
+      </div> : null}
       <table id={'tbl-' + self.id} ref="pivotWrapperTable" className={classes.table}>
         <colgroup>
           <col ref="column1"></col>

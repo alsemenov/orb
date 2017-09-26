@@ -16,6 +16,7 @@ var SizingManager = module.exports = {
   synchronizePivotChartWidths: function(pivotComp) {
       var pivotWrapperTable = pivotComp.refs.pivotWrapperTable,
         pivot = new ComponentSizeInfo(pivotComp.refs.pivot),
+        toolbar = new ComponentSizeInfo(pivotComp.refs.toolbar),
         topBtns = new ComponentSizeInfo(pivotComp.refs.upperButtons),
         cBtns = new ComponentSizeInfo(pivotComp.refs.colButtons),
         rBtnsTbl = new ComponentSizeInfo(pivotComp.refs.rowButtons),
@@ -25,7 +26,7 @@ var SizingManager = module.exports = {
         chartWidth = pivot.w - rBtnsWidth,
 
         pivotHeight = pivotComp.pgridwidget.pgrid.config.height,
-        chartHeight = !pivotHeight ? null : (pivotHeight - (topBtns.h + cBtns.h));
+        chartHeight = !pivotHeight ? null : (pivotHeight -  (toolbar ? toolbar.h + 17 : 0) - (topBtns.h + cBtns.h));
 
     // set pivotWrapperTable columns width to fixed value
     domUtils.updateTableColGroup(pivotWrapperTable, [
