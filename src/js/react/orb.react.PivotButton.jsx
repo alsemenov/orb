@@ -174,8 +174,12 @@ module.exports = React.createClass({
 				'' );
 		var filterClass = (self.state.dragging ? '' : 'fltr-btn') + (this.props.pivotTableComp.pgrid.isFieldFiltered(this.props.field.name) ? ' fltr-btn-active' : '');
 		var fieldAggFunc = '';
+		var sortDiv = <div className={'sort-indicator ' + sortDirectionClass}></div>;
+		var secondaryMark = '';
 		if(self.props.axetype === axe.Type.DATA) {
 			fieldAggFunc = <small>{' (' + self.props.field.aggregateFuncName + ')' }</small>;
+			sortDiv = '';
+			secondaryMark = self.props.field.secondary ? '*' : '';
 		}
 
 		return <div key={self.props.field.name} 
@@ -186,8 +190,8 @@ module.exports = React.createClass({
 					<table>
 						<tbody>
 							<tr>
-								<td className="caption">{self.props.field.caption}{fieldAggFunc}</td>
-								<td><div className={'sort-indicator ' + sortDirectionClass}></div></td>
+								<td className="caption">{self.props.field.caption}{fieldAggFunc}{secondaryMark}</td>
+								<td>{sortDiv}</td>
 								<td className="filter">
 									<div ref="filterButton" className={filterClass} onMouseDown={self.state.dragging ? null : this.onFilterMouseDown}></div>
 								</td>

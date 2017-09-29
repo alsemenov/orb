@@ -90,6 +90,8 @@ var pgrid = module.exports = function(config) {
             self.rows.sort(field);
         } else if (axetype === axe.Type.COLUMNS) {
             self.columns.sort(field);
+        } else if (axetype === axe.Type.DATA) {
+            field.secondary = !field.secondary;
         } else {
             return;
         }
@@ -280,22 +282,26 @@ var pgrid = module.exports = function(config) {
         var data = [];
         // primary data values
         for (var di=0; di<config.dataFields.length; di++) {
-            var currData = [config.dataFields[di].aggregateFuncName + '(' + config.dataFields[di].caption + ')'];
-            primaryValues.push(currData[0]);
-            for (var ci=0; ci<colLeafDimensions.length; ci++) {
-                currData.push(self.getData(config.dataFields[di].name, self.rows.root, colLeafDimensions[ci].dim));
+            if (!config.dataFields[di].secondary) {
+                var currData = [config.dataFields[di].aggregateFuncName + '(' + config.dataFields[di].caption + ')'];
+                primaryValues.push(currData[0]);
+                for (var ci=0; ci<colLeafDimensions.length; ci++) {
+                    currData.push(self.getData(config.dataFields[di].name, self.rows.root, colLeafDimensions[ci].dim));
+                }
+                data.push(currData);
             }
-            data.push(currData);
         }
         // secondary data values
         var secondaryValues = [];
-        for (var ri=0; ri<config.rowFields.length; ri++) {
-            currData = [config.rowFields[ri].aggregateFuncName + '(' + config.rowFields[ri].caption + ')'];
-            secondaryValues.push(currData[0]);
-            for (ci=0; ci<colLeafDimensions.length; ci++) {
-                currData.push(self.getData(config.rowFields[ri].name, self.rows.root, colLeafDimensions[ci].dim));
+        for (di=0; di<config.dataFields.length; di++) {
+            if (config.dataFields[di].secondary) {
+                currData = [config.dataFields[di].aggregateFuncName + '(' + config.dataFields[di].caption + ')'];
+                secondaryValues.push(currData[0]);
+                for (ci=0; ci<colLeafDimensions.length; ci++) {
+                    currData.push(self.getData(config.dataFields[di].name, self.rows.root, colLeafDimensions[ci].dim));
+                }
+                data.push(currData);
             }
-            data.push(currData);
         }
         
         return {
