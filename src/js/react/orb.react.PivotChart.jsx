@@ -9,7 +9,7 @@ var React = typeof window === 'undefined' ? require('react') : window.React,
     Toolbar = require('./orb.react.Toolbar.jsx'), // eslint-disable-line no-unused-vars
     UpperButtons =  require('./orb.react.PivotTable.UpperButtons.jsx'),
     ColumnButtons = require('./orb.react.PivotTable.ColumnButtons.jsx'),
-    RowButtons = require('./orb.react.PivotTable.RowButtons.jsx'),
+    // RowButtons = require('./orb.react.PivotTable.RowButtons.jsx'),
     Chart = require('./orb.react.Chart.jsx'),    
     domUtils = require('../orb.utils.dom'),
     
@@ -124,7 +124,7 @@ module.exports = React.createClass({
           </tr>
           <tr>
             <td style={{ position: 'relative'}}>
-              <RowButtons pivotTableComp={self} ref="rowButtons"></RowButtons>
+              {/* <RowButtons pivotTableComp={self} ref="rowButtons"></RowButtons> */}
             </td>
             <td>
               <Chart pivotTableComp={self} chartMode={config.chartMode} ref="chart"></Chart>

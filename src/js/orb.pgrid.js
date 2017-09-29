@@ -14,7 +14,14 @@ var PubSub = require('./orb.pubsub'),
     filtering = require('./orb.filtering'),
     query = require('./orb.query'),
     utils = require('./orb.utils');
-    
+
+var ViewType = {
+  TABULAR: 1,
+  BAR_CHART: 2,
+  STACKED_BAR_CHART:3,
+  PIE_CHART: 4
+};     
+
 /**
  * Creates a new instance of pgrid
  * @class
@@ -137,6 +144,41 @@ var pgrid = module.exports = function(config) {
     this.areStackedBars = function() {
         return self.config.areStackedBars();
     };
+
+    this.getViewType = function() {
+        if (self.config.chartMode.enabled) {
+            var chartMode = self.config.chartMode;
+            if (chartMode.type=='pie') {
+                return ViewType.PIE_CHART;
+            } else if (chartMode.type=='bar') {
+                return chartMode.stackedBars ? ViewType.STACKED_BAR_CHART : ViewType.BAR_CHART;
+            }
+        } else {
+            return ViewType.TABULAR;
+        }
+    };
+
+    this.setViewType = function(viewType) {
+        if (viewType==ViewType.TABULAR) {
+            self.config.chartMode.enabled = false;            
+        } else if ((viewType==ViewType.BAR_CHART) || (viewType == ViewType.STACKED_BAR_CHART) || (viewType==ViewType.PIE_CHART)) {
+            self.config.chartMode.enabled = true;
+            self.config.chartMode.type = (viewType==ViewType.PIE_CHART) ? 'pie' : 'bar';
+            self.config.chartMode.stackedBars = (viewType == ViewType.STACKED_BAR_CHART);
+            // TODO clear rows
+            var needRefresh = false;
+            while(self.rows.fields.length>0){
+                needRefresh = self.config.moveField(self.rows.fields[0].name, axe.Type.ROWS, null, null) || needRefresh;
+            }
+            if (needRefresh) {
+                refresh(false);
+            }
+        } else {
+            return;
+        }
+        self.publish(pgrid.EVENT_CONFIG_CHANGED);
+    }
+
 
     this.getFieldValues = function(field, filterFunc) {
         var values1 = [];
@@ -435,6 +477,13 @@ var pgrid = module.exports = function(config) {
         }
     }
 };
+
+/**
+ * View types
+ * @readonly
+ * @enum {Number}
+ */
+module.exports.ViewType = ViewType;
 
 // pgrid events
 pgrid.EVENT_UPDATED = 'pgrid:updated';

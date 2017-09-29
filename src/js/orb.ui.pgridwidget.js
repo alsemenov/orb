@@ -162,6 +162,14 @@ module.exports = function(config) {
         pivotComponent.changeTheme(newTheme);
     };
 
+    this.getViewType = function() {
+        return self.pgrid.getViewType();
+    };
+
+    this.setViewType = function(viewType) {
+        self.pgrid.setViewType(viewType);
+    }
+
     this.render = function(element) {
         renderElement = element || renderElement;
         if(renderElement) {            

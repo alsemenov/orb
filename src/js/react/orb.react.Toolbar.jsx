@@ -5,6 +5,7 @@
 
 var React = typeof window === 'undefined' ? require('react') : window.React,
     axe = require('../orb.axe'),
+    pgrid = require('../orb.pgrid'),
     domUtils = require('../orb.utils.dom');
 
 module.exports = React.createClass({
@@ -39,24 +40,27 @@ module.exports = React.createClass({
       var configButtons = config.toolbar.buttons ?
         defaultToolbarConfig.buttons.concat(config.toolbar.buttons) :
         defaultToolbarConfig.buttons;
-
+      var currentViewType = this.props.pivotTableComp.pgridwidget.pgrid.getViewType();
       var buttons = [];
+      this._toInit = [];
       for(var i = 0; i < configButtons.length; i++) {
         var btnConfig = configButtons[i];
         var refName = 'btn' + i;
 
-        if(btnConfig.type == 'separator') {
-          buttons.push(<div key={i} className="orb-tlbr-sep"></div>);
-        } else if(btnConfig.type == 'label') {
-          buttons.push(<div key={i} className="orb-tlbr-lbl">{btnConfig.text}</div>);
-        } else {
-          buttons.push(<div key={i} className={'orb-tlbr-btn ' + btnConfig.cssClass} title={btnConfig.tooltip} ref={refName} onClick={ this.createCallback(btnConfig.action) }></div>);
-        }
-        if(btnConfig.init) {
-          this._toInit.push({
-            ref: refName,
-            init: btnConfig.init
-          });
+        if (!btnConfig.viewType || currentViewType==btnConfig.viewType) {
+          if(btnConfig.type == 'separator') {
+            buttons.push(<div key={i} className="orb-tlbr-sep"></div>);
+          } else if(btnConfig.type == 'label') {
+            buttons.push(<div key={i} className="orb-tlbr-lbl">{btnConfig.text}</div>);
+          } else {
+            buttons.push(<div key={i} className={'orb-tlbr-btn ' + btnConfig.cssClass} title={btnConfig.tooltip} ref={refName} onClick={ this.createCallback(btnConfig.action) }></div>);
+          }
+          if(btnConfig.init) {
+            this._toInit.push({
+              ref: refName,
+              init: btnConfig.init
+            });
+          }
         }
       }
 
@@ -70,6 +74,12 @@ module.exports = React.createClass({
 });
 
 var excelExport = require('../orb.export.excel');
+
+var viewTypeStyle = {};
+viewTypeStyle[pgrid.ViewType.TABULAR] = 'tabular-view';
+viewTypeStyle[pgrid.ViewType.BAR_CHART] = 'bar-chart-view';
+viewTypeStyle[pgrid.ViewType.STACKED_BAR_CHART] = 'stacked-bar-chart-view';
+viewTypeStyle[pgrid.ViewType.PIE_CHART] = 'pie-chart-view';
 
 var defaultToolbarConfig = {
   exportToExcel: function(pgridComponent, button) { // eslint-disable-line no-unused-vars
@@ -153,56 +163,92 @@ var defaultToolbarConfig = {
     };
   },
 
-  updateStackedBars: function(pgridComponent, button) {
-    var stackedBarsState = pgridComponent.pgridwidget.areStackedBars();
-    button.style = '';
-    var classToAdd = '';
-    var classToRemove = '';
-    if (stackedBarsState){
-      classToAdd = 'stacked-bars';
-      classToRemove = 'non-stacked-bars';
+  // updateStackedBars: function(pgridComponent, button) {
+  //   var stackedBarsState = pgridComponent.pgridwidget.areStackedBars();
+  //   button.style = '';
+  //   var classToAdd = '';
+  //   var classToRemove = '';
+  //   if (stackedBarsState){
+  //     classToAdd = 'stacked-bars';
+  //     classToRemove = 'non-stacked-bars';
+  //   } else {
+  //     classToAdd = 'non-stacked-bars';
+  //     classToRemove = 'stacked-bars';
+  //   }
+  //   domUtils.removeClass(button, classToRemove);
+  //   domUtils.addClass(button, classToAdd);
+  // },
+
+  // toggleStackedBars: function() {
+  //   var self = this;
+  //   return function(pgridComponent, button) {
+  //     pgridComponent.toggleStackedBars();
+  //     self.updateStackedBars(pgridComponent, button);
+  //   };
+  // },
+
+  // initStackedBars: function() {
+  //   var self = this;
+  //   return function(pgridComponent, button) {
+  //     self.updateStackedBars(pgridComponent, button);
+  //   };
+  // },
+
+  updateViewButton: function(viewType, pgridComponent, button) {
+    var style = viewTypeStyle[viewType];
+    var activeStyle = style + '-active';
+    if (viewType==pgridComponent.pgridwidget.getViewType()){
+      domUtils.removeClass(button, style);
+      domUtils.addClass(button, activeStyle);
     } else {
-      classToAdd = 'non-stacked-bars';
-      classToRemove = 'stacked-bars';
+      domUtils.removeClass(button, activeStyle);
+      domUtils.addClass(button, style);
     }
-    domUtils.removeClass(button, classToRemove);
-    domUtils.addClass(button, classToAdd);
   },
 
-  toggleStackedBars: function() {
+  initView: function(viewType) {
     var self = this;
     return function(pgridComponent, button) {
-      pgridComponent.toggleStackedBars();
-      self.updateStackedBars(pgridComponent, button);
+      self.updateViewButton(viewType, pgridComponent, button);
     };
   },
 
-  initStackedBars: function() {
+  toggleView: function(viewType) {
     var self = this;
     return function(pgridComponent, button) {
-      self.updateStackedBars(pgridComponent, button);
-    };
+      pgridComponent.pgridwidget.setViewType(viewType);
+      self.updateViewButton(viewType, pgridComponent, button);
+    }
   }
 };
 
 defaultToolbarConfig.buttons = [
-  { type: 'button', tooltip: 'Toggle stacked bars', init: defaultToolbarConfig.initStackedBars(), action: defaultToolbarConfig.toggleStackedBars()},
-  { type: 'label', text: 'Rows:'},
-  { type: 'button', tooltip: 'Expand all rows', cssClass: 'expand-all', action: defaultToolbarConfig.expandAllRows},
-  { type: 'button', tooltip: 'Collapse all rows', cssClass: 'collapse-all', action: defaultToolbarConfig.collapseAllRows},
-  { type: 'button', tooltip: 'Toggle rows sub totals', init: defaultToolbarConfig.initSubtotals(axe.Type.ROWS), 
+  {type: 'button', tooltip: `Tabular view`, cssClass: 'tabular-view', 
+      init: defaultToolbarConfig.initView(pgrid.ViewType.TABULAR), action: defaultToolbarConfig.toggleView(pgrid.ViewType.TABULAR)},
+  {type: 'button', tooltip: 'Bar chart view', cssClass: 'bar-chart-view', 
+      init: defaultToolbarConfig.initView(pgrid.ViewType.BAR_CHART), action: defaultToolbarConfig.toggleView(pgrid.ViewType.BAR_CHART)},
+  {type: 'button', tooltip: 'Stacked bar chart view', cssClass: 'stacked-bar-chart-view', 
+      init: defaultToolbarConfig.initView(pgrid.ViewType.STACKED_BAR_CHART), action: defaultToolbarConfig.toggleView(pgrid.ViewType.STACKED_BAR_CHART)},
+  {type: 'button', tooltip: 'Pie chart view', cssClass: 'pie-chart-view', 
+      init: defaultToolbarConfig.initView(pgrid.ViewType.PIE_CHART), action: defaultToolbarConfig.toggleView(pgrid.ViewType.PIE_CHART)},
+  
+  { type: 'separator', viewType: pgrid.ViewType.TABULAR},
+  { type: 'label', text: 'Rows:', viewType: pgrid.ViewType.TABULAR},
+  { type: 'button', tooltip: 'Expand all rows', cssClass: 'expand-all', action: defaultToolbarConfig.expandAllRows, viewType: pgrid.ViewType.TABULAR},
+  { type: 'button', tooltip: 'Collapse all rows', cssClass: 'collapse-all', action: defaultToolbarConfig.collapseAllRows, viewType: pgrid.ViewType.TABULAR},
+  { type: 'button', tooltip: 'Toggle rows sub totals', init: defaultToolbarConfig.initSubtotals(axe.Type.ROWS), viewType: pgrid.ViewType.TABULAR,
                                                        action: defaultToolbarConfig.toggleSubtotals(axe.Type.ROWS)},
-  { type: 'button', tooltip: 'Toggle rows grand total', init: defaultToolbarConfig.initGrandtotal(axe.Type.ROWS), 
+  { type: 'button', tooltip: 'Toggle rows grand total', init: defaultToolbarConfig.initGrandtotal(axe.Type.ROWS), viewType: pgrid.ViewType.TABULAR,
                                                         action: defaultToolbarConfig.toggleGrandtotal(axe.Type.ROWS)},
-  { type: 'separator'},
-  { type: 'label', text: 'Columns:'},
-  { type: 'button', tooltip: 'Expand all columns', cssClass: 'expand-all', action: defaultToolbarConfig.expandAllColumns},
-  { type: 'button', tooltip: 'Collapse all columns', cssClass: 'collapse-all', action: defaultToolbarConfig.collapseAllColumns},
-  { type: 'button', tooltip: 'Toggle columns sub totals', init: defaultToolbarConfig.initSubtotals(axe.Type.COLUMNS), 
+  { type: 'separator', viewType: pgrid.ViewType.TABULAR},
+  { type: 'label', text: 'Columns:', viewType: pgrid.ViewType.TABULAR},
+  { type: 'button', tooltip: 'Expand all columns', cssClass: 'expand-all', action: defaultToolbarConfig.expandAllColumns, viewType: pgrid.ViewType.TABULAR},
+  { type: 'button', tooltip: 'Collapse all columns', cssClass: 'collapse-all', action: defaultToolbarConfig.collapseAllColumns, viewType: pgrid.ViewType.TABULAR},
+  { type: 'button', tooltip: 'Toggle columns sub totals', init: defaultToolbarConfig.initSubtotals(axe.Type.COLUMNS), viewType: pgrid.ViewType.TABULAR,
                                                           action: defaultToolbarConfig.toggleSubtotals(axe.Type.COLUMNS)},
-  { type: 'button', tooltip: 'Toggle columns grand total', init: defaultToolbarConfig.initGrandtotal(axe.Type.COLUMNS), 
+  { type: 'button', tooltip: 'Toggle columns grand total', init: defaultToolbarConfig.initGrandtotal(axe.Type.COLUMNS), viewType: pgrid.ViewType.TABULAR,
                                                            action: defaultToolbarConfig.toggleGrandtotal(axe.Type.COLUMNS)},
   { type: 'separator'},
   { type: 'label', text: 'Export:'},
-  { type: 'button', tooltip: 'Export to Excel', cssClass: 'export-xls', action: defaultToolbarConfig.exportToExcel}  
+  { type: 'button', tooltip: 'Export to Excel', cssClass: 'export-xls', action: defaultToolbarConfig.exportToExcel}
 ];

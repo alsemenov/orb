@@ -256,7 +256,7 @@ module.exports.config = function(config) {
         return obj;
     }
 
-    this.rowFields = (config.rows || []).map(function(fieldconfig) {
+    this.rowFields = (this.chartMode.enabled ? [] : (config.rows || [])).map(function(fieldconfig) {
         fieldconfig = ensureFieldConfig(fieldconfig);
         return createfield(self, axe.Type.ROWS, fieldconfig, getfield(self.allFields, fieldconfig.name));
     });
