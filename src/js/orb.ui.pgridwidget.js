@@ -18,6 +18,8 @@ var ReactDOM = typeof window === 'undefined' ? require('react-dom') : window.Rea
     Dialog = require('./react/orb.react.Dialog.jsx'),
     PivotChart = require('./react/orb.react.PivotChart.jsx'),
     PivotTable = require('./react/orb.react.PivotTable.jsx'),
+    PivotDonuts = require('./react/orb.react.PivotDonuts.jsx'),
+    
     Grid = require('./react/orb.react.Grid.jsx');
 
 /**
@@ -175,7 +177,8 @@ module.exports = function(config) {
         if(renderElement) {            
             var pivotTableFactory = React.createFactory(
                 self.pgrid.config.chartMode.enabled ?
-                    PivotChart :
+                    (self.pgrid.config.chartMode.type=='donut' ? 
+                        PivotDonuts : PivotChart) :
                     PivotTable);
             var pivottable = pivotTableFactory({
                 pgridwidget: self

@@ -14,7 +14,7 @@ module.exports = React.createClass({
   },
   canRender: function() {
     return this.state.canRender &&
-      typeof this.props.chartMode.type === 'string';
+      this.props.chartMode.type == 'bar';
   },
   drawChart: function() {
     var self = this;

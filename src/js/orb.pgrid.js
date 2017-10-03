@@ -165,7 +165,7 @@ var pgrid = module.exports = function(config) {
             self.config.chartMode.enabled = false;            
         } else if ((viewType==ViewType.BAR_CHART) || (viewType == ViewType.STACKED_BAR_CHART) || (viewType==ViewType.PIE_CHART)) {
             self.config.chartMode.enabled = true;
-            self.config.chartMode.type = (viewType==ViewType.PIE_CHART) ? 'pie' : 'bar';
+            self.config.chartMode.type = (viewType==ViewType.PIE_CHART) ? 'donut' : 'bar';
             self.config.chartMode.stackedBars = (viewType == ViewType.STACKED_BAR_CHART);
             // TODO clear rows
             var needRefresh = false;
@@ -316,6 +316,16 @@ var pgrid = module.exports = function(config) {
             secondaryValues: secondaryValues,
             stackedBars: config.areStackedBars()
            };
+    };
+
+    this.getDonutData = function(index) {
+        var dataField = self.config.dataFields[index];
+        return {
+            data: self.columns.flattenValues().map(function(colDim) {
+                return [colDim.name, self.getData(dataField.name, self.rows.root, colDim.dim)];
+            }),
+            title: dataField.aggregateFuncName + '(' + dataField.caption + ')'
+        };
     };
 
     this.query = query(self);

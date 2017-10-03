@@ -1,0 +1,148 @@
+/* global module, require, React */ // eslint-disable-line no-unused-vars
+
+'use strict';
+
+var React = typeof window === 'undefined' ? require('react') : window.React,    
+    ReactDOM = typeof window === 'undefined' ? require('react-dom') : window.ReactDOM,    
+    DragManager = require('./orb.react.DragManager.jsx'),
+    SizingManager = require('./orb.react.PivotTable.SizingManager.jsx'),
+    Toolbar = require('./orb.react.Toolbar.jsx'), // eslint-disable-line no-unused-vars
+    UpperButtons =  require('./orb.react.PivotTable.UpperButtons.jsx'),
+    ColumnButtons = require('./orb.react.PivotTable.ColumnButtons.jsx'),
+    // RowButtons = require('./orb.react.PivotTable.RowButtons.jsx'),
+    Donut = require('./orb.react.Donut.jsx'),    
+    domUtils = require('../orb.utils.dom'),
+    
+    pivotId = 1,
+    themeChangeCallbacks = {};
+
+module.exports = React.createClass({
+  id: pivotId++,
+  pgrid: null,
+  pgridwidget: null,
+  fontStyle: null,
+  getInitialState: function() {
+    DragManager.init(this);
+    
+    themeChangeCallbacks[this.id] = [];
+    this.registerThemeChanged(this.updateClasses);
+
+    this.pgridwidget = this.props.pgridwidget;
+    this.pgrid = this.pgridwidget.pgrid;
+    return {};
+  },
+  toggleStackedBars: function () {
+    this.pgridwidget.toggleStackedBars();
+  },
+  sort: function(axetype, field) {
+    this.pgridwidget.sort(axetype, field);
+  },
+  moveButton: function(button, newAxeType, position) {
+    this.pgridwidget.moveField(button.props.field.name, button.props.axetype, newAxeType, position);
+  },
+  applyFilter: function(fieldname, operator, term, staticValue, excludeStatic) {
+    this.pgridwidget.applyFilter(fieldname, operator, term, staticValue, excludeStatic);
+  },
+  registerThemeChanged: function(compCallback) {
+    if(compCallback) {
+      themeChangeCallbacks[this.id].push(compCallback);
+    }
+  },
+  unregisterThemeChanged: function(compCallback) {
+    var i;
+    if(compCallback && (i = themeChangeCallbacks[this.id].indexOf(compCallback)) >= 0) {
+      themeChangeCallbacks[this.id].splice(i, 1);
+    }
+  },
+  changeTheme: function(newTheme) {
+    if(this.pgridwidget.pgrid.config.setTheme(newTheme)) {
+      // notify self/sub-components of the theme change
+      for(var i = 0; i < themeChangeCallbacks[this.id].length; i++) {
+        themeChangeCallbacks[this.id][i]();
+      }
+    }
+  },
+  updateClasses: function() {
+      var thisnode = ReactDOM.findDOMNode(this);
+      var classes = this.pgridwidget.pgrid.config.theme.getPivotClasses();    
+      thisnode.className = classes.container;
+      thisnode.children[1].className = classes.table;
+  },
+  componentDidUpdate: function() {    
+    this.synchronizeWidths();
+  },
+  componentDidMount: function() {
+      var fontInfos = domUtils.getStyle(ReactDOM.findDOMNode(this), ['font-family', 'font-size'], true);
+    this.fontStyle = {
+      fontFamily: fontInfos[0], 
+      fontSize: fontInfos[1]
+    };
+
+    this.synchronizeWidths();
+  },
+  synchronizeWidths: function() {
+    var donutStyle = SizingManager.synchronizeWidths(this);    
+    donutStyle.fontFamily = this.fontStyle.fontFamily;
+    donutStyle.fontSize = this.fontStyle.fontSize;
+    donutStyle.display = 'inline-block';
+
+    var config = this.pgridwidget.pgrid.config;
+    if (config.dataFields.length>0) {
+      donutStyle.width = Math.floor(donutStyle.width /config.dataFields.length);
+    }
+    for (var k=config.dataFields.length-1; k>=0; k--) {
+      this.refs['dnt'+k].setState({
+        canRender: true,
+        donutStyle: donutStyle
+      });
+    }
+  },
+  render: function() {
+
+    var self = this;
+
+    var config = this.pgridwidget.pgrid.config;
+    var classes = config.theme.getPivotClasses();    
+
+    var tblStyle = {};
+    if(config.width) { tblStyle.width = config.width; }
+    if(config.height) { tblStyle.height = config.height; }
+
+    var donuts = config.dataFields.map(function(dataRow, index){
+      return <Donut key={index} index={index} pivotTableComp={self} chartMode={config.chartMode} ref={'dnt'+index}></Donut>;
+    });
+
+    return (<div className={classes.container} style={tblStyle} ref="pivot">
+      {config.toolbar && config.toolbar.visible ? <div ref="toolbar" className="orb-toolbar">
+        <Toolbar pivotTableComp={self}></Toolbar>
+      </div> : null}
+      <table id={'tbl-' + self.id} ref="pivotWrapperTable" className={classes.table}>
+        <colgroup>
+          <col ref="column1"></col>
+          <col ref="column2"></col>
+        </colgroup>
+        <tbody>
+          <tr ref="upperButtons">
+            <td colSpan="2">
+              <UpperButtons pivotTableComp={self}></UpperButtons>              
+            </td>
+          </tr>
+          <tr ref="colButtons">
+            <td></td>
+            <td style={{padding: '11px 4px !important'}}>
+              <ColumnButtons pivotTableComp={self}></ColumnButtons>
+            </td>
+          </tr>
+          <tr>
+            <td style={{ position: 'relative'}}>
+              {/* <RowButtons pivotTableComp={self} ref="rowButtons"></RowButtons> */}
+            </td>
+            <td>
+              {donuts}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>);
+  }
+});
