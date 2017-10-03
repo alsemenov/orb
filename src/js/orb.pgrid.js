@@ -150,7 +150,7 @@ var pgrid = module.exports = function(config) {
     this.getViewType = function() {
         if (self.config.chartMode.enabled) {
             var chartMode = self.config.chartMode;
-            if (chartMode.type=='pie') {
+            if (chartMode.type=='donut') {
                 return ViewType.PIE_CHART;
             } else if (chartMode.type=='bar') {
                 return chartMode.stackedBars ? ViewType.STACKED_BAR_CHART : ViewType.BAR_CHART;

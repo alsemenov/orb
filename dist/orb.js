@@ -2737,7 +2737,7 @@
         this.getViewType = function() {
           if (self.config.chartMode.enabled) {
             var chartMode = self.config.chartMode;
-            if (chartMode.type == 'pie') {
+            if (chartMode.type == 'donut') {
               return ViewType.PIE_CHART;
             } else if (chartMode.type == 'bar') {
               return chartMode.stackedBars ? ViewType.STACKED_BAR_CHART : ViewType.BAR_CHART;
@@ -2752,7 +2752,7 @@
             self.config.chartMode.enabled = false;
           } else if (viewType == ViewType.BAR_CHART || viewType == ViewType.STACKED_BAR_CHART || viewType == ViewType.PIE_CHART) {
             self.config.chartMode.enabled = true;
-            self.config.chartMode.type = viewType == ViewType.PIE_CHART ? 'pie' : 'bar';
+            self.config.chartMode.type = viewType == ViewType.PIE_CHART ? 'donut' : 'bar';
             self.config.chartMode.stackedBars = viewType == ViewType.STACKED_BAR_CHART;
             // TODO clear rows
             var needRefresh = false;
@@ -2901,6 +2901,16 @@
             primaryValues: primaryValues,
             secondaryValues: secondaryValues,
             stackedBars: config.areStackedBars()
+          };
+        };
+
+        this.getDonutData = function(index) {
+          var dataField = self.config.dataFields[index];
+          return {
+            data: self.columns.flattenValues().map(function(colDim) {
+              return [colDim.name, self.getData(dataField.name, self.rows.root, colDim.dim)];
+            }),
+            title: dataField.aggregateFuncName + '(' + dataField.caption + ')'
           };
         };
 
@@ -4125,6 +4135,7 @@
         Dialog = _dereq_('./react/orb.react.Dialog.jsx'),
         PivotChart = _dereq_('./react/orb.react.PivotChart.jsx'),
         PivotTable = _dereq_('./react/orb.react.PivotTable.jsx'),
+        PivotDonuts = _dereq_('./react/orb.react.PivotDonuts.jsx'),
         Grid = _dereq_('./react/orb.react.Grid.jsx');
 
       module.exports = function(config) {
@@ -4239,7 +4250,7 @@
         this.render = function(element) {
           renderElement = element || renderElement;
           if (renderElement) {
-            var pivotTableFactory = React.createFactory(self.pgrid.config.chartMode.enabled ? PivotChart : PivotTable);
+            var pivotTableFactory = React.createFactory(self.pgrid.config.chartMode.enabled ? self.pgrid.config.chartMode.type == 'donut' ? PivotDonuts : PivotChart : PivotTable);
             var pivottable = pivotTableFactory({
               pgridwidget: self
             });
@@ -4361,9 +4372,10 @@
       "./orb.ui.header": 84,
       "./orb.ui.rows": 86,
       "./react/orb.react.Dialog.jsx": 90,
-      "./react/orb.react.Grid.jsx": 97,
-      "./react/orb.react.PivotChart.jsx": 100,
-      "./react/orb.react.PivotTable.jsx": 109,
+      "./react/orb.react.Grid.jsx": 98,
+      "./react/orb.react.PivotChart.jsx": 101,
+      "./react/orb.react.PivotDonuts.jsx": 102,
+      "./react/orb.react.PivotTable.jsx": 111,
       "react-dom": "react-dom"
     }],
     86: [function(_dereq_, module, exports) {
@@ -4838,7 +4850,7 @@
           };
         },
         canRender: function canRender() {
-          return this.state.canRender && typeof this.props.chartMode.type === 'string';
+          return this.state.canRender && this.props.chartMode.type == 'bar';
         },
         drawChart: function drawChart() {
           var self = this;
@@ -4996,6 +5008,64 @@
       "react-dom": "react-dom"
     }],
     91: [function(_dereq_, module, exports) {
+      // eslint-disable-line no-unused-vars
+
+      var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
+        ReactDOM = typeof window === 'undefined' ? _dereq_('react-dom') : window.ReactDOM,
+        c3 = typeof window === 'undefined' ? _dereq_('c3') : window.c3;
+
+      module.exports = React.createClass({
+        displayName: 'exports',
+
+        getInitialState: function getInitialState() {
+          return {
+            canRender: false
+          };
+        },
+        canRender: function canRender() {
+          return this.state.canRender && this.props.chartMode.type == 'donut';
+        },
+        drawDonut: function drawDonut() {
+          var self = this;
+          if (this.canRender()) {
+            var index = self.props.index;
+            var donutData = self.props.pivotTableComp.pgridwidget.pgrid.getDonutData(index);
+
+            c3.generate({ // eslint-disable-line no-unused-vars
+              bindto: ReactDOM.findDOMNode(this),
+              data: {
+                type: self.props.chartMode.type,
+                columns: donutData.data
+              },
+              donut: {
+                title: donutData.title
+              }
+            });
+          }
+        },
+        componentDidMount: function componentDidMount() {
+          this.drawDonut();
+        },
+        componentDidUpdate: function componentDidUpdate() {
+          this.drawDonut();
+        },
+        render: function render() {
+          if (this.canRender()) {
+            return React.createElement('div', {
+              className: 'chart',
+              style: this.state.donutStyle
+            });
+          }
+          return null;
+        }
+      });
+
+    }, {
+      "c3": "c3",
+      "react": "react",
+      "react-dom": "react-dom"
+    }],
+    92: [function(_dereq_, module, exports) {
       // eslint-disable-line no-unused-vars
 
       var ReactDOM = typeof window === 'undefined' ? _dereq_('react-dom') : window.ReactDOM,
@@ -5200,7 +5270,7 @@
       "../orb.utils": 88,
       "react-dom": "react-dom"
     }],
-    92: [function(_dereq_, module, exports) {
+    93: [function(_dereq_, module, exports) {
       // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
@@ -5259,10 +5329,10 @@
       });
 
     }, {
-      "./orb.react.DragManager.jsx": 91,
+      "./orb.react.DragManager.jsx": 92,
       "react": "react"
     }],
-    93: [function(_dereq_, module, exports) {
+    94: [function(_dereq_, module, exports) {
       // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
@@ -5377,11 +5447,11 @@
 
     }, {
       "../orb.axe": 71,
-      "./orb.react.DragManager.jsx": 91,
-      "./orb.react.DropIndicator.jsx": 92,
+      "./orb.react.DragManager.jsx": 92,
+      "./orb.react.DropIndicator.jsx": 93,
       "react": "react"
     }],
-    94: [function(_dereq_, module, exports) {
+    95: [function(_dereq_, module, exports) {
       // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
@@ -5487,11 +5557,11 @@
       });
 
     }, {
-      "./orb.react.DragManager.jsx": 91,
-      "./orb.react.DropIndicator.jsx": 92,
+      "./orb.react.DragManager.jsx": 92,
+      "./orb.react.DropIndicator.jsx": 93,
       "react": "react"
     }],
-    95: [function(_dereq_, module, exports) {
+    96: [function(_dereq_, module, exports) {
       // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
@@ -5596,7 +5666,7 @@
       "../orb.utils": 88,
       "react": "react"
     }],
-    96: [function(_dereq_, module, exports) {
+    97: [function(_dereq_, module, exports) {
       // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
@@ -6215,11 +6285,11 @@
       "../orb.filtering": 75,
       "../orb.utils": 88,
       "../orb.utils.dom": 87,
-      "./orb.react.Dropdown.jsx": 95,
+      "./orb.react.Dropdown.jsx": 96,
       "react": "react",
       "react-dom": "react-dom"
     }],
-    97: [function(_dereq_, module, exports) {
+    98: [function(_dereq_, module, exports) {
       // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
@@ -6303,7 +6373,7 @@
       "../orb.utils": 88,
       "react": "react"
     }],
-    98: [function(_dereq_, module, exports) {
+    99: [function(_dereq_, module, exports) {
       // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
@@ -6546,12 +6616,12 @@
       "../orb.axe": 71,
       "../orb.utils": 88,
       "../orb.utils.dom": 87,
-      "./orb.react.DragManager.jsx": 91,
-      "./orb.react.FilterPanel.jsx": 96,
+      "./orb.react.DragManager.jsx": 92,
+      "./orb.react.FilterPanel.jsx": 97,
       "react": "react",
       "react-dom": "react-dom"
     }],
-    99: [function(_dereq_, module, exports) {
+    100: [function(_dereq_, module, exports) {
       // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
@@ -6782,7 +6852,7 @@
       "react": "react",
       "react-dom": "react-dom"
     }],
-    100: [function(_dereq_, module, exports) {
+    101: [function(_dereq_, module, exports) {
       // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
@@ -6981,15 +7051,235 @@
     }, {
       "../orb.utils.dom": 87,
       "./orb.react.Chart.jsx": 89,
-      "./orb.react.DragManager.jsx": 91,
-      "./orb.react.PivotTable.ColumnButtons.jsx": 102,
-      "./orb.react.PivotTable.SizingManager.jsx": 107,
-      "./orb.react.PivotTable.UpperButtons.jsx": 108,
-      "./orb.react.Toolbar.jsx": 111,
+      "./orb.react.DragManager.jsx": 92,
+      "./orb.react.PivotTable.ColumnButtons.jsx": 104,
+      "./orb.react.PivotTable.SizingManager.jsx": 109,
+      "./orb.react.PivotTable.UpperButtons.jsx": 110,
+      "./orb.react.Toolbar.jsx": 113,
       "react": "react",
       "react-dom": "react-dom"
     }],
-    101: [function(_dereq_, module, exports) {
+    102: [function(_dereq_, module, exports) {
+      // eslint-disable-line no-unused-vars
+
+      var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
+        ReactDOM = typeof window === 'undefined' ? _dereq_('react-dom') : window.ReactDOM,
+        DragManager = _dereq_('./orb.react.DragManager.jsx'),
+        SizingManager = _dereq_('./orb.react.PivotTable.SizingManager.jsx'),
+        Toolbar = _dereq_('./orb.react.Toolbar.jsx'),
+        // eslint-disable-line no-unused-vars
+        UpperButtons = _dereq_('./orb.react.PivotTable.UpperButtons.jsx'),
+        ColumnButtons = _dereq_('./orb.react.PivotTable.ColumnButtons.jsx'),
+
+        // RowButtons = require('./orb.react.PivotTable.RowButtons.jsx'),
+        Donut = _dereq_('./orb.react.Donut.jsx'),
+        domUtils = _dereq_('../orb.utils.dom'),
+        pivotId = 1,
+        themeChangeCallbacks = {};
+
+      module.exports = React.createClass({
+        displayName: 'exports',
+
+        id: pivotId++,
+        pgrid: null,
+        pgridwidget: null,
+        fontStyle: null,
+        getInitialState: function getInitialState() {
+          DragManager.init(this);
+
+          themeChangeCallbacks[this.id] = [];
+          this.registerThemeChanged(this.updateClasses);
+
+          this.pgridwidget = this.props.pgridwidget;
+          this.pgrid = this.pgridwidget.pgrid;
+          return {};
+        },
+        toggleStackedBars: function toggleStackedBars() {
+          this.pgridwidget.toggleStackedBars();
+        },
+        sort: function sort(axetype, field) {
+          this.pgridwidget.sort(axetype, field);
+        },
+        moveButton: function moveButton(button, newAxeType, position) {
+          this.pgridwidget.moveField(button.props.field.name, button.props.axetype, newAxeType, position);
+        },
+        applyFilter: function applyFilter(fieldname, operator, term, staticValue, excludeStatic) {
+          this.pgridwidget.applyFilter(fieldname, operator, term, staticValue, excludeStatic);
+        },
+        registerThemeChanged: function registerThemeChanged(compCallback) {
+          if (compCallback) {
+            themeChangeCallbacks[this.id].push(compCallback);
+          }
+        },
+        unregisterThemeChanged: function unregisterThemeChanged(compCallback) {
+          var i;
+          if (compCallback && (i = themeChangeCallbacks[this.id].indexOf(compCallback)) >= 0) {
+            themeChangeCallbacks[this.id].splice(i, 1);
+          }
+        },
+        changeTheme: function changeTheme(newTheme) {
+          if (this.pgridwidget.pgrid.config.setTheme(newTheme)) {
+            // notify self/sub-components of the theme change
+            for (var i = 0; i < themeChangeCallbacks[this.id].length; i++) {
+              themeChangeCallbacks[this.id][i]();
+            }
+          }
+        },
+        updateClasses: function updateClasses() {
+          var thisnode = ReactDOM.findDOMNode(this);
+          var classes = this.pgridwidget.pgrid.config.theme.getPivotClasses();
+          thisnode.className = classes.container;
+          thisnode.children[1].className = classes.table;
+        },
+        componentDidUpdate: function componentDidUpdate() {
+          this.synchronizeWidths();
+        },
+        componentDidMount: function componentDidMount() {
+          var fontInfos = domUtils.getStyle(ReactDOM.findDOMNode(this), ['font-family', 'font-size'], true);
+          this.fontStyle = {
+            fontFamily: fontInfos[0],
+            fontSize: fontInfos[1]
+          };
+
+          this.synchronizeWidths();
+        },
+        synchronizeWidths: function synchronizeWidths() {
+          var donutStyle = SizingManager.synchronizeWidths(this);
+          donutStyle.fontFamily = this.fontStyle.fontFamily;
+          donutStyle.fontSize = this.fontStyle.fontSize;
+          donutStyle.display = 'inline-block';
+
+          var config = this.pgridwidget.pgrid.config;
+          if (config.dataFields.length > 0) {
+            donutStyle.width = Math.floor(donutStyle.width / config.dataFields.length);
+          }
+          for (var k = config.dataFields.length - 1; k >= 0; k--) {
+            this.refs['dnt' + k].setState({
+              canRender: true,
+              donutStyle: donutStyle
+            });
+          }
+        },
+        render: function render() {
+
+          var self = this;
+
+          var config = this.pgridwidget.pgrid.config;
+          var classes = config.theme.getPivotClasses();
+
+          var tblStyle = {};
+          if (config.width) {
+            tblStyle.width = config.width;
+          }
+          if (config.height) {
+            tblStyle.height = config.height;
+          }
+
+          var donuts = config.dataFields.map(function(dataRow, index) {
+            return React.createElement(Donut, {
+              key: index,
+              index: index,
+              pivotTableComp: self,
+              chartMode: config.chartMode,
+              ref: 'dnt' + index
+            });
+          });
+
+          return React.createElement(
+            'div', {
+              className: classes.container,
+              style: tblStyle,
+              ref: 'pivot'
+            },
+            config.toolbar && config.toolbar.visible ? React.createElement(
+              'div', {
+                ref: 'toolbar',
+                className: 'orb-toolbar'
+              },
+              React.createElement(Toolbar, {
+                pivotTableComp: self
+              })
+            ) : null,
+            React.createElement(
+              'table', {
+                id: 'tbl-' + self.id,
+                ref: 'pivotWrapperTable',
+                className: classes.table
+              },
+              React.createElement(
+                'colgroup',
+                null,
+                React.createElement('col', {
+                  ref: 'column1'
+                }),
+                React.createElement('col', {
+                  ref: 'column2'
+                })
+              ),
+              React.createElement(
+                'tbody',
+                null,
+                React.createElement(
+                  'tr', {
+                    ref: 'upperButtons'
+                  },
+                  React.createElement(
+                    'td', {
+                      colSpan: '2'
+                    },
+                    React.createElement(UpperButtons, {
+                      pivotTableComp: self
+                    })
+                  )
+                ),
+                React.createElement(
+                  'tr', {
+                    ref: 'colButtons'
+                  },
+                  React.createElement('td', null),
+                  React.createElement(
+                    'td', {
+                      style: {
+                        padding: '11px 4px !important'
+                      }
+                    },
+                    React.createElement(ColumnButtons, {
+                      pivotTableComp: self
+                    })
+                  )
+                ),
+                React.createElement(
+                  'tr',
+                  null,
+                  React.createElement('td', {
+                    style: {
+                      position: 'relative'
+                    }
+                  }),
+                  React.createElement(
+                    'td',
+                    null,
+                    donuts
+                  )
+                )
+              )
+            )
+          );
+        }
+      });
+
+    }, {
+      "../orb.utils.dom": 87,
+      "./orb.react.Donut.jsx": 91,
+      "./orb.react.DragManager.jsx": 92,
+      "./orb.react.PivotTable.ColumnButtons.jsx": 104,
+      "./orb.react.PivotTable.SizingManager.jsx": 109,
+      "./orb.react.PivotTable.UpperButtons.jsx": 110,
+      "./orb.react.Toolbar.jsx": 113,
+      "react": "react",
+      "react-dom": "react-dom"
+    }],
+    103: [function(_dereq_, module, exports) {
       // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
@@ -7061,10 +7351,10 @@
 
     }, {
       "../orb.axe": 71,
-      "./orb.react.PivotCell.jsx": 99,
+      "./orb.react.PivotCell.jsx": 100,
       "react": "react"
     }],
-    102: [function(_dereq_, module, exports) {
+    104: [function(_dereq_, module, exports) {
       // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
@@ -7098,11 +7388,11 @@
 
     }, {
       "../orb.axe": 71,
-      "./orb.react.DropTarget.jsx": 93,
-      "./orb.react.PivotButton.jsx": 98,
+      "./orb.react.DropTarget.jsx": 94,
+      "./orb.react.PivotButton.jsx": 99,
       "react": "react"
     }],
-    103: [function(_dereq_, module, exports) {
+    105: [function(_dereq_, module, exports) {
       // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
@@ -7154,10 +7444,10 @@
 
     }, {
       "../orb.axe": 71,
-      "./orb.react.PivotRow.jsx": 101,
+      "./orb.react.PivotRow.jsx": 103,
       "react": "react"
     }],
-    104: [function(_dereq_, module, exports) {
+    106: [function(_dereq_, module, exports) {
       // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
@@ -7207,10 +7497,10 @@
 
     }, {
       "../orb.axe": 71,
-      "./orb.react.PivotRow.jsx": 101,
+      "./orb.react.PivotRow.jsx": 103,
       "react": "react"
     }],
-    105: [function(_dereq_, module, exports) {
+    107: [function(_dereq_, module, exports) {
       // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
@@ -7252,12 +7542,12 @@
 
     }, {
       "../orb.axe": 71,
-      "./orb.react.DropTarget.jsx": 93,
-      "./orb.react.DropTargetVertical.jsx": 94,
-      "./orb.react.PivotButton.jsx": 98,
+      "./orb.react.DropTarget.jsx": 94,
+      "./orb.react.DropTargetVertical.jsx": 95,
+      "./orb.react.PivotButton.jsx": 99,
       "react": "react"
     }],
-    106: [function(_dereq_, module, exports) {
+    108: [function(_dereq_, module, exports) {
       // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
@@ -7325,11 +7615,11 @@
 
     }, {
       "../orb.axe": 71,
-      "./orb.react.PivotRow.jsx": 101,
+      "./orb.react.PivotRow.jsx": 103,
       "react": "react",
       "react-dom": "react-dom"
     }],
-    107: [function(_dereq_, module, exports) {
+    109: [function(_dereq_, module, exports) {
       // eslint-disable-line no-unused-vars
 
       var ReactDOM = typeof window === 'undefined' ? _dereq_('react-dom') : window.ReactDOM,
@@ -7625,7 +7915,7 @@
       "../orb.utils.dom": 87,
       "react-dom": "react-dom"
     }],
-    108: [function(_dereq_, module, exports) {
+    110: [function(_dereq_, module, exports) {
       // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
@@ -7728,11 +8018,11 @@
 
     }, {
       "../orb.axe": 71,
-      "./orb.react.DropTarget.jsx": 93,
-      "./orb.react.PivotButton.jsx": 98,
+      "./orb.react.DropTarget.jsx": 94,
+      "./orb.react.PivotButton.jsx": 99,
       "react": "react"
     }],
-    109: [function(_dereq_, module, exports) {
+    111: [function(_dereq_, module, exports) {
       // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
@@ -8037,20 +8327,20 @@
     }, {
       "../orb.utils": 88,
       "../orb.utils.dom": 87,
-      "./orb.react.DragManager.jsx": 91,
-      "./orb.react.PivotTable.ColumnButtons.jsx": 102,
-      "./orb.react.PivotTable.ColumnHeaders.jsx": 103,
-      "./orb.react.PivotTable.DataCells.jsx": 104,
-      "./orb.react.PivotTable.RowButtons.jsx": 105,
-      "./orb.react.PivotTable.RowHeaders.jsx": 106,
-      "./orb.react.PivotTable.SizingManager.jsx": 107,
-      "./orb.react.PivotTable.UpperButtons.jsx": 108,
-      "./orb.react.ScrollBars.jsx": 110,
-      "./orb.react.Toolbar.jsx": 111,
+      "./orb.react.DragManager.jsx": 92,
+      "./orb.react.PivotTable.ColumnButtons.jsx": 104,
+      "./orb.react.PivotTable.ColumnHeaders.jsx": 105,
+      "./orb.react.PivotTable.DataCells.jsx": 106,
+      "./orb.react.PivotTable.RowButtons.jsx": 107,
+      "./orb.react.PivotTable.RowHeaders.jsx": 108,
+      "./orb.react.PivotTable.SizingManager.jsx": 109,
+      "./orb.react.PivotTable.UpperButtons.jsx": 110,
+      "./orb.react.ScrollBars.jsx": 112,
+      "./orb.react.Toolbar.jsx": 113,
       "react": "react",
       "react-dom": "react-dom"
     }],
-    110: [function(_dereq_, module, exports) {
+    112: [function(_dereq_, module, exports) {
       // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
@@ -8259,7 +8549,7 @@
       "react": "react",
       "react-dom": "react-dom"
     }],
-    111: [function(_dereq_, module, exports) {
+    113: [function(_dereq_, module, exports) {
       // eslint-disable-line no-unused-vars
 
       var React = typeof window === 'undefined' ? _dereq_('react') : window.React,
