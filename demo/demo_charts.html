@@ -6,6 +6,11 @@
 
     <link rel="stylesheet" type="text/css" href="../deps/bootstrap-3.3.1/css/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="../deps/bootstrap-3.3.1/css/bootstrap-theme.css" />
+    <link href="../deps/c3.css" rel="stylesheet">
+
+    <!-- Load d3.js and c3.js -->
+    <script src="../deps/d3-3.5.17.js" charset="utf-8"></script>
+    <script src="../deps/c3-0.4.17.js"></script>
 
     <!-- RELEASE --
     <link rel="stylesheet" type="text/css" href="../dist/orb.min.css" />
@@ -34,17 +39,6 @@
     <div id="rr" style="padding: 7px;"></div>
     <div id="chart_div" style="height: 507px;"></div>
 
-    <!--Load the AJAX API-->
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript">
-
-      // Load the Visualization API and the piechart package.
-      google.load('visualization', '1.1', {'packages':['corechart', 'gauge']});
-      google.setOnLoadCallback(function() { console.log(google.visualization);});
-
-
-    </script>
-
     <script type="text/javascript">
 
     var config = {
@@ -56,7 +50,7 @@
         theme: 'green',
         chartMode: {
             enabled: true,
-            type: 'ColumnChart'
+            type: 'bar'
         },
         toolbar: {
             visible: true
@@ -142,8 +136,8 @@
                 aggregateFunc: 'sum'
             }
         ],
-        rows    : [ 'Manufacturer'],//, 'Category' ],
-        columns : [ 'Class', 'Category' ],
+        rows    : [],
+        columns : [ 'Category' ],
         data    : [ 'Quantity', 'Amount' ],
         /*preFilters : {
             'Class': { 'Matches': 'Regular' },
