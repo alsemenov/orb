@@ -1884,7 +1884,8 @@
           aggregateFuncName: getpropertyvalue('aggregateFuncName', merged.functions, 'sum'),
           aggregateFunc: getpropertyvalue('aggregateFunc', merged.functions, aggregation.sum),
           formatFunc: getpropertyvalue('formatFunc', merged.functions, null),
-          secondary: getpropertyvalue('secondary', merged.configs, false)
+          secondary: getpropertyvalue('secondary', merged.configs, false),
+          color: getpropertyvalue('color', merged.configs, undefined)
         }, false);
       }
 
@@ -1944,6 +1945,9 @@
         // data settings
         if (options.secondary) {
           this.secondary = true;
+        }
+        if (options.color !== undefined) {
+          this.color = options.color;
         }
         var _aggregatefunc;
         var _formatfunc;
@@ -2864,13 +2868,16 @@
           var colLeafDimensions = self.columns.flattenValues();
           var primaryValues = [];
           var data = [];
+          var colors = {};
           // primary data values
           for (var di = 0; di < config.dataFields.length; di++) {
-            if (!config.dataFields[di].secondary) {
-              var currData = [config.dataFields[di].aggregateFuncName + '(' + config.dataFields[di].caption + ')'];
+            var dataField = config.dataFields[di];
+            if (!dataField.secondary) {
+              var currData = [dataField.aggregateFuncName + '(' + dataField.caption + ')'];
               primaryValues.push(currData[0]);
+              colors[currData[0]] = dataField.color;
               for (var ci = 0; ci < colLeafDimensions.length; ci++) {
-                currData.push(self.getData(config.dataFields[di].name, self.rows.root, colLeafDimensions[ci].dim));
+                currData.push(self.getData(dataField.name, self.rows.root, colLeafDimensions[ci].dim));
               }
               data.push(currData);
             }
@@ -2878,11 +2885,13 @@
           // secondary data values
           var secondaryValues = [];
           for (di = 0; di < config.dataFields.length; di++) {
-            if (config.dataFields[di].secondary) {
-              currData = [config.dataFields[di].aggregateFuncName + '(' + config.dataFields[di].caption + ')'];
+            dataField = config.dataFields[di];
+            if (dataField.secondary) {
+              currData = [dataField.aggregateFuncName + '(' + dataField.caption + ')'];
+              colors[currData[0]] = dataField.color;
               secondaryValues.push(currData[0]);
               for (ci = 0; ci < colLeafDimensions.length; ci++) {
-                currData.push(self.getData(config.dataFields[di].name, self.rows.root, colLeafDimensions[ci].dim));
+                currData.push(self.getData(dataField.name, self.rows.root, colLeafDimensions[ci].dim));
               }
               data.push(currData);
             }
@@ -2900,7 +2909,8 @@
             dataTable: data,
             primaryValues: primaryValues,
             secondaryValues: secondaryValues,
-            stackedBars: config.areStackedBars()
+            stackedBars: config.areStackedBars(),
+            colors: colors
           };
         };
 
@@ -4865,7 +4875,8 @@
                   map[value] = self.props.chartMode.secondaryType;
                   return map;
                 }, {}),
-                groups: [chartData.stackedBars ? chartData.primaryValues : []]
+                groups: [chartData.stackedBars ? chartData.primaryValues : []],
+                colors: chartData.colors
               },
               axis: {
                 x: {

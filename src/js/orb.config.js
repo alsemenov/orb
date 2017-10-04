@@ -96,7 +96,8 @@ function createfield(rootconfig, axetype, fieldconfig, defaultfieldconfig) {
         aggregateFuncName: getpropertyvalue('aggregateFuncName', merged.functions, 'sum'),
         aggregateFunc: getpropertyvalue('aggregateFunc', merged.functions, aggregation.sum),
         formatFunc: getpropertyvalue('formatFunc', merged.functions, null),
-        secondary: getpropertyvalue('secondary', merged.configs, false)
+        secondary: getpropertyvalue('secondary', merged.configs, false),
+        color: getpropertyvalue('color', merged.configs, undefined)
     }, false);
 }
 
@@ -156,6 +157,9 @@ var Field = module.exports.field = function(options, createSubOptions) {
     // data settings
     if (options.secondary) {
         this.secondary = true;
+    }
+    if (options.color !== undefined) {
+        this.color = options.color;
     }
     var _aggregatefunc;
     var _formatfunc;

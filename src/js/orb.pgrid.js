@@ -280,13 +280,16 @@ var pgrid = module.exports = function(config) {
         var colLeafDimensions = self.columns.flattenValues();
         var primaryValues = [];
         var data = [];
+        var colors = {};
         // primary data values
         for (var di=0; di<config.dataFields.length; di++) {
-            if (!config.dataFields[di].secondary) {
-                var currData = [config.dataFields[di].aggregateFuncName + '(' + config.dataFields[di].caption + ')'];
+            var dataField = config.dataFields[di];
+            if (!dataField.secondary) {
+                var currData = [dataField.aggregateFuncName + '(' + dataField.caption + ')'];
                 primaryValues.push(currData[0]);
+                colors[currData[0]] = dataField.color; 
                 for (var ci=0; ci<colLeafDimensions.length; ci++) {
-                    currData.push(self.getData(config.dataFields[di].name, self.rows.root, colLeafDimensions[ci].dim));
+                    currData.push(self.getData(dataField.name, self.rows.root, colLeafDimensions[ci].dim));
                 }
                 data.push(currData);
             }
@@ -294,11 +297,13 @@ var pgrid = module.exports = function(config) {
         // secondary data values
         var secondaryValues = [];
         for (di=0; di<config.dataFields.length; di++) {
-            if (config.dataFields[di].secondary) {
-                currData = [config.dataFields[di].aggregateFuncName + '(' + config.dataFields[di].caption + ')'];
+            dataField = config.dataFields[di];
+            if (dataField.secondary) {
+                currData = [dataField.aggregateFuncName + '(' + dataField.caption + ')'];
+                colors[currData[0]] = dataField.color; 
                 secondaryValues.push(currData[0]);
                 for (ci=0; ci<colLeafDimensions.length; ci++) {
-                    currData.push(self.getData(config.dataFields[di].name, self.rows.root, colLeafDimensions[ci].dim));
+                    currData.push(self.getData(dataField.name, self.rows.root, colLeafDimensions[ci].dim));
                 }
                 data.push(currData);
             }
@@ -314,7 +319,8 @@ var pgrid = module.exports = function(config) {
             dataTable: data,
             primaryValues: primaryValues,
             secondaryValues: secondaryValues,
-            stackedBars: config.areStackedBars()
+            stackedBars: config.areStackedBars(),
+            colors: colors
            };
     };
 
