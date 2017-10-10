@@ -1926,6 +1926,7 @@
         this.type = options.type || 'bar';
         this.secondaryType = options.secondaryType || 'line';
         this.stackedBars = options.stackedBars !== undefined ? options.stackedBars : false;
+        this.y2 = options.y2 !== undefined ? options.y2 : {};
       }
 
       var Field = module.exports.field = function(options, createSubOptions) {
@@ -2772,6 +2773,18 @@
           self.publish(pgrid.EVENT_CONFIG_CHANGED);
         };
 
+        this.getY2Visible = function() {
+          // if y2.show is not specified in config, show y2 if there are secondary data fields
+          return self.config.chartMode.y2.show !== undefined ? self.config.chartMode.y2.show : self.config.dataFields.reduce(function(value, field) {
+            return value || field.secondary;
+          }, false);
+        };
+
+        this.toggleY2Visible = function() {
+          self.config.chartMode.y2.show = !self.getY2Visible();
+          self.publish(pgrid.EVENT_CONFIG_CHANGED);
+        };
+
         this.getFieldValues = function(field, filterFunc) {
           var values1 = [];
           var values = [];
@@ -2897,6 +2910,12 @@
             }
           }
 
+          var y2 = {};
+          for (var name in config.chartMode.y2) {
+            y2[name] = config.chartMode.y2[name];
+          }
+          y2.show = self.getY2Visible();
+
           return {
             // title: vAxisLabel + ': ' + hAxisLabel + ' by ' + legendsLabel,
             hAxisLabel: hAxisLabel,
@@ -2910,7 +2929,8 @@
             primaryValues: primaryValues,
             secondaryValues: secondaryValues,
             stackedBars: config.areStackedBars(),
-            colors: colors
+            colors: colors,
+            y2: y2
           };
         };
 
@@ -4257,6 +4277,14 @@
           self.pgrid.setViewType(viewType);
         };
 
+        this.getY2Visible = function() {
+          return self.pgrid.getY2Visible();
+        };
+
+        this.toggleY2Visible = function() {
+          self.pgrid.toggleY2Visible();
+        };
+
         this.render = function(element) {
           renderElement = element || renderElement;
           if (renderElement) {
@@ -4866,6 +4894,13 @@
           var self = this;
           if (this.canRender()) {
             var chartData = self.props.pivotTableComp.pgridwidget.pgrid.getChartData();
+            var dataAxes = chartData.primaryValues.reduce(function(map, name) {
+              map[name] = 'y';
+              return map;
+            }, {});
+            chartData.secondaryValues.forEach(function(name) {
+              dataAxes[name] = chartData.y2.show ? 'y2' : 'y';
+            });
             var chart = c3.generate({ // eslint-disable-line no-unused-vars
               bindto: ReactDOM.findDOMNode(this),
               data: {
@@ -4876,14 +4911,16 @@
                   return map;
                 }, {}),
                 groups: [chartData.stackedBars ? chartData.primaryValues : []],
-                colors: chartData.colors
+                colors: chartData.colors,
+                axes: dataAxes
               },
               axis: {
                 x: {
                   label: chartData.hAxisLabel,
                   type: 'category', // this needed to load string x value
                   categories: chartData.colNames
-                }
+                },
+                y2: chartData.y2
               }
             });
           }
@@ -8607,7 +8644,7 @@
               var btnConfig = configButtons[i];
               var refName = 'btn' + i;
 
-              if (!btnConfig.viewType || currentViewType == btnConfig.viewType) {
+              if (!btnConfig.viewType || currentViewType == btnConfig.viewType || Array.isArray(btnConfig.viewType) && btnConfig.viewType.includes(currentViewType)) {
                 if (btnConfig.type == 'separator') {
                   buttons.push(React.createElement('div', {
                     key: i,
@@ -8801,7 +8838,33 @@
             pgridComponent.pgridwidget.setViewType(viewType);
             self.updateViewButton(viewType, pgridComponent, button);
           };
+        },
+
+        initY2: function initY2() {
+          var self = this;
+          return function(pgridComponent, button) {
+            self.updateY2Button(pgridComponent, button);
+          };
+        },
+
+        toggleY2: function toggleY2() {
+          var self = this;
+          return function(pgridComponent, button) {
+            pgridComponent.pgridwidget.toggleY2Visible();
+            self.updateY2Button(pgridComponent, button);
+          };
+        },
+
+        updateY2Button: function updateY2Button(pgridComponent, button) {
+          if (pgridComponent.pgridwidget.getY2Visible()) {
+            domUtils.removeClass(button, 'y-axis');
+            domUtils.addClass(button, 'y2-axis');
+          } else {
+            domUtils.removeClass(button, 'y2-axis');
+            domUtils.addClass(button, 'y-axis');
+          }
         }
+
       };
 
       defaultToolbarConfig.buttons = [{
@@ -8890,6 +8953,15 @@
         init: defaultToolbarConfig.initGrandtotal(axe.Type.COLUMNS),
         viewType: pgrid.ViewType.TABULAR,
         action: defaultToolbarConfig.toggleGrandtotal(axe.Type.COLUMNS)
+      }, {
+        type: 'separator',
+        viewType: [pgrid.ViewType.BAR_CHART, pgrid.ViewType.STACKED_BAR_CHART]
+      }, {
+        type: 'button',
+        tooltip: 'Show/hide second y axis',
+        viewType: [pgrid.ViewType.BAR_CHART, pgrid.ViewType.STACKED_BAR_CHART],
+        init: defaultToolbarConfig.initY2(),
+        action: defaultToolbarConfig.toggleY2()
       }, {
         type: 'separator'
       }, {

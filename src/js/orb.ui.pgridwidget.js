@@ -170,7 +170,15 @@ module.exports = function(config) {
 
     this.setViewType = function(viewType) {
         self.pgrid.setViewType(viewType);
-    }
+    };
+
+    this.getY2Visible = function() {
+        return self.pgrid.getY2Visible();
+    };
+
+    this.toggleY2Visible = function() {
+        self.pgrid.toggleY2Visible();
+    };
 
     this.render = function(element) {
         renderElement = element || renderElement;

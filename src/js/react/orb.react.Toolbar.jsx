@@ -47,7 +47,7 @@ module.exports = React.createClass({
         var btnConfig = configButtons[i];
         var refName = 'btn' + i;
 
-        if (!btnConfig.viewType || currentViewType==btnConfig.viewType) {
+        if (!btnConfig.viewType || currentViewType==btnConfig.viewType || (Array.isArray(btnConfig.viewType) && btnConfig.viewType.includes(currentViewType))) {
           if(btnConfig.type == 'separator') {
             buttons.push(<div key={i} className="orb-tlbr-sep"></div>);
           } else if(btnConfig.type == 'label') {
@@ -219,7 +219,33 @@ var defaultToolbarConfig = {
       pgridComponent.pgridwidget.setViewType(viewType);
       self.updateViewButton(viewType, pgridComponent, button);
     }
+  },
+  
+  initY2: function() {
+    var self = this;
+    return function(pgridComponent, button) {
+      self.updateY2Button(pgridComponent, button);
+    };
+  },
+
+  toggleY2: function() {
+    var self = this;
+    return function(pgridComponent, button) { 
+      pgridComponent.pgridwidget.toggleY2Visible();
+      self.updateY2Button(pgridComponent, button);
+    };
+  },
+
+  updateY2Button: function(pgridComponent, button) {
+    if (pgridComponent.pgridwidget.getY2Visible()){
+      domUtils.removeClass(button, 'y-axis');
+      domUtils.addClass(button, 'y2-axis');
+    } else {
+      domUtils.removeClass(button, 'y2-axis');
+      domUtils.addClass(button, 'y-axis');
+    }
   }
+
 };
 
 defaultToolbarConfig.buttons = [
@@ -248,6 +274,11 @@ defaultToolbarConfig.buttons = [
                                                           action: defaultToolbarConfig.toggleSubtotals(axe.Type.COLUMNS)},
   { type: 'button', tooltip: 'Toggle columns grand total', init: defaultToolbarConfig.initGrandtotal(axe.Type.COLUMNS), viewType: pgrid.ViewType.TABULAR,
                                                            action: defaultToolbarConfig.toggleGrandtotal(axe.Type.COLUMNS)},
+  
+  { type: 'separator', viewType: [pgrid.ViewType.BAR_CHART, pgrid.ViewType.STACKED_BAR_CHART]},
+  { type: 'button', tooltip: 'Show/hide second y axis', viewType: [pgrid.ViewType.BAR_CHART, pgrid.ViewType.STACKED_BAR_CHART],
+        init: defaultToolbarConfig.initY2(), action: defaultToolbarConfig.toggleY2()},
+
   { type: 'separator'},
   { type: 'label', text: 'Export:'},
   { type: 'button', tooltip: 'Export to Excel', cssClass: 'export-xls', action: defaultToolbarConfig.exportToExcel}

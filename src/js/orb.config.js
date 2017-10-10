@@ -138,6 +138,7 @@ function ChartConfig(options) {
     this.type = options.type || 'bar';
     this.secondaryType = options.secondaryType || 'line';    
     this.stackedBars = options.stackedBars !== undefined ? options.stackedBars : false;
+    this.y2 = options.y2 !== undefined ? options.y2 : {};
 }
 
 var Field = module.exports.field = function(options, createSubOptions) {

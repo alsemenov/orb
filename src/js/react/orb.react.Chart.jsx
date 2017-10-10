@@ -20,6 +20,8 @@ module.exports = React.createClass({
     var self = this;
     if(this.canRender()) {
       var chartData = self.props.pivotTableComp.pgridwidget.pgrid.getChartData();
+      var dataAxes = chartData.primaryValues.reduce(function(map,name) {map[name]='y'; return map;}, {});
+      chartData.secondaryValues.forEach(function(name) { dataAxes[name] = chartData.y2.show ? 'y2' : 'y';});
       var chart = c3.generate({ // eslint-disable-line no-unused-vars
         bindto: ReactDOM.findDOMNode(this),
         data:{
@@ -27,14 +29,16 @@ module.exports = React.createClass({
           columns: chartData.dataTable,
           types: chartData.secondaryValues.reduce(function(map,value) { map[value] = self.props.chartMode.secondaryType; return map; }, {}),
           groups: [ chartData.stackedBars ? chartData.primaryValues : [] ],
-          colors: chartData.colors
+          colors: chartData.colors,
+          axes: dataAxes
         },                
         axis: {
           x: {
               label: chartData.hAxisLabel,
               type: 'category', // this needed to load string x value
               categories: chartData.colNames
-          }
+          },
+          y2: chartData.y2
         }
       });
     }

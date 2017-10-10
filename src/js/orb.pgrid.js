@@ -179,8 +179,18 @@ var pgrid = module.exports = function(config) {
             return;
         }
         self.publish(pgrid.EVENT_CONFIG_CHANGED);
-    }
+    };
 
+    this.getY2Visible = function() {
+        // if y2.show is not specified in config, show y2 if there are secondary data fields
+        return self.config.chartMode.y2.show !== undefined ? self.config.chartMode.y2.show :
+            self.config.dataFields.reduce(function(value, field) {return value || field.secondary;}, false);
+    };
+
+    this.toggleY2Visible = function() {
+        self.config.chartMode.y2.show = !self.getY2Visible();
+        self.publish(pgrid.EVENT_CONFIG_CHANGED);
+    };
 
     this.getFieldValues = function(field, filterFunc) {
         var values1 = [];
@@ -309,6 +319,12 @@ var pgrid = module.exports = function(config) {
             }
         }
         
+        var y2 = {};
+        for (var name in config.chartMode.y2){
+            y2[name] = config.chartMode.y2[name];
+        }
+        y2.show = self.getY2Visible();
+
         return {
             // title: vAxisLabel + ': ' + hAxisLabel + ' by ' + legendsLabel,
             hAxisLabel: hAxisLabel,
@@ -320,7 +336,8 @@ var pgrid = module.exports = function(config) {
             primaryValues: primaryValues,
             secondaryValues: secondaryValues,
             stackedBars: config.areStackedBars(),
-            colors: colors
+            colors: colors,
+            y2: y2
            };
     };
 
