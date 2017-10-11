@@ -291,6 +291,7 @@ var pgrid = module.exports = function(config) {
         var primaryValues = [];
         var data = [];
         var colors = {};
+        var formatters = {};
         // primary data values
         for (var di=0; di<config.dataFields.length; di++) {
             var dataField = config.dataFields[di];
@@ -298,6 +299,7 @@ var pgrid = module.exports = function(config) {
                 var currData = [dataField.aggregateFuncName + '(' + dataField.caption + ')'];
                 primaryValues.push(currData[0]);
                 colors[currData[0]] = dataField.color; 
+                formatters[currData[0]] = dataField.formatFunc();
                 for (var ci=0; ci<colLeafDimensions.length; ci++) {
                     currData.push(self.getData(dataField.name, self.rows.root, colLeafDimensions[ci].dim));
                 }
@@ -312,6 +314,7 @@ var pgrid = module.exports = function(config) {
                 currData = [dataField.aggregateFuncName + '(' + dataField.caption + ')'];
                 colors[currData[0]] = dataField.color; 
                 secondaryValues.push(currData[0]);
+                formatters[currData[0]] = dataField.formatFunc();
                 for (ci=0; ci<colLeafDimensions.length; ci++) {
                     currData.push(self.getData(dataField.name, self.rows.root, colLeafDimensions[ci].dim));
                 }
@@ -337,7 +340,8 @@ var pgrid = module.exports = function(config) {
             secondaryValues: secondaryValues,
             stackedBars: config.areStackedBars(),
             colors: colors,
-            y2: y2
+            y2: y2,
+            formatters: formatters
            };
     };
 

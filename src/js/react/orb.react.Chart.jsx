@@ -39,6 +39,12 @@ module.exports = React.createClass({
               categories: chartData.colNames
           },
           y2: chartData.y2
+        },
+        tooltip: {
+          format: {
+            // config.dataFields always provide default format function
+            value: function (value, ratio, id, index) { return chartData.formatters[id](value); } // eslint-disable-line no-unused-vars
+          }
         }
       });
     }
